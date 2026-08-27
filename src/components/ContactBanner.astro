@@ -1,0 +1,14 @@
+---
+interface Props {
+  title: string;
+  label: string;
+  href: string;
+}
+
+const { title, label, href } = Astro.props;
+---
+
+<section class="contact-banner" id="contact">
+  <h2>{title}</h2>
+  <a href={href}>{label} →</a>
+</section>

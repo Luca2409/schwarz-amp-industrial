@@ -1,0 +1,22 @@
+---
+interface Props {
+  eyebrow: string;
+  title: string;
+  cardTitle: string;
+  cardText: string;
+}
+
+const { eyebrow, title, cardTitle, cardText } = Astro.props;
+---
+
+<section class="quality-section" id="quality">
+  <div>
+    <div class="eyebrow">{eyebrow}</div>
+    <h2 class="section-heading">{title}</h2>
+  </div>
+
+  <div class="quality-card">
+    <strong>{cardTitle}</strong>
+    <p>{cardText}</p>
+  </div>
+</section>

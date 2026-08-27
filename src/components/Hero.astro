@@ -1,0 +1,40 @@
+---
+interface Props {
+  eyebrow: string;
+  titlePrefix: string;
+  titleHighlight: string;
+  text: string;
+  image: string;
+  imageLabel: string;
+  primaryLabel: string;
+  primaryHref: string;
+  secondaryLabel: string;
+  secondaryHref: string;
+}
+
+const props = Astro.props;
+---
+
+<section class="hero">
+  <div class="hero__copy">
+    <div class="eyebrow">{props.eyebrow}</div>
+
+    <h1 class="hero__title">
+      {props.titlePrefix}
+      <span>{props.titleHighlight}</span>
+    </h1>
+
+    <p class="hero__text">{props.text}</p>
+
+    <div class="hero__actions">
+      <a class="button button--primary" href={props.primaryHref}>
+        {props.primaryLabel}
+        <span>→</span>
+      </a>
+
+      <a class="button button--secondary" href={props.secondaryHref}>
+        {props.secondaryLabel}
+      </a>
+    </div>
+  </div>
+</section>

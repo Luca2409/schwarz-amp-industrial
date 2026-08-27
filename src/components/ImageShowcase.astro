@@ -1,0 +1,42 @@
+---
+interface Props {
+  src: string;
+  alt: string;
+  eyebrow?: string;
+  caption?: string;
+}
+
+const {
+  src,
+  alt,
+  eyebrow,
+  caption,
+} = Astro.props;
+---
+
+<section class="image-showcase">
+  <div class="image-showcase__inner">
+    <figure class="image-showcase__figure">
+      <img
+        class="image-showcase__image"
+        src={src}
+        alt={alt}
+        loading="eager"
+      />
+
+      {(eyebrow || caption) && (
+        <figcaption class="image-showcase__caption">
+          {eyebrow && (
+            <span class="image-showcase__eyebrow">{eyebrow}</span>
+          )}
+
+          {caption && (
+            <span class="image-showcase__text">{caption}</span>
+          )}
+        </figcaption>
+      )}
+
+      <span class="image-showcase__accent" aria-hidden="true"></span>
+    </figure>
+  </div>
+</section>

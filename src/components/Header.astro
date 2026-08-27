@@ -1,0 +1,24 @@
+---
+const navigation = [
+  { label: 'Know-how', href: '/#about' },
+  { label: 'Kompetenzen', href: '/#services' },
+  { label: 'Qualität', href: '/#quality' },
+  { label: 'Kontakt', href: '/#contact' },
+];
+---
+
+<header class="site-header">
+  <a class="brand" href="/" aria-label="AMP Startseite">
+    <span class="brand__name">AMP</span>
+    <span class="brand__line"></span>
+    <span class="brand__subtitle">Zerstörungsfreie Werkstoffprüfung</span>
+  </a>
+
+  <nav class="main-navigation" aria-label="Hauptnavigation">
+    {navigation.map((item) => (
+      <a class="main-navigation__link" href={item.href}>{item.label}</a>
+    ))}
+
+    <a class="main-navigation__cta" href="/#contact">Projekt anfragen</a>
+  </nav>
+</header>

@@ -1,0 +1,76 @@
+---
+import { getCollection, getEntry, render } from 'astro:content';
+
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import Header from '@/components/Header.astro';
+import Hero from '@/components/Hero.astro';
+import ImageShowcase from '@/components/ImageShowcase.astro';
+import AboutSection from '@/components/AboutSection.astro';
+import CompetenciesSection from '@/components/CompetenciesSection.astro';
+import QualitySection from '@/components/QualitySection.astro';
+import ContactBanner from '@/components/ContactBanner.astro';
+import Footer from '@/components/Footer.astro';
+
+const home = await getEntry('pages', 'home');
+
+if (!home) {
+  throw new Error('Home content not found.');
+}
+
+const competencies = await getCollection('competencies');
+const { Content } = await render(home);
+---
+
+<BaseLayout title={home.data.title} description={home.data.description}>
+  <Header />
+
+  <main>
+    <Hero
+      eyebrow={home.data.heroEyebrow}
+      titlePrefix={home.data.heroTitlePrefix}
+      titleHighlight={home.data.heroTitleHighlight}
+      text={home.data.heroText}
+      image={home.data.heroImage}
+      imageLabel={home.data.heroImageLabel}
+      primaryLabel={home.data.primaryCtaLabel}
+      primaryHref={home.data.primaryCtaHref}
+      secondaryLabel={home.data.secondaryCtaLabel}
+      secondaryHref={home.data.secondaryCtaHref}
+    />
+
+    <ImageShowcase
+      src={home.data.showcaseImage}
+      alt={home.data.showcaseImageAlt}
+      eyebrow={home.data.showcaseEyebrow}
+      caption={home.data.showcaseCaption}
+    />
+
+    <AboutSection
+      eyebrow={home.data.aboutEyebrow}
+      title={home.data.aboutTitle}
+    >
+      <Content />
+    </AboutSection>
+
+    <CompetenciesSection
+      eyebrow={home.data.competenciesEyebrow}
+      title={home.data.competenciesTitle}
+      entries={competencies}
+    />
+
+    <QualitySection
+      eyebrow={home.data.qualityEyebrow}
+      title={home.data.qualityTitle}
+      cardTitle={home.data.qualityCardTitle}
+      cardText={home.data.qualityCardText}
+    />
+
+    <ContactBanner
+      title={home.data.contactTitle}
+      label={home.data.contactLabel}
+      href={home.data.contactHref}
+    />
+  </main>
+
+  <Footer />
+</BaseLayout>

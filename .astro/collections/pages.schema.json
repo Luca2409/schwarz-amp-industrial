@@ -1,0 +1,117 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "title": {
+      "type": "string"
+    },
+    "description": {
+      "type": "string"
+    },
+    "heroEyebrow": {
+      "type": "string"
+    },
+    "heroTitlePrefix": {
+      "type": "string"
+    },
+    "heroTitleHighlight": {
+      "type": "string"
+    },
+    "heroText": {
+      "type": "string"
+    },
+    "heroImage": {
+      "type": "string"
+    },
+    "heroImageLabel": {
+      "type": "string"
+    },
+    "showcaseImage": {
+      "type": "string"
+    },
+    "showcaseImageAlt": {
+      "type": "string"
+    },
+    "showcaseEyebrow": {
+      "type": "string"
+    },
+    "showcaseCaption": {
+      "type": "string"
+    },
+    "primaryCtaLabel": {
+      "type": "string"
+    },
+    "primaryCtaHref": {
+      "type": "string"
+    },
+    "secondaryCtaLabel": {
+      "type": "string"
+    },
+    "secondaryCtaHref": {
+      "type": "string"
+    },
+    "aboutEyebrow": {
+      "type": "string"
+    },
+    "aboutTitle": {
+      "type": "string"
+    },
+    "competenciesEyebrow": {
+      "type": "string"
+    },
+    "competenciesTitle": {
+      "type": "string"
+    },
+    "qualityEyebrow": {
+      "type": "string"
+    },
+    "qualityTitle": {
+      "type": "string"
+    },
+    "qualityCardTitle": {
+      "type": "string"
+    },
+    "qualityCardText": {
+      "type": "string"
+    },
+    "contactTitle": {
+      "type": "string"
+    },
+    "contactLabel": {
+      "type": "string"
+    },
+    "contactHref": {
+      "type": "string"
+    },
+    "$schema": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "title",
+    "description",
+    "heroEyebrow",
+    "heroTitlePrefix",
+    "heroTitleHighlight",
+    "heroText",
+    "heroImage",
+    "heroImageLabel",
+    "showcaseImage",
+    "showcaseImageAlt",
+    "primaryCtaLabel",
+    "primaryCtaHref",
+    "secondaryCtaLabel",
+    "secondaryCtaHref",
+    "aboutEyebrow",
+    "aboutTitle",
+    "competenciesEyebrow",
+    "competenciesTitle",
+    "qualityEyebrow",
+    "qualityTitle",
+    "qualityCardTitle",
+    "qualityCardText",
+    "contactTitle",
+    "contactLabel",
+    "contactHref"
+  ]
+}

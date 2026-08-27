@@ -1,0 +1,31 @@
+---
+import type { CollectionEntry } from 'astro:content';
+import CompetencyRow from './CompetencyRow.astro';
+
+interface Props {
+  eyebrow: string;
+  title: string;
+  entries: CollectionEntry<'competencies'>[];
+}
+
+const { eyebrow, title } = Astro.props;
+const entries = [...Astro.props.entries].sort(
+  (a, b) => a.data.order - b.data.order
+);
+---
+
+<section class="competencies-section" id="services">
+  <div class="eyebrow eyebrow--dark">{eyebrow}</div>
+  <h2 class="section-heading">{title}</h2>
+
+  <div class="competency-list">
+    {entries.map((entry) => (
+      <CompetencyRow
+        id={entry.id}
+        number={entry.data.number}
+        title={entry.data.title}
+        teaser={entry.data.teaser}
+      />
+    ))}
+  </div>
+</section>

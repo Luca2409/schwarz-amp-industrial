@@ -1,0 +1,17 @@
+---
+interface Props {
+  id: string;
+  number: string;
+  title: string;
+  teaser: string;
+}
+
+const { id, number, title, teaser } = Astro.props;
+---
+
+<a class="competency-row" href={`/kompetenzen/${id}/`}>
+  <div class="competency-row__number">{number}</div>
+  <h3 class="competency-row__title">{title}</h3>
+  <p class="competency-row__text">{teaser}</p>
+  <b class="competency-row__arrow" aria-hidden="true">→</b>
+</a>

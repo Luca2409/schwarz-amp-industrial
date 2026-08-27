@@ -1,0 +1,51 @@
+---
+import { getCollection, render } from 'astro:content';
+
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import Header from '@/components/Header.astro';
+import Footer from '@/components/Footer.astro';
+
+export async function getStaticPaths() {
+  const entries = await getCollection('competencies');
+
+  return entries.map((entry) => ({
+    params: { id: entry.id },
+    props: { entry },
+  }));
+}
+
+const { entry } = Astro.props;
+const { Content } = await render(entry);
+---
+
+<BaseLayout
+  title={`${entry.data.title} | AMP`}
+  description={entry.data.seoDescription}
+>
+  <Header />
+
+  <main>
+    <section class="detail-hero">
+      <div class="eyebrow eyebrow--dark">AMP · Kompetenz</div>
+      <h1>{entry.data.title}</h1>
+      <p>{entry.data.teaser}</p>
+    </section>
+
+    <section class="detail-content">
+      <article class="markdown-content">
+        <Content />
+      </article>
+
+      <aside class="detail-sidebar">
+        <div class="eyebrow">Kontakt</div>
+        <h2>Projekt besprechen</h2>
+        <p>Sie haben eine konkrete Prüfaufgabe? Sprechen Sie uns an.</p>
+        <a class="button button--primary" href="mailto:info@amp-zfp.de">
+          Kontakt aufnehmen →
+        </a>
+      </aside>
+    </section>
+  </main>
+
+  <Footer />
+</BaseLayout>
