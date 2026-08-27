@@ -9,7 +9,7 @@ heroText: "Moderne Prüftechnik, umfassendes Know-how und persönliche Betreuung
 heroImage: "/images/hero-placeholder.svg"
 heroImageLabel: "AMP Prüftechnik"
 
-showcaseImage: "/images/showcase-image.png"
+showcaseImage: "/public/images/showcase-image.png"
 showcaseImageAlt: "Industrielle Prüftechnik bei AMP"
 showcaseEyebrow: "Prüftechnik im Einsatz"
 showcaseCaption: "Präzision, Erfahrung und moderne Technik für anspruchsvolle Prüfaufgaben."
