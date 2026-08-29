@@ -339,29 +339,29 @@ summary:focus-visible {
    ========================================================= */
 
 .hero {
-    width: min(100%, var(--content-max));
+    width: 100%;
     min-height: calc(100vh - 88px);
     min-height: calc(100svh - 88px);
-    margin: 0 auto;
-    padding: 58px var(--page-padding) 42px;
     display: grid;
-    grid-template-columns: minmax(0, 1.04fr) minmax(0, 0.96fr);
-    gap: clamp(32px, 4vw, 70px);
+    grid-template-columns: minmax(0, 44fr) minmax(0, 56fr);
+    gap: 0;
     align-items: stretch;
+    background: var(--white);
+    color: var(--black);
 }
 
 .hero__copy {
     min-width: 0;
-    padding: 62px 0 70px;
+    padding: clamp(68px, 7vw, 108px) clamp(32px, 3vw, 52px) clamp(72px, 7vw, 110px) max(var(--page-padding), calc((100vw - var(--content-max)) / 2 + var(--page-padding)));
     display: flex;
     flex-direction: column;
     justify-content: center;
 }
 
 .hero__title {
-    max-width: 760px;
+    max-width: 650px;
     margin: 24px 0 24px;
-    font-size: clamp(44px, 4.4vw, 66px);
+    font-size: clamp(44px, 4.2vw, 62px);
     line-height: 1.04;
     letter-spacing: -0.025em;
 }
@@ -398,16 +398,10 @@ summary:focus-visible {
 .hero__visual {
     position: relative;
     min-width: 0;
-    height: clamp(590px, 72vh, 720px);
-    height: clamp(590px, 72svh, 720px);
-    min-height: 0;
-    align-self: center;
+    min-height: calc(100vh - 88px);
+    min-height: calc(100svh - 88px);
     overflow: hidden;
-    isolation: isolate;
-    border-radius: var(--radius);
-    border: 1px solid #2a2a2a;
     background: var(--black);
-    box-shadow: var(--shadow);
 }
 
 .hero__image {
@@ -421,23 +415,20 @@ summary:focus-visible {
     filter: saturate(.76) contrast(1.04);
 }
 
-.hero__visual-shade {
-    position: absolute;
-    inset: 0;
-    background: linear-gradient(180deg, rgba(0, 0, 0, .32), transparent 40%, rgba(0, 0, 0, .55)), linear-gradient(90deg, rgba(0, 0, 0, .12), transparent 45%);
+.hero .button--primary {
+    background: var(--yellow);
+    border-color: var(--yellow);
+    color: var(--black);
 }
 
-.hero__image-label {
-    position: absolute;
-    top: 28px;
-    left: 28px;
-    z-index: 3;
-    color: #fff;
-    font-size: 12px;
-    font-weight: 750;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-    opacity: .92;
+.hero .button--primary:hover {
+    background: var(--black);
+    border-color: var(--black);
+    color: var(--white);
+}
+
+.hero .button--secondary {
+    color: var(--black);
 }
 
 
@@ -448,7 +439,7 @@ summary:focus-visible {
 .image-showcase {
     width: min(100%, var(--content-max));
     margin: 0 auto;
-    padding: 36px var(--page-padding) 72px;
+    padding: 52px var(--page-padding) 84px;
 }
 
 .image-showcase__inner {
@@ -461,14 +452,14 @@ summary:focus-visible {
     min-height: 300px;
     overflow: hidden;
     border-radius: var(--radius);
-    border: 1px solid var(--line);
+    border: 1px solid #d5d5d1;
     background: var(--black);
     box-shadow: none;
 }
 
 .image-showcase__image {
     width: 100%;
-    aspect-ratio: 2.65 / 1;
+    aspect-ratio: 2.8 / 1;
     display: block;
     object-fit: cover;
     object-position: center;
@@ -512,7 +503,8 @@ summary:focus-visible {
 
 @media (max-width: 900px) {
     .image-showcase {
-        padding-bottom: 48px;
+        padding-top: 40px;
+        padding-bottom: 56px;
     }
     .image-showcase__figure {
         min-height: 300px;
@@ -523,6 +515,10 @@ summary:focus-visible {
 }
 
 @media (max-width: 560px) {
+    .image-showcase {
+        padding-top: 32px;
+        padding-bottom: 48px;
+    }
     .image-showcase__caption {
         right: 24px;
         bottom: 24px;
@@ -542,21 +538,26 @@ summary:focus-visible {
 .quality-section {
     width: min(100%, var(--content-max));
     margin: 0 auto;
-    padding: 96px var(--page-padding);
+    padding: 104px var(--page-padding);
     display: grid;
     grid-template-columns: 0.95fr 1.05fr;
-    gap: 100px;
+    gap: clamp(64px, 7vw, 100px);
     align-items: start;
 }
 
 .about-section {
-    margin-top: 40px;
+    margin-top: 0;
     background: #181818;
     color: var(--white);
 }
 
 .about-section__content {
+    max-width: 640px;
     color: #c7c7c2;
+}
+
+.about-section .section-heading {
+    max-width: 600px;
 }
 
 .section-heading-block {
@@ -570,18 +571,18 @@ summary:focus-visible {
 
 .competencies-section {
     width: 100%;
-    padding: 110px max(var(--page-padding), calc((100vw - var(--content-max)) / 2 + var(--page-padding)));
+    padding: 104px max(var(--page-padding), calc((100vw - var(--content-max)) / 2 + var(--page-padding))) 112px;
     background-color: var(--black);
     color: white;
 }
 
 .competency-list {
-    margin-top: 48px;
+    margin-top: 44px;
     border-top: 1px solid rgba(255, 255, 255, .28);
 }
 
 .competency-row {
-    padding: 30px 18px 30px 0;
+    padding: 28px 18px 28px 0;
     display: grid;
     grid-template-columns: 72px 1.05fr 1fr 48px;
     gap: 18px;
@@ -650,7 +651,7 @@ summary:focus-visible {
 
 .quality-section {
     grid-template-columns: 1.05fr 0.95fr;
-    gap: 80px;
+    gap: clamp(56px, 6vw, 80px);
     align-items: center;
     background: var(--white);
 }
@@ -658,7 +659,7 @@ summary:focus-visible {
 .quality-card {
     position: relative;
     overflow: hidden;
-    padding: 48px;
+    padding: 46px 48px 48px;
     border: 1px solid #2c2c2c;
     border-radius: var(--radius);
     background: #181818;
@@ -699,8 +700,8 @@ summary:focus-visible {
 
 .contact-banner {
     width: min( calc(100% - (var(--page-padding) * 2)), calc(var(--content-max) - (var(--page-padding) * 2)));
-    margin: 12px auto 72px;
-    padding: 48px 56px;
+    margin: 0 auto 80px;
+    padding: 44px 52px;
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -1012,10 +1013,6 @@ summary:focus-visible {
     .main-navigation__link {
         font-size: 11px;
     }
-    .hero {
-        grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
-        gap: 28px;
-    }
     .about-section__inner {
         gap: 60px;
     }
@@ -1045,17 +1042,14 @@ summary:focus-visible {
     }
     .hero {
         grid-template-columns: 1fr;
-        min-height: calc(100vh - 76px);
-        min-height: calc(100svh - 76px);
-        padding-top: 32px;
+        min-height: 0;
     }
     .hero__copy {
-        padding: 46px 0 20px;
+        padding: 58px var(--page-padding) 64px;
     }
     .hero__visual {
-        height: auto;
-        min-height: 460px;
-        align-self: stretch;
+        height: clamp(360px, 68vw, 460px);
+        min-height: 0;
     }
     .about-section__inner,
     .quality-section,
@@ -1112,12 +1106,7 @@ summary:focus-visible {
         padding: 0 var(--page-padding);
     }
     .hero__visual {
-        min-height: 390px;
-    }
-    .hero__image-label {
-        top: 22px;
-        right: 22px;
-        left: 22px;
+        height: 360px;
     }
     .image-showcase__image {
         aspect-ratio: auto;
