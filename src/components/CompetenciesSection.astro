@@ -15,8 +15,11 @@ const entries = [...Astro.props.entries].sort(
 ---
 
 <section class="competencies-section" id="services">
-  <div class="eyebrow eyebrow--dark">{eyebrow}</div>
-  <h2 class="section-heading">{title}</h2>
+  <div class="section-heading-block">
+    <span class="section-index section-index--dark" aria-hidden="true">03 / LEISTUNGEN</span>
+    <div class="eyebrow eyebrow--dark">{eyebrow}</div>
+    <h2 class="section-heading">{title}</h2>
+  </div>
 
   <div class="competency-list">
     {entries.map((entry) => (

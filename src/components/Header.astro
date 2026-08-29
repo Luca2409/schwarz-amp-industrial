@@ -5,20 +5,33 @@ const navigation = [
   { label: 'Qualität', href: '/#quality' },
   { label: 'Kontakt', href: '/#contact' },
 ];
+
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 ---
 
 <header class="site-header">
-  <a class="brand" href={`${import.meta.env.BASE_URL}`} aria-label="AMP Startseite">
-    <span class="brand__name">AMP</span>
-    <span class="brand__line"></span>
-    <span class="brand__subtitle">Zerstörungsfreie Werkstoffprüfung</span>
-  </a>
+  <div class="site-header__inner">
+    <a class="brand" href={`${base}/`} aria-label="AMP Startseite">
+      <span class="brand__name">AMP</span>
+      <span class="brand__line"></span>
+      <span class="brand__subtitle">Zerstörungsfreie Werkstoffprüfung</span>
+    </a>
 
-  <nav class="main-navigation" aria-label="Hauptnavigation">
-    {navigation.map((item) => (
-      <a class="main-navigation__link" href={`${import.meta.env.BASE_URL}${item.href}`}>{item.label}</a>
-    ))}
+    <nav class="main-navigation" aria-label="Hauptnavigation">
+      {navigation.map((item) => (
+        <a class="main-navigation__link" href={`${base}${item.href}`}>{item.label}</a>
+      ))}
 
-    <a class="main-navigation__cta" href={`${import.meta.env.BASE_URL}/#contact`}>Projekt anfragen</a>
-  </nav>
+      <a class="main-navigation__cta" href={`${base}/#contact`}>Projekt anfragen</a>
+    </nav>
+
+    <details class="mobile-navigation">
+      <summary><span>Menü</span><i aria-hidden="true"></i></summary>
+      <nav aria-label="Mobile Hauptnavigation">
+        {navigation.map((item) => (
+          <a href={`${base}${item.href}`}>{item.label}<span aria-hidden="true">→</span></a>
+        ))}
+      </nav>
+    </details>
+  </div>
 </header>

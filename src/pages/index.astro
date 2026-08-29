@@ -38,19 +38,19 @@ const { Content } = await render(home);
       secondaryHref={home.data.secondaryCtaHref}
     />
 
-    <ImageShowcase
-      src={home.data.showcaseImage}
-      alt={home.data.showcaseImageAlt}
-      eyebrow={home.data.showcaseEyebrow}
-      caption={home.data.showcaseCaption}
-    />
-
     <AboutSection
       eyebrow={home.data.aboutEyebrow}
       title={home.data.aboutTitle}
     >
       <Content />
     </AboutSection>
+
+    <ImageShowcase
+      src={home.data.showcaseImage}
+      alt={home.data.showcaseImageAlt}
+      eyebrow={home.data.showcaseEyebrow}
+      caption={home.data.showcaseCaption}
+    />
 
     <CompetenciesSection
       eyebrow={home.data.competenciesEyebrow}

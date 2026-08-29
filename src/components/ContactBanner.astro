@@ -9,6 +9,9 @@ const { title, label, href } = Astro.props;
 ---
 
 <section class="contact-banner" id="contact">
-  <h2>{title}</h2>
-  <a href={href}>{label} →</a>
+  <div class="contact-banner__copy">
+    <span class="contact-banner__index" aria-hidden="true">05 / KONTAKT</span>
+    <h2>{title}</h2>
+  </div>
+  <a href={href}>{label} <span aria-hidden="true">→</span></a>
 </section>

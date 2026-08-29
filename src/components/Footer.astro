@@ -1,6 +1,27 @@
+---
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+---
+
 <footer class="site-footer">
-  <b>AMP</b>
-  <span>· Zerstörungsfreie Prüftechnik</span>
-  <span>· info@amp-zfp.de</span>
-  <span>· +49 7443 9665-19</span>
+  <div class="site-footer__inner">
+    <div class="site-footer__brand">
+      <b>AMP</b>
+      <span>Zerstörungsfreie Werkstoffprüfung</span>
+    </div>
+
+    <nav class="site-footer__navigation" aria-label="Footer-Navigation">
+      <a href={`${base}/#about`}>Know-how</a>
+      <a href={`${base}/#services`}>Kompetenzen</a>
+      <a href={`${base}/#quality`}>Qualität</a>
+    </nav>
+
+    <div class="site-footer__contact">
+      <a href="mailto:info@amp-zfp.de">info@amp-zfp.de</a>
+      <a href="tel:+497443966519">+49 7443 9665-19</a>
+    </div>
+  </div>
+  <div class="site-footer__bottom">
+    <span>AMP Prüftechnik</span>
+    <span>Präzision. Erfahrung. Verantwortung.</span>
+  </div>
 </footer>

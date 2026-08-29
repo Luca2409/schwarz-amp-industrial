@@ -12,6 +12,11 @@ const {
   eyebrow,
   caption,
 } = Astro.props;
+
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+const imageSrc = src.startsWith('http')
+  ? src
+  : `${base}${src.startsWith('/') ? src : `/${src}`}`;
 ---
 
 <section class="image-showcase">
@@ -19,9 +24,9 @@ const {
     <figure class="image-showcase__figure">
       <img
         class="image-showcase__image"
-        src={`${import.meta.env.BASE_URL}/images/showcase-image.png`}‚
+        src={imageSrc}
         alt={alt}
-        loading="eager"
+        loading="lazy"
       />
 
       {(eyebrow || caption) && (
