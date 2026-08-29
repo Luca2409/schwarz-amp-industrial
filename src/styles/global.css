@@ -27,11 +27,15 @@
 }
 
 html {
+    max-width: 100%;
+    overflow-x: clip;
     scroll-behavior: smooth;
     scroll-padding-top: 104px;
 }
 
 body {
+    max-width: 100%;
+    overflow-x: clip;
     margin: 0;
     font-family: "Inter Variable", Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
     background: var(--white);
@@ -151,6 +155,7 @@ summary:focus-visible {
     position: sticky;
     top: 0;
     z-index: 50;
+    width: 100%;
     height: 88px;
     background: var(--black);
     border-bottom: 1px solid rgba(255, 255, 255, 0.12);
@@ -604,6 +609,7 @@ summary:focus-visible {
 }
 
 .competency-row__title {
+    min-width: 0;
     margin: 0;
     font-size: 23px;
     line-height: 1.25;
@@ -977,6 +983,8 @@ summary:focus-visible {
 .competency-row__title,
 .quality-card h3,
 .contact-banner h2 {
+    overflow-wrap: anywhere;
+    hyphens: auto;
     text-wrap: balance;
 }
 
@@ -1108,6 +1116,7 @@ summary:focus-visible {
     }
     .hero__image-label {
         top: 22px;
+        right: 22px;
         left: 22px;
     }
     .image-showcase__image {
