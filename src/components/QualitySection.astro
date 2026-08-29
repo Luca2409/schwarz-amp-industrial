@@ -11,13 +11,12 @@ const { eyebrow, title, cardTitle, cardText } = Astro.props;
 
 <section class="quality-section" id="quality">
   <div class="section-heading-block">
-    <span class="section-index" aria-hidden="true">04 / QUALITÄT</span>
     <div class="eyebrow">{eyebrow}</div>
     <h2 class="section-heading">{title}</h2>
   </div>
 
   <div class="quality-card">
-    <strong>{cardTitle}</strong>
+    <h3>{cardTitle}</h3>
     <p>{cardText}</p>
   </div>
 </section>

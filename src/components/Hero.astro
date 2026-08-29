@@ -51,11 +51,6 @@ const imageSrc = props.image.startsWith('http')
       fetchpriority="high"
     />
     <div class="hero__visual-shade" aria-hidden="true"></div>
-    <span class="hero__image-label"><b>01</b> {props.imageLabel}</span>
-    <span class="hero__frame" aria-hidden="true"></span>
-    <div class="hero__meta" aria-hidden="true">
-      <span>AMP / PRÜFTECHNIK</span>
-      <span>PRÄZISION IM DETAIL</span>
-    </div>
+    <span class="hero__image-label">{props.imageLabel}</span>
   </div>
 </section>

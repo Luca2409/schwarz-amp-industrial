@@ -16,6 +16,7 @@ export async function getStaticPaths() {
 
 const { entry } = Astro.props;
 const { Content } = await render(entry);
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 ---
 
 <BaseLayout
@@ -26,9 +27,14 @@ const { Content } = await render(entry);
 
   <main>
     <section class="detail-hero">
-      <div class="eyebrow eyebrow--dark">AMP · Kompetenz</div>
-      <h1>{entry.data.title}</h1>
-      <p>{entry.data.teaser}</p>
+      <div class="detail-hero__inner">
+        <div class="detail-back-row">
+          <a class="detail-back" href={`${base}/#services`}>← Alle Kompetenzen</a>
+        </div>
+        <div class="eyebrow eyebrow--dark">AMP · Kompetenz</div>
+        <h1>{entry.data.title}</h1>
+        <p>{entry.data.teaser}</p>
+      </div>
     </section>
 
     <section class="detail-content">
@@ -37,10 +43,10 @@ const { Content } = await render(entry);
       </article>
 
       <aside class="detail-sidebar">
-        <div class="eyebrow">Kontakt</div>
+        <div class="eyebrow eyebrow--dark">Kontakt</div>
         <h2>Projekt besprechen</h2>
         <p>Sie haben eine konkrete Prüfaufgabe? Sprechen Sie uns an.</p>
-        <a class="button button--primary" href="mailto:info@amp-zfp.de">
+        <a class="button button--accent" href="mailto:info@amp-zfp.de">
           Kontakt aufnehmen →
         </a>
       </aside>
