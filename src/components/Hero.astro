@@ -21,24 +21,28 @@ const imageSrc = props.image.startsWith('http')
 
 <section class="hero">
   <div class="hero__copy">
-    <div class="eyebrow">{props.eyebrow}</div>
+    <div class="hero__heading">
+      <div class="eyebrow">{props.eyebrow}</div>
 
-    <h1 class="hero__title">
-      {props.titlePrefix}
-      <span>{props.titleHighlight}</span>
-    </h1>
+      <h1 class="hero__title">
+        {props.titlePrefix}
+        <span>{props.titleHighlight}</span>
+      </h1>
+    </div>
 
-    <p class="hero__text">{props.text}</p>
+    <div class="hero__support">
+      <p class="hero__text">{props.text}</p>
 
-    <div class="hero__actions">
-      <a class="button button--primary" href={props.primaryHref}>
-        {props.primaryLabel}
-        <span>→</span>
-      </a>
+      <div class="hero__actions">
+        <a class="button button--primary" href={props.primaryHref}>
+          {props.primaryLabel}
+          <span>→</span>
+        </a>
 
-      <a class="button button--secondary" href={props.secondaryHref}>
-        {props.secondaryLabel}
-      </a>
+        <a class="button button--secondary" href={props.secondaryHref}>
+          {props.secondaryLabel}
+        </a>
+      </div>
     </div>
   </div>
 

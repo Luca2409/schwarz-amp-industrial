@@ -343,7 +343,7 @@ summary:focus-visible {
     min-height: calc(100vh - 88px);
     min-height: calc(100svh - 88px);
     display: grid;
-    grid-template-columns: minmax(0, 44fr) minmax(0, 56fr);
+    grid-template-rows: minmax(300px, 42fr) minmax(320px, 58fr);
     gap: 0;
     align-items: stretch;
     background: var(--white);
@@ -351,17 +351,25 @@ summary:focus-visible {
 }
 
 .hero__copy {
+    width: min(100%, var(--content-max));
+    margin: 0 auto;
     min-width: 0;
-    padding: clamp(68px, 7vw, 108px) clamp(32px, 3vw, 52px) clamp(72px, 7vw, 110px) max(var(--page-padding), calc((100vw - var(--content-max)) / 2 + var(--page-padding)));
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
+    padding: clamp(42px, 5vw, 72px) var(--page-padding);
+    display: grid;
+    grid-template-columns: minmax(0, 1.15fr) minmax(320px, .85fr);
+    gap: clamp(52px, 7vw, 108px);
+    align-items: center;
+}
+
+.hero__heading,
+.hero__support {
+    min-width: 0;
 }
 
 .hero__title {
-    max-width: 650px;
-    margin: 24px 0 24px;
-    font-size: clamp(44px, 4.2vw, 62px);
+    max-width: 780px;
+    margin: 18px 0 0;
+    font-size: clamp(42px, 4vw, 60px);
     line-height: 1.04;
     letter-spacing: -0.025em;
 }
@@ -373,14 +381,14 @@ summary:focus-visible {
 .hero__title::after {
     width: 68px;
     height: 4px;
-    margin-top: 24px;
+    margin-top: 20px;
     display: block;
     background: var(--yellow);
     content: "";
 }
 
 .hero__text {
-    max-width: 625px;
+    max-width: 540px;
     margin: 0;
     color: var(--muted);
     font-size: 18px;
@@ -388,7 +396,7 @@ summary:focus-visible {
 }
 
 .hero__actions {
-    margin-top: 32px;
+    margin-top: 26px;
     display: flex;
     align-items: center;
     flex-wrap: wrap;
@@ -398,8 +406,7 @@ summary:focus-visible {
 .hero__visual {
     position: relative;
     min-width: 0;
-    min-height: calc(100vh - 88px);
-    min-height: calc(100svh - 88px);
+    min-height: 320px;
     overflow: hidden;
     background: var(--black);
 }
@@ -411,7 +418,7 @@ summary:focus-visible {
     height: 100%;
     display: block;
     object-fit: cover;
-    object-position: 30% center;
+    object-position: center 46%;
     filter: saturate(.76) contrast(1.04);
 }
 
@@ -1007,6 +1014,10 @@ summary:focus-visible {
    ========================================================= */
 
 @media (max-width: 1050px) {
+    .hero__copy {
+        grid-template-columns: minmax(0, 1fr) minmax(300px, .8fr);
+        gap: 44px;
+    }
     .main-navigation {
         gap: 16px;
     }
@@ -1041,11 +1052,19 @@ summary:focus-visible {
         display: block;
     }
     .hero {
-        grid-template-columns: 1fr;
+        grid-template-rows: auto auto;
         min-height: 0;
     }
     .hero__copy {
+        grid-template-columns: 1fr;
+        gap: 28px;
         padding: 58px var(--page-padding) 64px;
+    }
+    .hero__title {
+        max-width: 720px;
+    }
+    .hero__support {
+        max-width: 620px;
     }
     .hero__visual {
         height: clamp(360px, 68vw, 460px);
