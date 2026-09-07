@@ -1,4 +1,5 @@
 ---
+translationKey: "non-destructive-testing"
 number: "01"
 title: "Zerstörungsfreie Werkstoffprüfung"
 teaser: "Von Schweißnähten bis zu komplexen Bauteilen."

@@ -1,0 +1,55 @@
+---
+import { render } from 'astro:content';
+import { getRelativeLocaleUrl } from 'astro:i18n';
+
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import Header from '@/components/Header.astro';
+import Footer from '@/components/Footer.astro';
+import { getCompetencyStaticPaths } from '@/lib/i18n';
+
+export async function getStaticPaths() {
+  return getCompetencyStaticPaths('en');
+}
+
+const { entry, alternateLocaleUrl } = Astro.props;
+const { Content } = await render(entry);
+const competenciesUrl = `${getRelativeLocaleUrl('en')}#services`;
+---
+
+<BaseLayout
+  title={`${entry.data.title} | AMP`}
+  description={entry.data.seoDescription}
+  alternateLocaleUrl={alternateLocaleUrl}
+>
+  <Header alternateLocaleUrl={alternateLocaleUrl} />
+
+  <main>
+    <section class="detail-hero">
+      <div class="detail-hero__inner">
+        <div class="detail-back-row">
+          <a class="detail-back" href={competenciesUrl}>← All expertise</a>
+        </div>
+        <div class="eyebrow eyebrow--dark">AMP · Expertise</div>
+        <h1>{entry.data.title}</h1>
+        <p>{entry.data.teaser}</p>
+      </div>
+    </section>
+
+    <section class="detail-content">
+      <article class="markdown-content">
+        <Content />
+      </article>
+
+      <aside class="detail-sidebar">
+        <div class="eyebrow eyebrow--dark">Contact</div>
+        <h2>Discuss your project</h2>
+        <p>Do you have a specific inspection task? Get in touch with us.</p>
+        <a class="button button--accent" href="mailto:info@amp-zfp.de">
+          Get in touch →
+        </a>
+      </aside>
+    </section>
+  </main>
+
+  <Footer />
+</BaseLayout>

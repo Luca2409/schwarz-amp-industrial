@@ -1,4 +1,6 @@
 ---
+import { getCompetencyUrl } from '@/lib/i18n';
+
 interface Props {
   id: string;
   number: string;
@@ -7,10 +9,12 @@ interface Props {
 }
 
 const { id, number, title, teaser } = Astro.props;
-const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+const locale = Astro.currentLocale === 'en' ? 'en' : 'de';
+const slug = id.replace(new RegExp(`^${locale}/`), '');
+const href = getCompetencyUrl(locale, slug);
 ---
 
-<a class="competency-row" href={`${base}/kompetenzen/${id}/`}>
+<a class="competency-row" href={href}>
   <div class="competency-row__number">{number}</div>
   <h3 class="competency-row__title">{title}</h3>
   <p class="competency-row__text">{teaser}</p>

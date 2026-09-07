@@ -1,4 +1,6 @@
 ---
+import { getRelativeLocaleUrl } from 'astro:i18n';
+
 interface LegalLink {
   label: string;
   href: string;
@@ -8,21 +10,41 @@ interface Props {
   legalLinks?: LegalLink[];
 }
 
-const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 const { legalLinks = [] } = Astro.props;
+const locale = Astro.currentLocale === 'en' ? 'en' : 'de';
+const home = getRelativeLocaleUrl(locale);
+const copy = locale === 'en'
+  ? {
+      subtitle: 'Non-Destructive Testing',
+      navigationLabel: 'Footer navigation',
+      expertise: 'Expertise',
+      services: 'Services',
+      quality: 'Quality',
+      legalLabel: 'Legal information',
+      tagline: 'Precision. Experience. Responsibility.',
+    }
+  : {
+      subtitle: 'Zerstörungsfreie Werkstoffprüfung',
+      navigationLabel: 'Footer-Navigation',
+      expertise: 'Know-how',
+      services: 'Kompetenzen',
+      quality: 'Qualität',
+      legalLabel: 'Rechtliche Hinweise',
+      tagline: 'Präzision. Erfahrung. Verantwortung.',
+    };
 ---
 
 <footer class="site-footer">
   <div class="site-footer__inner">
     <div class="site-footer__brand">
       <b>AMP</b>
-      <span>Zerstörungsfreie Werkstoffprüfung</span>
+      <span>{copy.subtitle}</span>
     </div>
 
-    <nav class="site-footer__navigation" aria-label="Footer-Navigation">
-      <a href={`${base}/#about`}>Know-how</a>
-      <a href={`${base}/#services`}>Kompetenzen</a>
-      <a href={`${base}/#quality`}>Qualität</a>
+    <nav class="site-footer__navigation" aria-label={copy.navigationLabel}>
+      <a href={`${home}#about`}>{copy.expertise}</a>
+      <a href={`${home}#services`}>{copy.services}</a>
+      <a href={`${home}#quality`}>{copy.quality}</a>
     </nav>
 
     <div class="site-footer__contact">
@@ -33,11 +55,11 @@ const { legalLinks = [] } = Astro.props;
   <div class="site-footer__bottom">
     <span>AMP Prüftechnik</span>
     {legalLinks.length > 0 ? (
-      <nav class="site-footer__legal" aria-label="Rechtliche Hinweise">
+      <nav class="site-footer__legal" aria-label={copy.legalLabel}>
         {legalLinks.map((link) => <a href={link.href}>{link.label}</a>)}
       </nav>
     ) : (
-      <span>Präzision. Erfahrung. Verantwortung.</span>
+      <span>{copy.tagline}</span>
     )}
   </div>
 </footer>

@@ -1,0 +1,102 @@
+---
+interface Props {
+  locale: 'de' | 'en';
+  alternateLocaleUrl?: string;
+  preserveHash?: boolean;
+  variant: 'desktop' | 'mobile';
+}
+
+const {
+  locale,
+  alternateLocaleUrl,
+  preserveHash = false,
+  variant,
+} = Astro.props;
+
+const labels = locale === 'en'
+  ? {
+      group: 'Language selection',
+      de: 'Switch to German',
+      en: 'English selected',
+      unavailable: 'German translation not available',
+    }
+  : {
+      group: 'Sprachauswahl',
+      de: 'Deutsch ausgewählt',
+      en: 'Zu Englisch wechseln',
+      unavailable: 'Englische Übersetzung nicht verfügbar',
+    };
+---
+
+<div
+  class:list={['language-switcher', `language-switcher--${variant}`]}
+  role="group"
+  aria-label={labels.group}
+>
+  {locale === 'de' ? (
+    <span class="language-switcher__language is-active" lang="de" aria-current="page" aria-label={labels.de}>
+      DE
+    </span>
+  ) : alternateLocaleUrl ? (
+    <a
+      class="language-switcher__language"
+      href={alternateLocaleUrl}
+      data-language-link
+      data-base-href={alternateLocaleUrl}
+      data-preserve-hash={preserveHash ? 'true' : undefined}
+      lang="de"
+      hreflang="de"
+      aria-label={labels.de}
+    >
+      DE
+    </a>
+  ) : (
+    <span class="language-switcher__language is-disabled" lang="de" aria-disabled="true" aria-label={labels.unavailable}>
+      DE
+    </span>
+  )}
+
+  <span class="language-switcher__separator" aria-hidden="true">|</span>
+
+  {locale === 'en' ? (
+    <span class="language-switcher__language is-active" lang="en" aria-current="page" aria-label={labels.en}>
+      EN
+    </span>
+  ) : alternateLocaleUrl ? (
+    <a
+      class="language-switcher__language"
+      href={alternateLocaleUrl}
+      data-language-link
+      data-base-href={alternateLocaleUrl}
+      data-preserve-hash={preserveHash ? 'true' : undefined}
+      lang="en"
+      hreflang="en"
+      aria-label={labels.en}
+    >
+      EN
+    </a>
+  ) : (
+    <span class="language-switcher__language is-disabled" lang="en" aria-disabled="true" aria-label={labels.unavailable}>
+      EN
+    </span>
+  )}
+</div>
+
+<script>
+  const updateLanguageLinkHashes = () => {
+    document
+      .querySelectorAll<HTMLAnchorElement>('[data-language-link][data-preserve-hash="true"]')
+      .forEach((link) => {
+        const baseHref = link.dataset.baseHref;
+
+        if (!baseHref) return;
+
+        const url = new URL(baseHref, window.location.origin);
+        url.hash = window.location.hash;
+        link.href = `${url.pathname}${url.search}${url.hash}`;
+      });
+  };
+
+  updateLanguageLinkHashes();
+  window.addEventListener('hashchange', updateLanguageLinkHashes);
+</script>

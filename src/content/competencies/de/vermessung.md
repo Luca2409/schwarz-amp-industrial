@@ -1,4 +1,5 @@
 ---
+translationKey: "industrial-metrology"
 number: "02"
 title: "Vermessung"
 teaser: "Laserbasierte Präzisionsmessung für industrielle Anwendungen."

@@ -1175,3 +1175,61 @@ summary:focus-visible {
         animation-iteration-count: 1 !important;
     }
 }
+
+
+/* =========================================================
+   LANGUAGE SWITCHER
+   ========================================================= */
+
+.language-switcher {
+    display: inline-flex;
+    align-items: center;
+    color: var(--white);
+    font-size: 11px;
+    font-weight: 800;
+    letter-spacing: .08em;
+}
+
+.language-switcher__language {
+    min-width: 30px;
+    min-height: 32px;
+    padding: 0 6px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--white);
+    text-decoration: none;
+    transition: color .16s ease, background .16s ease;
+}
+
+a.language-switcher__language:hover {
+    color: var(--yellow);
+}
+
+.language-switcher__language.is-active {
+    color: var(--yellow);
+}
+
+.language-switcher__language.is-disabled {
+    color: #777;
+    cursor: not-allowed;
+}
+
+.language-switcher__separator {
+    color: rgba(255, 255, 255, .35);
+}
+
+.language-switcher--mobile {
+    width: 100%;
+    margin-top: 8px;
+    padding-top: 12px;
+    justify-content: center;
+    border-top: 1px solid rgba(255, 255, 255, .12);
+}
+
+.language-switcher--mobile .language-switcher__language {
+    min-width: 52px;
+    min-height: 44px;
+    padding: 0 12px;
+    border: 0;
+}

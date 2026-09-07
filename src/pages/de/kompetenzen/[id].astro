@@ -1,35 +1,33 @@
 ---
-import { getCollection, render } from 'astro:content';
+import { render } from 'astro:content';
+import { getRelativeLocaleUrl } from 'astro:i18n';
 
 import BaseLayout from '@/layouts/BaseLayout.astro';
 import Header from '@/components/Header.astro';
 import Footer from '@/components/Footer.astro';
+import { getCompetencyStaticPaths } from '@/lib/i18n';
 
 export async function getStaticPaths() {
-  const entries = await getCollection('competencies');
-
-  return entries.map((entry) => ({
-    params: { id: entry.id },
-    props: { entry },
-  }));
+  return getCompetencyStaticPaths('de');
 }
 
-const { entry } = Astro.props;
+const { entry, alternateLocaleUrl } = Astro.props;
 const { Content } = await render(entry);
-const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+const competenciesUrl = `${getRelativeLocaleUrl('de')}#services`;
 ---
 
 <BaseLayout
   title={`${entry.data.title} | AMP`}
   description={entry.data.seoDescription}
+  alternateLocaleUrl={alternateLocaleUrl}
 >
-  <Header />
+  <Header alternateLocaleUrl={alternateLocaleUrl} />
 
   <main>
     <section class="detail-hero">
       <div class="detail-hero__inner">
         <div class="detail-back-row">
-          <a class="detail-back" href={`${base}/#services`}>← Alle Kompetenzen</a>
+          <a class="detail-back" href={competenciesUrl}>← Alle Kompetenzen</a>
         </div>
         <div class="eyebrow eyebrow--dark">AMP · Kompetenz</div>
         <h1>{entry.data.title}</h1>

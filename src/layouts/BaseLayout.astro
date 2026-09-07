@@ -6,40 +6,72 @@ import '@/styles/global.css';
 interface Props {
   title: string;
   description?: string;
+  alternateLocaleUrl?: string;
+  noindex?: boolean;
 }
 
 const {
   title,
   description = 'AMP – Zerstörungsfreie Werkstoffprüfung',
+  alternateLocaleUrl,
+  noindex = false,
 } = Astro.props;
 
 const site = Astro.site ?? Astro.url;
 const canonicalUrl = new URL(Astro.url.pathname, site);
 const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 const socialImageUrl = new URL(`${base}/images/hero-image.jpg`, site);
+const locale = Astro.currentLocale === 'en' ? 'en' : 'de';
+const ogLocale = locale === 'en' ? 'en_GB' : 'de_DE';
+const socialImageAlt = locale === 'en'
+  ? 'AMP testing technology in industrial use'
+  : 'AMP Prüftechnik im industriellen Einsatz';
+const alternateUrl = alternateLocaleUrl
+  ? new URL(alternateLocaleUrl, site)
+  : undefined;
+const deUrl = locale === 'de' ? canonicalUrl : alternateUrl;
+const enUrl = locale === 'en' ? canonicalUrl : alternateUrl;
+const sitemapUrl = new URL(`${base}/sitemap-index.xml`, site);
+const structuredData = {
+  '@context': 'https://schema.org',
+  '@type': 'Organization',
+  name: 'AMP Prüftechnik',
+  url: new URL(`${base}/`, site),
+  logo: new URL(`${base}/images/logo-amp.png`, site),
+  email: 'info@amp-zfp.de',
+};
 ---
 
 <!doctype html>
-<html lang="de">
+<html lang={locale}>
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width" />
     <meta name="description" content={description} />
     <meta name="theme-color" content="#111111" />
+    {noindex && <meta name="robots" content="noindex, nofollow" />}
     <link rel="canonical" href={canonicalUrl} />
+    {deUrl && <link rel="alternate" hreflang="de" href={deUrl} />}
+    {enUrl && <link rel="alternate" hreflang="en" href={enUrl} />}
+    {deUrl && <link rel="alternate" hreflang="x-default" href={deUrl} />}
+    <link rel="sitemap" href={sitemapUrl} />
 
     <meta property="og:type" content="website" />
-    <meta property="og:locale" content="de_DE" />
+    <meta property="og:locale" content={ogLocale} />
+    {alternateUrl && (
+      <meta property="og:locale:alternate" content={locale === 'en' ? 'de_DE' : 'en_GB'} />
+    )}
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
     <meta property="og:url" content={canonicalUrl} />
     <meta property="og:image" content={socialImageUrl} />
-    <meta property="og:image:alt" content="AMP Prüftechnik im industriellen Einsatz" />
+    <meta property="og:image:alt" content={socialImageAlt} />
 
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content={title} />
     <meta name="twitter:description" content={description} />
     <meta name="twitter:image" content={socialImageUrl} />
+    <script is:inline type="application/ld+json" set:html={JSON.stringify(structuredData)} />
     <title>{title}</title>
   </head>
   <body>
