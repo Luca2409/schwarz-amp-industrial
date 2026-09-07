@@ -1,4 +1,5 @@
 ---
+translationKey: "inspections-acceptance"
 number: "03"
 title: "Inspektionen & Abnahmen"
 teaser: "Fachliche Begleitung und zuverlässige Dokumentation."

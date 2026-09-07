@@ -1,0 +1,105 @@
+---
+import { getRelativeLocaleUrl } from 'astro:i18n';
+
+import BaseLayout from '@/layouts/BaseLayout.astro';
+
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+const deHome = getRelativeLocaleUrl('de');
+const enHome = getRelativeLocaleUrl('en');
+---
+
+<BaseLayout
+  title="Seite nicht gefunden | AMP"
+  description="Die angeforderte Seite wurde nicht gefunden."
+  noindex
+>
+  <main class="not-found">
+    <a class="not-found__brand" href={deHome} data-home-link>AMP</a>
+    <div class="not-found__content">
+      <div class="eyebrow eyebrow--dark">AMP · 404</div>
+      <h1 data-title>Seite nicht gefunden.</h1>
+      <p data-description>
+        Die angeforderte Seite existiert nicht oder wurde verschoben.
+      </p>
+      <a class="button button--accent" href={deHome} data-home-link data-home-label>
+        Zur Startseite →
+      </a>
+    </div>
+  </main>
+
+  <script is:inline define:vars={{ base, deHome, enHome }}>
+    const english = window.location.pathname.startsWith(`${base}/en/`);
+    const copy = english
+      ? {
+          lang: 'en',
+          documentTitle: 'Page not found | AMP',
+          title: 'Page not found.',
+          description: 'The requested page does not exist or has been moved.',
+          homeLabel: 'Back to home page →',
+          homeUrl: enHome,
+        }
+      : {
+          lang: 'de',
+          documentTitle: 'Seite nicht gefunden | AMP',
+          title: 'Seite nicht gefunden.',
+          description: 'Die angeforderte Seite existiert nicht oder wurde verschoben.',
+          homeLabel: 'Zur Startseite →',
+          homeUrl: deHome,
+        };
+
+    document.documentElement.lang = copy.lang;
+    document.title = copy.documentTitle;
+    document.querySelector('[data-title]').textContent = copy.title;
+    document.querySelector('[data-description]').textContent = copy.description;
+    document.querySelector('[data-home-label]').textContent = copy.homeLabel;
+    document.querySelectorAll('[data-home-link]').forEach((link) => {
+      link.setAttribute('href', copy.homeUrl);
+    });
+  </script>
+</BaseLayout>
+
+<style>
+  .not-found {
+    min-height: 100vh;
+    min-height: 100svh;
+    padding: clamp(32px, 6vw, 88px) var(--page-padding);
+    display: flex;
+    flex-direction: column;
+    background: var(--black);
+    color: var(--white);
+  }
+
+  .not-found__brand {
+    width: max-content;
+    color: var(--white);
+    font-size: 42px;
+    font-style: italic;
+    font-weight: 900;
+    letter-spacing: -.05em;
+    line-height: .85;
+    text-decoration: underline;
+    text-decoration-color: var(--yellow);
+    text-decoration-thickness: 4px;
+    text-underline-offset: 10px;
+  }
+
+  .not-found__content {
+    width: min(100%, 760px);
+    margin: auto 0;
+  }
+
+  .not-found h1 {
+    margin: 22px 0 20px;
+    font-size: clamp(48px, 7vw, 96px);
+    line-height: 1;
+    letter-spacing: -.04em;
+  }
+
+  .not-found p {
+    max-width: 620px;
+    margin: 0 0 34px;
+    color: #c7c7c2;
+    font-size: clamp(17px, 2vw, 21px);
+    line-height: 1.65;
+  }
+</style>

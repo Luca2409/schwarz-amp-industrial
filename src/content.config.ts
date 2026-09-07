@@ -51,6 +51,7 @@ const competencies = defineCollection({
     pattern: '**/*.md',
   }),
   schema: z.object({
+    translationKey: z.string().min(1),
     number: z.string(),
     title: z.string(),
     teaser: z.string(),
