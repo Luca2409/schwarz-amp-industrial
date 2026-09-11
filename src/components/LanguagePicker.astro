@@ -2,14 +2,46 @@
 import { languages } from "@/i18n/ui";
 
 const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+const pathname = Astro.url.pathname;
+const pathWithoutBase = base && pathname.startsWith(`${base}/`)
+  ? pathname.slice(base.length)
+  : pathname;
+const pathSegments = pathWithoutBase.split('/').filter(Boolean);
+const currentLocale = pathSegments[0] in languages ? pathSegments[0] : 'de';
+const languageNames: Record<string, string> = {
+  de: 'Deutsch',
+  en: 'English',
+};
+
+function getLocalizedPath(locale: string) {
+  const localizedSegments = [...pathSegments];
+
+  if (localizedSegments[0] in languages) {
+    localizedSegments[0] = locale;
+  } else {
+    localizedSegments.unshift(locale);
+  }
+
+  let localizedPath = `/${localizedSegments.join('/')}`;
+  if (pathname.endsWith('/') && !localizedPath.endsWith('/')) localizedPath += '/';
+
+  return `${base}${localizedPath}${Astro.url.search}`;
+}
 ---
 
-<ul style="color: white;">
+<div class="language-picker" role="group" aria-label="Sprache auswählen">
   {
     Object.entries(languages).map(([locale, label]) => (
-      <li>
-        <a href={`${base}/${locale}/`}>{label}</a>
-      </li>
+      <a
+        class:list={['language-picker__option', { 'is-active': locale === currentLocale }]}
+        href={getLocalizedPath(locale)}
+        lang={locale}
+        hreflang={locale}
+        aria-label={`${languageNames[locale] ?? label} auswählen`}
+        aria-current={locale === currentLocale ? 'page' : undefined}
+      >
+        {label}
+      </a>
     ))
   }
-</ul>
+</div>
