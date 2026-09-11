@@ -1,40 +1,40 @@
 ---
-title: "AMP – Zerstörungsfreie Werkstoffprüfung"
-description: "Moderne Prüftechnik, umfassendes Know-how und persönliche Betreuung für anspruchsvolle industrielle Prüfaufgaben."
+title: "AMP – Non-Destructive Testing"
+description: "Advanced testing technology, extensive expertise, and dedicated support for demanding industrial inspection tasks."
 
-heroEyebrow: "AMP · Qualitätssicherung"
-heroTitlePrefix: "Ihr Partner für"
-heroTitleHighlight: "ENGLISH ENGLISHs"
-heroText: "Moderne Prüftechnik, umfassendes Know-how und persönliche Betreuung für anspruchsvolle industrielle Prüfaufgaben."
+heroEyebrow: "AMP · Quality Assurance"
+heroTitlePrefix: "Your partner for"
+heroTitleHighlight: "non-destructive testing."
+heroText: "Advanced testing technology, extensive expertise, and dedicated support for demanding industrial inspection tasks."
 heroImage: "/images/hero-image.jpg"
-heroImageLabel: "Werkstoffprüfung im Einsatz"
+heroImageLabel: "Material testing in practice"
 
 showcaseImage: "/images/know-how_01.jpg"
-showcaseImageAlt: "Fassade des AMP-Prüfzentrums"
-showcaseEyebrow: "AMP Prüftechnik"
-showcaseCaption: "Technische Kompetenz für anspruchsvolle industrielle Prüfaufgaben."
+showcaseImageAlt: "Exterior of the AMP testing center"
+showcaseEyebrow: "AMP Testing Technology"
+showcaseCaption: "Technical expertise for demanding industrial inspection tasks."
 
-primaryCtaLabel: "Kompetenzen ansehen"
+primaryCtaLabel: "Explore our capabilities"
 primaryCtaHref: "#services"
-secondaryCtaLabel: "Projekt anfragen"
+secondaryCtaLabel: "Discuss a project"
 secondaryCtaHref: "#contact"
 
-aboutEyebrow: "Wissen, prüfen, optimieren"
-aboutTitle: "Know-how ist unsere Leidenschaft."
+aboutEyebrow: "Expertise, testing, optimization"
+aboutTitle: "Expertise is our passion."
 
-competenciesEyebrow: "Unsere Kompetenzen"
-competenciesTitle: "Prüfen. Messen. Absichern."
+competenciesEyebrow: "Our Capabilities"
+competenciesTitle: "Inspect. Measure. Assure."
 
-qualityEyebrow: "Qualität im Fokus"
-qualityTitle: "Verlässliche Ergebnisse beginnen mit klaren Standards."
-qualityCardTitle: "Qualifiziert. Dokumentiert. Nachvollziehbar."
-qualityCardText: "Von der einzelnen Prüfung bis zur laufenden Qualitätsüberwachung unterstützen wir Sie mit der passenden technischen Lösung."
+qualityEyebrow: "Quality in Focus"
+qualityTitle: "Reliable results begin with clearly defined standards."
+qualityCardTitle: "Qualified. Documented. Traceable."
+qualityCardText: "From individual inspections to continuous quality monitoring, we provide the right technical solution for your requirements."
 
-contactTitle: "Ihre Prüfaufgabe. Unser Know-how."
-contactLabel: "Jetzt Kontakt aufnehmen"
+contactTitle: "Your inspection task. Our expertise."
+contactLabel: "Get in touch"
 contactHref: "mailto:info@amp-zfp.de"
 ---
 
-Als mittelständisches Unternehmen stellen wir uns auf die besonderen Anforderungen unserer Kunden ein. Sie profitieren von modernster Prüftechnik und umfassender Expertise – und können sich auf kurze Ent­scheidungs­wege verlassen. 
+As a medium-sized company, we adapt to the specific requirements of every customer. You benefit from advanced testing technology, extensive expertise, and fast, direct decision-making.
 
-Mit Leidenschaft und großer Sorgfalt führen wir das gemeinsame Projekt zum Erfolg. Unsere zertifizierten Servicetechniker verfügen über ausgewiesene Erfahrung in sämtlichen Bereichen der Quali­täts­sicherung und Werkstoffprüfung.
+We approach every project with dedication and meticulous care. Our certified service technicians bring proven experience across all areas of quality assurance and material testing.
