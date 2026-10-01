@@ -68,9 +68,9 @@ const lastModified = getLastModified(home.filePath, ...competencies.map((entry) 
       primaryHref={home.data.primaryCtaHref}
       secondaryLabel={home.data.secondaryCtaLabel}
       secondaryHref={getLocalizedPath(lang, 'contact')}
-    />
-
-    <FactsBar facts={home.data.facts} label={t('home.factsLabel')} />
+    >
+      <FactsBar slot="facts" facts={home.data.facts} label={t('home.factsLabel')} />
+    </Hero>
 
     <AboutSection
       eyebrow={home.data.aboutEyebrow}

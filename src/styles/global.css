@@ -414,22 +414,20 @@ summary:focus-visible {
 
 .hero {
     width: 100%;
-    /* Window height minus header (88px) and the part of the facts card below the hero (80px),
-       so the whole card is visible on the first screen of common laptops and monitors. */
-    min-height: calc(100vh - 168px);
-    min-height: calc(100svh - 168px);
+    /* Fills the first screen below the header (88px), including the facts card at the bottom. */
+    min-height: calc(100vh - 88px);
+    min-height: calc(100svh - 88px);
     display: grid;
     /* Outer margin of the content column; text and image align to it. */
     --hero-edge: max(var(--page-padding), calc((100vw - var(--content-max)) / 2 + var(--page-padding)));
     /* Split: text left, image right. The image column is half of the content width plus the
        right margin, so the text column doesn't get squeezed by wide outer margins. */
     grid-template-columns: minmax(0, 1fr) calc((100% - 2 * var(--hero-edge)) * .5 + var(--hero-edge));
-    /* Rows: space above, the text block, space below, and a fixed row for the facts card
-       overlapping the hero by 64px. The space above gets 60% of the space below, so the
-       text sits slightly above center, closer to the header. The image starts on the same
-       line as the text and ends where the card begins, floating between header and card. */
+    /* Rows: space above, the text block, space below, and the facts card. The space above
+       gets 60% of the space below, so the text sits slightly above center, closer to the
+       header. The image runs from the header to the facts bar. */
     --hero-space: clamp(32px, 3.5vw, 56px);
-    grid-template-rows: minmax(clamp(24px, 2.5vw, 40px), .6fr) auto minmax(var(--hero-space), 1fr) 64px;
+    grid-template-rows: minmax(clamp(24px, 2.5vw, 40px), .6fr) auto minmax(var(--hero-space), 1fr) auto;
     gap: 0;
     align-items: stretch;
     background: var(--white);
@@ -464,15 +462,6 @@ summary:focus-visible {
     background: none;
 }
 
-.hero__title::after {
-    width: 68px;
-    height: 4px;
-    margin-top: 18px;
-    display: block;
-    background: var(--yellow);
-    content: "";
-}
-
 .hero__text {
     max-width: 540px;
     margin: 0;
@@ -490,28 +479,15 @@ summary:focus-visible {
 }
 
 .hero__visual {
-    /* From the text's first line down to the card row, so the image's bottom edge and the
-       card's yellow top edge form one line. */
+    /* Full-bleed: from the header down to the facts bar and out to the right window edge;
+       the image's bottom edge meets the bar's yellow top edge. */
     grid-column: 2;
-    grid-row: 2 / 4;
+    grid-row: 1 / 4;
     position: relative;
     min-width: 0;
     min-height: 320px;
-    /* Right edge aligned with the content column (header button, facts card). */
-    margin-right: var(--hero-edge);
     isolation: isolate;
     --hero-shape: polygon(14% 0, 100% 0, 100% 100%, 0 100%);
-}
-
-/* Yellow stripe along the slanted left edge, meeting the card's yellow top edge. */
-.hero__visual::before {
-    position: absolute;
-    inset: 0;
-    z-index: -1;
-    background: var(--yellow);
-    clip-path: var(--hero-shape);
-    transform: translateX(-10px);
-    content: "";
 }
 
 .hero__image {
@@ -622,23 +598,26 @@ summary:focus-visible {
    FACTS BAR
    ========================================================= */
 
-/* Card that overlaps the bottom edge of the hero, bridging hero and the next section. */
+/* Bottom row of the hero, full width: a dark bar whose yellow top edge runs across the whole
+   window, echoing the black and yellow of header and logo. The facts sit in the content column. */
+.hero__facts {
+    grid-column: 1 / -1;
+    grid-row: 4;
+}
+
 .facts-bar {
     position: relative;
     z-index: 2;
-    margin-top: -64px;
-    padding: 0 var(--page-padding);
+    border-top: 3px solid var(--yellow);
+    background: var(--black);
 }
 
 .facts-bar__list {
-    width: min(100%, calc(var(--content-max) - 2 * var(--page-padding)));
+    width: min(100%, var(--content-max));
     margin: 0 auto;
-    padding: 0 8px;
+    padding: 0 var(--page-padding);
     display: grid;
     grid-template-columns: repeat(4, minmax(0, 1fr));
-    border-top: 3px solid var(--yellow);
-    background: var(--white);
-    box-shadow: 0 18px 48px rgba(0, 0, 0, .1);
     list-style: none;
 }
 
@@ -649,12 +628,17 @@ summary:focus-visible {
     align-content: start;
 }
 
+/* First fact lines up with the hero text. */
+.facts-bar__item:first-child {
+    padding-left: 0;
+}
+
 .facts-bar__item + .facts-bar__item {
-    border-left: 1px solid var(--line);
+    border-left: 1px solid rgba(255, 255, 255, .16);
 }
 
 .facts-bar__value {
-    color: var(--text);
+    color: var(--white);
     font-size: 20px;
     font-weight: 800;
     line-height: 1.2;
@@ -662,7 +646,7 @@ summary:focus-visible {
 }
 
 .facts-bar__label {
-    color: var(--muted);
+    color: #c4c4c4;
     font-size: 14px;
     line-height: 1.5;
 }
@@ -672,29 +656,23 @@ summary:focus-visible {
         grid-template-columns: repeat(2, minmax(0, 1fr));
     }
     .facts-bar__item:nth-child(odd) {
+        padding-left: 0;
         border-left: 0;
     }
     .facts-bar__item:nth-child(n + 3) {
-        border-top: 1px solid var(--line);
-    }
-}
-
-@media (max-width: 900px) {
-    .facts-bar {
-        margin-top: -40px;
+        border-top: 1px solid rgba(255, 255, 255, .16);
     }
 }
 
 @media (max-width: 560px) {
     .facts-bar__list {
-        padding: 0 20px;
         grid-template-columns: 1fr;
     }
     .facts-bar__item {
         padding: 18px 0;
     }
     .facts-bar__item + .facts-bar__item {
-        border-top: 1px solid var(--line);
+        border-top: 1px solid rgba(255, 255, 255, .16);
         border-left: 0;
     }
 }
@@ -1528,15 +1506,15 @@ summary:focus-visible {
         height: clamp(360px, 68vw, 460px);
         min-height: 0;
         /* Stacked layout: full-bleed with a slanted top edge; straight bottom edge so the image
-           meets the card's yellow top edge. Card overlap is 40px here. */
+           meets the card's yellow top edge. */
         grid-column: auto;
         grid-row: auto;
-        margin-bottom: 40px;
         margin-right: 0;
         --hero-shape: polygon(0 10%, 100% 0, 100% 100%, 0 100%);
     }
-    .hero__visual::before {
-        transform: translateY(-8px);
+    .hero__facts {
+        grid-column: auto;
+        grid-row: auto;
     }
     .about-section__inner,
     .quality-section,
