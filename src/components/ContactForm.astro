@@ -1,0 +1,145 @@
+---
+import type { Lang } from '@/i18n/ui';
+import { useTranslations } from '@/i18n/utils';
+import { site } from '@/site';
+
+/**
+ * Contact form posting to the external form service configured in `site.contactForm`.
+ * Submits via fetch and shows the result inline; without JavaScript the browser posts
+ * directly to the service. While no endpoint is configured, the form is disabled and
+ * points to the email address instead.
+ */
+interface Props {
+  lang: Lang;
+  /** Link to the privacy policy, shown in the notice below the form. */
+  privacyLink?: { title: string; href: string };
+}
+
+const { lang, privacyLink } = Astro.props;
+const t = useTranslations(lang);
+const { endpoint, hiddenFields, honeypot, subjectField } = site.contactForm;
+const enabled = endpoint !== '';
+---
+
+<form
+  class="contact-form"
+  action={enabled ? endpoint : undefined}
+  method="post"
+  data-contact-form
+  data-msg-sending={t('contact.form.sending')}
+  data-msg-success={t('contact.form.success')}
+  data-msg-error={`${t('contact.form.error')} ${site.email}.`}
+  data-msg-required={t('contact.form.invalidRequired')}
+  data-msg-email={t('contact.form.invalidEmail')}
+>
+  <h2 class="contact-form__title">{t('contact.form.title')}</h2>
+
+  {!enabled && (
+    <p class="contact-form__notice">
+      {t('contact.form.unavailable')} <a href={`mailto:${site.email}`}>{site.email}</a>.
+    </p>
+  )}
+
+  <fieldset class="contact-form__fields" disabled={!enabled}>
+    {Object.entries(hiddenFields).map(([name, value]) => (
+      <input type="hidden" name={name} value={value} />
+    ))}
+    <input type="hidden" name={subjectField} value={t('contact.form.subject')} />
+    <input type="hidden" name="language" value={lang} />
+
+    <!-- Spam trap: hidden from people, bots that fill it in are rejected by the service. -->
+    <div class="contact-form__honeypot" aria-hidden="true">
+      <input type="checkbox" name={honeypot} tabindex="-1" autocomplete="off" />
+    </div>
+
+    <div class="contact-form__row">
+      <label class="contact-form__field">
+        <span>{t('contact.form.name')} *</span>
+        <input type="text" name="name" autocomplete="name" required maxlength="200" />
+      </label>
+      <label class="contact-form__field">
+        <span>{t('contact.form.company')}</span>
+        <input type="text" name="company" autocomplete="organization" maxlength="200" />
+      </label>
+    </div>
+
+    <div class="contact-form__row">
+      <label class="contact-form__field">
+        <span>{t('contact.form.email')} *</span>
+        <input type="email" name="email" autocomplete="email" required maxlength="200" />
+      </label>
+      <label class="contact-form__field">
+        <span>{t('contact.form.phone')}</span>
+        <input type="tel" name="phone" autocomplete="tel" maxlength="50" />
+      </label>
+    </div>
+
+    <label class="contact-form__field">
+      <span>{t('contact.form.message')} *</span>
+      <textarea name="message" rows="7" required maxlength="5000"></textarea>
+    </label>
+
+    <p class="contact-form__hint">{t('contact.form.requiredHint')}</p>
+
+    <p class="contact-form__privacy">
+      {t('contact.form.privacy')}
+      {privacyLink ? <a href={privacyLink.href}>{privacyLink.title}</a> : null}.
+    </p>
+
+    <button class="button button--primary contact-form__submit" type="submit">
+      {t('contact.form.submit')}
+    </button>
+  </fieldset>
+
+  <!-- Always rendered (empty until submit), so screen readers reliably announce changes. -->
+  <p class="contact-form__status" role="status" aria-live="polite" data-status></p>
+</form>
+
+<script>
+  // Sends the form with fetch so visitors stay on the page and see the result inline.
+  document.querySelectorAll<HTMLFormElement>('form[data-contact-form][action]').forEach((form) => {
+    const status = form.querySelector<HTMLElement>('[data-status]')!;
+    const fieldset = form.querySelector('fieldset')!;
+
+    const showStatus = (message: string, state: 'sending' | 'success' | 'error') => {
+      status.textContent = message;
+      status.dataset.state = state;
+    };
+
+    // Validation messages in the page language instead of the browser language.
+    form.querySelectorAll<HTMLInputElement | HTMLTextAreaElement>('input, textarea').forEach((field) => {
+      field.addEventListener('invalid', () => {
+        if (field.validity.valueMissing) field.setCustomValidity(form.dataset.msgRequired!);
+        else if (field.validity.typeMismatch) field.setCustomValidity(form.dataset.msgEmail!);
+      });
+      field.addEventListener('input', () => field.setCustomValidity(''));
+    });
+
+    form.addEventListener('submit', async (event) => {
+      event.preventDefault();
+      // Collect the data before disabling the fields: disabled fields aren't submitted.
+      const data = new FormData(form);
+      showStatus(form.dataset.msgSending!, 'sending');
+      fieldset.disabled = true;
+
+      try {
+        const response = await fetch(form.action, {
+          method: 'POST',
+          body: data,
+          headers: { Accept: 'application/json' },
+        });
+        // Some services answer 200 with { success: false } (Web3Forms) or { ok: false } (Formspree).
+        const result = await response.json().catch(() => ({}));
+        if (!response.ok || result.success === false || result.ok === false) {
+          throw new Error(`Form service rejected the submission (HTTP ${response.status})`);
+        }
+        form.reset();
+        showStatus(form.dataset.msgSuccess!, 'success');
+      } catch {
+        showStatus(form.dataset.msgError!, 'error');
+      } finally {
+        fieldset.disabled = false;
+      }
+    });
+  });
+</script>

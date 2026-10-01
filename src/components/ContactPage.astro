@@ -1,0 +1,99 @@
+---
+import { getAbsoluteLocaleUrl } from 'astro:i18n';
+
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import Header from '@/components/Header.astro';
+import Footer from '@/components/Footer.astro';
+import JsonLd from '@/components/JsonLd.astro';
+import ContactForm from '@/components/ContactForm.astro';
+import GoogleMap from '@/components/GoogleMap.astro';
+import type { Lang } from '@/i18n/ui';
+import { getAlternates, getLocalizedPath, useTranslations } from '@/i18n/utils';
+import { getLegalPageLink } from '@/lib/content';
+import { getLastModified } from '@/lib/last-modified';
+import { breadcrumbs, contactPage, organization } from '@/lib/structured-data';
+import { getMissingContactSettings, isPlaceholder, site } from '@/site';
+
+/**
+ * Contact page with contact person, address, contact form and Google Maps.
+ * Rendered by the static routes `src/pages/de/kontakt.astro` and `src/pages/en/contact.astro`.
+ */
+interface Props {
+  lang: Lang;
+}
+
+const { lang } = Astro.props;
+const t = useTranslations(lang);
+
+const missing = getMissingContactSettings();
+if (isPlaceholder(t('contact.personRole'))) missing.push('contact.personRole (src/i18n/ui.ts)');
+if (missing.length > 0) {
+  console.warn(`[contact] ${lang}: not configured yet: ${missing.join(', ')}`);
+}
+
+const alternates = getAlternates('contact');
+const url = new URL(getLocalizedPath(lang, 'contact'), Astro.site ?? Astro.url).href;
+const privacyLink = await getLegalPageLink(lang, 'privacy-policy');
+const { address, contactPerson } = site;
+---
+
+<BaseLayout
+  lang={lang}
+  title={t('contact.metaTitle')}
+  description={t('contact.metaDescription')}
+  alternates={alternates}
+  lastModified={getLastModified('src/components/ContactPage.astro', 'src/site.ts', 'src/i18n/ui.ts')}
+>
+  <JsonLd
+    slot="head"
+    data={[
+      organization(lang, Astro.site ?? Astro.url),
+      contactPage(lang, t('contact.metaTitle'), url),
+      breadcrumbs([
+        { name: t('breadcrumb.home'), url: getAbsoluteLocaleUrl(lang) },
+        { name: t('contact.eyebrow'), url },
+      ]),
+    ]}
+  />
+  <Header lang={lang} alternates={alternates} />
+
+  <main>
+    <section class="detail-hero">
+      <div class="detail-hero__inner">
+        <div class="eyebrow eyebrow--dark">{t('contact.eyebrow')}</div>
+        <h1>{t('contact.title')}</h1>
+        <p>{t('contact.intro')}</p>
+      </div>
+    </section>
+
+    <section class="detail-content">
+      <ContactForm lang={lang} privacyLink={privacyLink} />
+
+      <aside class="detail-sidebar contact-sidebar">
+        <div class="eyebrow eyebrow--dark">{t('contact.personEyebrow')}</div>
+        <h2>{contactPerson.name}</h2>
+        <p class="contact-sidebar__role">{t('contact.personRole')}</p>
+        <dl class="contact-sidebar__list">
+          <dt>{t('contact.phone')}</dt>
+          <dd><a href={contactPerson.phone.href}>{contactPerson.phone.display}</a></dd>
+          <dt>{t('contact.email')}</dt>
+          <dd><a href={`mailto:${contactPerson.email}`}>{contactPerson.email}</a></dd>
+        </dl>
+
+        <div class="eyebrow eyebrow--dark">{t('contact.addressEyebrow')}</div>
+        <address class="contact-sidebar__address">
+          {site.company}<br />
+          {address.street}<br />
+          {address.postalCode} {address.city}
+        </address>
+      </aside>
+    </section>
+
+    <section class="contact-map" aria-labelledby="contact-map-title">
+      <h2 class="section-heading" id="contact-map-title">{t('contact.map.title')}</h2>
+      <GoogleMap lang={lang} privacyLink={privacyLink} />
+    </section>
+  </main>
+
+  <Footer lang={lang} />
+</BaseLayout>

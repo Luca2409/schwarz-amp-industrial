@@ -94,6 +94,18 @@ export async function getCompetencies(lang: Lang) {
 }
 
 /**
+ * Finds a legal page by its `translationKey`, e.g. to link the privacy policy.
+ *
+ * @param lang Language of the page.
+ * @param translationKey Key of the legal page, e.g. `privacy-policy`.
+ * @returns Title and localized URL, or `undefined` if the page doesn't exist in `lang`.
+ */
+export async function getLegalPageLink(lang: Lang, translationKey: string) {
+  const entry = (await getLegalPages(lang)).find((page) => page.data.translationKey === translationKey);
+  return entry && { title: entry.data.title, href: getEntryPath(entry) };
+}
+
+/**
  * Loads the legal pages (Impressum, privacy policy, …) of one language, e.g. for the footer.
  *
  * @param lang Language to load.

@@ -9,7 +9,15 @@ import type { Lang } from './ui';
  */
 export const routes = {
   competencies: { de: 'kompetenzen', en: 'competencies' },
+  // Static routes: src/pages/de/kontakt.astro and src/pages/en/contact.astro must match.
+  contact: { de: 'kontakt', en: 'contact' },
 } as const satisfies Record<string, Record<Lang, string>>;
 
 /** Name of a localized route, e.g. `competencies`. */
 export type RouteKey = keyof typeof routes;
+
+/**
+ * Routes served by static page files (`src/pages/<lang>/<segment>.astro`) instead of a
+ * dynamic `[lang]/[…]` route. The build checks that these files exist for every language.
+ */
+export const staticRoutes = ['contact'] as const satisfies readonly RouteKey[];

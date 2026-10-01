@@ -1,19 +1,21 @@
 ---
-import { site } from '@/site';
+import type { Lang } from '@/i18n/ui';
+import { getLocalizedPath } from '@/i18n/utils';
 
-/** Contact call-to-action (`#contact`); the link opens an email to the address in `src/site.ts`. */
+/** Contact call-to-action (`#contact`) linking to the contact page. */
 interface Props {
+  lang: Lang;
   title: string;
   /** Link label. */
   label: string;
 }
 
-const { title, label } = Astro.props;
+const { lang, title, label } = Astro.props;
 ---
 
 <section class="contact-banner" id="contact">
   <div class="contact-banner__copy">
     <h2>{title}</h2>
   </div>
-  <a href={`mailto:${site.email}`}>{label} <span aria-hidden="true">→</span></a>
+  <a href={getLocalizedPath(lang, 'contact')}>{label} <span aria-hidden="true">→</span></a>
 </section>

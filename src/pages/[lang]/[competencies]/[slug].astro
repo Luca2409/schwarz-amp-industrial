@@ -8,7 +8,7 @@ import Footer from '@/components/Footer.astro';
 import JsonLd from '@/components/JsonLd.astro';
 import CompetenciesSection from '@/components/CompetenciesSection.astro';
 import { routes } from '@/i18n/routes';
-import { getHomeAnchor, useTranslations } from '@/i18n/utils';
+import { getHomeAnchor, getLocalizedPath, useTranslations } from '@/i18n/utils';
 import {
   getCompetencies,
   getEntryAlternates,
@@ -19,7 +19,6 @@ import {
 } from '@/lib/content';
 import { getLastModified } from '@/lib/last-modified';
 import { breadcrumbs, service } from '@/lib/structured-data';
-import { site } from '@/site';
 
 /**
  * Builds one page per competency, e.g. `/de/kompetenzen/vermessung/`. The route segment
@@ -90,7 +89,7 @@ const related = (await getCompetencies(lang)).filter((other) => other.id !== ent
         <div class="eyebrow eyebrow--dark">{t('competency.contactEyebrow')}</div>
         <h2>{t('competency.contactTitle')}</h2>
         <p>{t('competency.contactText')}</p>
-        <a class="button button--accent" href={`mailto:${site.email}`}>
+        <a class="button button--accent" href={getLocalizedPath(lang, 'contact')}>
           {t('competency.contactCta')}
         </a>
       </aside>

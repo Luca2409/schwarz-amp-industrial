@@ -18,7 +18,7 @@ const navigation = [
   { label: t('nav.about'), href: getHomeAnchor(lang, 'about') },
   { label: t('nav.competencies'), href: getHomeAnchor(lang, 'services') },
   { label: t('nav.quality'), href: getHomeAnchor(lang, 'quality') },
-  { label: t('nav.contact'), href: getHomeAnchor(lang, 'contact') },
+  { label: t('nav.contact'), href: getLocalizedPath(lang, 'contact') },
 ];
 ---
 
@@ -37,7 +37,7 @@ const navigation = [
 
       <LanguagePicker lang={lang} alternates={alternates} />
 
-      <a class="main-navigation__cta" href={getHomeAnchor(lang, 'contact')}>{t('nav.cta')}</a>
+      <a class="main-navigation__cta" href={getLocalizedPath(lang, 'contact')}>{t('nav.cta')}</a>
     </nav>
 
     <details class="mobile-navigation">
