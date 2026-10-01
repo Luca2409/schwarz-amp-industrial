@@ -2,8 +2,6 @@
 
 How the site handles languages, localized URLs, translations, SEO tags, structured data and the sitemap. Built on Astro's [i18n routing](https://docs.astro.build/en/guides/internationalization/), the [i18n recipe](https://docs.astro.build/en/recipes/i18n/) and [`@astrojs/sitemap`](https://docs.astro.build/en/guides/integrations-guide/sitemap/).
 
-Open tasks are tracked in [TODO.md](./TODO.md).
-
 ## Contents
 
 - [Overview](#overview)
@@ -29,15 +27,17 @@ Open tasks are tracked in [TODO.md](./TODO.md).
 | File | Purpose |
 | --- | --- |
 | `astro.config.mjs` | Locales, default locale, routing options, sitemap integration |
+| `deploy.config.mjs` | Domain (`site`) and base path (`base`), shared with the e2e tests |
 | `src/i18n/ui.ts` | UI strings per language, `Lang` type, `languages`, `defaultLang`, `localeMeta` |
 | `src/i18n/utils.ts` | `useTranslations`, `getLocalizedPath`, `getHomeAnchor`, `getAlternates` |
 | `src/i18n/routes.ts` | Translated URL segments (`kompetenzen` ↔ `competencies`) |
 | `src/i18n/sitemap.ts` | Sitemap serializer copying hreflang and `lastmod` from built pages |
 | `src/i18n/storage.ts` | localStorage key for the chosen language |
+| `src/integrations/site-checks.ts` | Build checks: placeholders, static route files |
 | `src/lib/content.ts` | Helpers for translated content entries (paths, alternates, missing-translation check) |
 | `src/lib/structured-data.ts` | schema.org JSON-LD builders |
 | `src/lib/last-modified.ts` | Last change date of source files (git) |
-| `src/site.ts` | Company data (name, email, phone, logo) |
+| `src/site.ts` | Company data, related companies, address, contact person, form service, map URL |
 | `src/layouts/BaseLayout.astro` | All `<head>` SEO tags |
 | `src/components/LanguagePicker.astro` | Language switch |
 | `src/components/JsonLd.astro` | Renders structured data |
@@ -65,6 +65,7 @@ Every page carries a language prefix (`prefixDefaultLocale: true`). All URLs end
 | Home | `/de/` | `/en/` | `src/pages/[lang]/index.astro` |
 | Competency | `/de/kompetenzen/vermessung/` | `/en/competencies/dimensional-metrology/` | `src/pages/[lang]/[competencies]/[slug].astro` |
 | Legal page | `/de/impressum/` | `/en/legal-notice/` | `src/pages/[lang]/[slug].astro` |
+| Contact | `/de/kontakt/` | `/en/contact/` | `src/pages/de/kontakt.astro`, `src/pages/en/contact.astro`, see [contact-page.md](./contact-page.md) |
 | 404 | `/404.html` | | `src/pages/404.astro` |
 
 Never build URLs by hand. Use `getLocalizedPath`, `getHomeAnchor` or `getEntryPath`; they handle `base`, the language prefix, translated segments and trailing slashes.
@@ -113,7 +114,7 @@ const t = useTranslations(lang);
 ```
 
 - German is the reference. A key missing in another language is a **type error** (`npm run check`).
-- Keys are grouped by prefix: `brand.*`, `nav.*`, `language.*`, `footer.*`, `breadcrumb.*`, `notFound.*`, `competency.*`, `seo.*`.
+- Keys are grouped by prefix: `brand.*`, `nav.*`, `language.*`, `footer.*`, `breadcrumb.*`, `notFound.*`, `competency.*`, `contact.*` (incl. `contact.form.*`, `contact.map.*`), `seo.*`.
 - `t()` falls back to German at runtime if a key is missing.
 
 Components get the language as a `lang` prop from the page; they don't detect it from the URL.
@@ -157,6 +158,7 @@ Helpers in `src/lib/content.ts`:
 | `getEntryAlternates(entry, all)` | All translations of the entry |
 | `getCompetencies(lang)` | Competencies of one language, sorted by `order` |
 | `getLegalPages(lang)` | Legal pages of one language, sorted by `order` |
+| `getLegalPageLink(lang, key)` | Title and URL of one legal page, e.g. the privacy policy for the contact form |
 | `warnMissingTranslations(entries)` | Logs missing translations |
 
 ### Home page frontmatter
@@ -164,7 +166,7 @@ Helpers in `src/lib/content.ts`:
 `src/content/pages/<lang>/home.md` holds all texts of the home page sections (hero, about, showcase, competencies, quality, contact banner) plus `title` and `description` for SEO. The Markdown body is the "about" text. See the `pages` schema in `src/content.config.ts` for the full field list.
 
 - `heroImage` and `showcaseImage` are paths to `src/assets/images/`, relative to the Markdown file (e.g. `../../../assets/images/hero-image.jpg`). See [Images](#images).
-- The contact banner links to the email from `src/site.ts`; there is no link field in the frontmatter.
+- The contact banner links to the contact page; there is no link field in the frontmatter.
 - `primaryCtaHref` / `secondaryCtaHref` are anchors on the same page (`#services`, `#contact`).
 
 ### Competency frontmatter
@@ -187,10 +189,15 @@ Route segments that differ per language are defined in `src/i18n/routes.ts`:
 ```ts
 export const routes = {
   competencies: { de: 'kompetenzen', en: 'competencies' },
+  contact: { de: 'kontakt', en: 'contact' },
 };
+
+export const staticRoutes = ['contact'];
 ```
 
 The dynamic folder `src/pages/[lang]/[competencies]/` receives the translated segment as a param from `getStaticPaths`. Every route key must have an entry for each language (type-checked).
+
+`contact` is the exception: the contact page uses static route files (`src/pages/de/kontakt.astro`, `src/pages/en/contact.astro`), because a dynamic `[lang]/[contact]/` route would clash with the legal pages route `[lang]/[slug].astro`. Such routes are listed in `staticRoutes` in `src/i18n/routes.ts`; the build fails if their files don't match the segments in `routes` (`src/integrations/site-checks.ts`). `routes.contact` is still used to build links with `getLocalizedPath(lang, 'contact')`.
 
 ## Language selection
 
@@ -250,6 +257,9 @@ JSON-LD built with `src/lib/structured-data.ts` and rendered with `<JsonLd slot=
 | Home | `Organization`, `WebSite` |
 | Competency | `Service`, `BreadcrumbList` |
 | Legal page | `BreadcrumbList` |
+| Contact | `Organization`, `ContactPage`, `BreadcrumbList` |
+
+The `Organization` includes a `ContactPoint` and, once `site.address` is filled in, a `PostalAddress`.
 
 All nodes reference the organization by a stable id (`…/de/#organization`). Company data comes from `src/site.ts`. Validate with Google's [Rich Results Test](https://search.google.com/test/rich-results) or the [Schema Markup Validator](https://validator.schema.org/).
 
@@ -268,6 +278,7 @@ All nodes reference the organization by a stable id (`…/de/#organization`). Co
 | --- | --- |
 | Home | its `home.md` and all competencies of that language |
 | Competency / legal page | its Markdown file |
+| Contact | `src/components/ContactPage.astro`, `src/site.ts` and `src/i18n/ui.ts` |
 
 The deploy workflow checks out the full history (`fetch-depth: 0`), otherwise every page would get the date of the latest commit.
 
@@ -277,7 +288,7 @@ The deploy workflow checks out the full history (`fetch-depth: 0`), otherwise ev
 
 ## Internal linking
 
-Each competency page ends with a "related" section (`CompetenciesSection` with `id="related"`) listing the other competencies of the same language, with the headings `competency.relatedEyebrow` / `competency.relatedTitle`. Header and footer link to the home page sections of the current language via `getHomeAnchor`.
+Each competency page ends with a "related" section (`CompetenciesSection` with `id="related"`) listing the other competencies of the same language, with the headings `competency.relatedEyebrow` / `competency.relatedTitle`. Header and footer link to the home page sections of the current language via `getHomeAnchor`, and to the contact page via `getLocalizedPath(lang, 'contact')`. The contact banner on the home page and the sidebar on competency pages link to the contact page too.
 
 ## Images
 
@@ -297,7 +308,7 @@ Collection `legal` (`src/content/legal/<lang>/*.md`) with `translationKey`, `tit
 
 ## Site config
 
-`src/site.ts` holds company data used by the footer, contact links and structured data:
+`src/site.ts` holds company data used by the footer, the contact page and structured data:
 
 ```ts
 export const site = {
@@ -306,8 +317,15 @@ export const site = {
   email: 'info@amp-zfp.de',
   phone: { display: '+49 7443 9665-19', href: 'tel:+497443966519' },
   logo: '/images/logo-amp.png',
+  relatedCompanies: [{ name: 'Schwarz Holding', url: 'https://www.schwarz-online.de/' }, …],
+  address: { street: '…', postalCode: '…', city: '…', country: 'DE' },
+  contactPerson: { name: '…', email: '…', phone: { … } },
+  contactForm: { endpoint: '…', hiddenFields: {}, honeypot: 'botcheck', subjectField: 'subject' },
+  mapEmbedUrl: '',
 };
 ```
+
+`relatedCompanies` are listed in the footer under "Weitere Unternehmen" / "Related companies" (`footer.relatedLabel`); their names aren't translated. Address, contact person, form service and map are explained in [contact-page.md](./contact-page.md#setup-checklist).
 
 Markdown can't import it, so the legal pages repeat email and phone.
 
@@ -348,8 +366,8 @@ Create `src/content/legal/<lang>/<slug>.md` for every language with a shared `tr
 
 ### Move to your own domain
 
-1. Set `site` in `astro.config.mjs` to the domain, e.g. `https://www.amp-zfp.de`.
-2. Remove `base` (and the `base` argument in the sitemap config).
+1. In `deploy.config.mjs`, set `site` to the domain, e.g. `https://www.amp-zfp.de`, and `base` to `''`.
+2. Nothing else in the code: `astro.config.mjs` (incl. sitemap) and the e2e tests read both values from there.
 3. Configure the domain in the GitHub Pages settings.
 
 Canonical URLs, hreflang, the sitemap, `robots.txt` and structured data follow automatically.

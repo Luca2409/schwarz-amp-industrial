@@ -1,6 +1,6 @@
 import { getAbsoluteLocaleUrl } from 'astro:i18n';
 import { defaultLang, type Lang } from '@/i18n/ui';
-import { site } from '@/site';
+import { hasAddress, site } from '@/site';
 
 // schema.org JSON-LD objects, rendered into <head> by the JsonLd component.
 
@@ -25,6 +25,25 @@ export function organization(lang: Lang, siteUrl: URL) {
     logo: new URL(`${import.meta.env.BASE_URL.replace(/\/$/, '')}${site.logo}`, siteUrl).href,
     email: site.email,
     telephone: site.phone.display,
+    ...(hasAddress && { address: postalAddress() }),
+    contactPoint: {
+      '@type': 'ContactPoint',
+      contactType: 'customer service',
+      email: site.contactPerson.email,
+      telephone: site.contactPerson.phone.display,
+      availableLanguage: ['de', 'en'],
+    },
+  };
+}
+
+/** The company address from `src/site.ts` as schema.org `PostalAddress`. */
+function postalAddress() {
+  return {
+    '@type': 'PostalAddress',
+    streetAddress: site.address.street,
+    postalCode: site.address.postalCode,
+    addressLocality: site.address.city,
+    addressCountry: site.address.country,
   };
 }
 
@@ -66,6 +85,25 @@ export function service(lang: Lang, name: string, description: string, url: stri
     url,
     inLanguage: lang,
     provider: { '@id': organizationId() },
+  };
+}
+
+/**
+ * Describes the contact page as a schema.org `ContactPage` about the organization.
+ *
+ * @param lang Language of the page.
+ * @param name Page title.
+ * @param url Absolute URL of the contact page.
+ * @returns JSON-LD object referencing the organization as main entity.
+ */
+export function contactPage(lang: Lang, name: string, url: string) {
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'ContactPage',
+    name,
+    url,
+    inLanguage: lang,
+    mainEntity: { '@id': organizationId() },
   };
 }
 

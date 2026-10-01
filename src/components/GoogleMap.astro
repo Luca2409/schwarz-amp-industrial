@@ -1,0 +1,56 @@
+---
+import type { Lang } from '@/i18n/ui';
+import { useTranslations } from '@/i18n/utils';
+import { addressLine, site } from '@/site';
+
+/**
+ * Google Maps with a two-click solution: nothing is loaded from Google until the visitor
+ * clicks "Load map", as required for consent under GDPR and § 25 TDDDG. The consent isn't
+ * stored, so the map has to be loaded again on every visit.
+ */
+interface Props {
+  lang: Lang;
+  /** Link to the privacy policy, shown in the consent notice. */
+  privacyLink?: { title: string; href: string };
+}
+
+const { lang, privacyLink } = Astro.props;
+const t = useTranslations(lang);
+
+const query = encodeURIComponent(`${site.company}, ${addressLine}`);
+const embedUrl = site.mapEmbedUrl || `https://www.google.com/maps?q=${query}&hl=${lang}&output=embed`;
+// Official Maps URL; opens Google Maps in a new tab without embedding anything.
+const mapsUrl = `https://www.google.com/maps/search/?api=1&query=${query}`;
+---
+
+<div class="google-map" data-google-map data-src={embedUrl} data-title={t('contact.map.iframeTitle')}>
+  <div class="google-map__consent">
+    <p>
+      {t('contact.map.notice')}
+      {privacyLink ? <a href={privacyLink.href}>{privacyLink.title}</a> : null}.
+    </p>
+    <div class="google-map__actions">
+      <button class="button button--accent" type="button" data-load-map>{t('contact.map.load')}</button>
+      <a class="google-map__external" href={mapsUrl} target="_blank" rel="noopener noreferrer">
+        {t('contact.map.open')}
+      </a>
+    </div>
+  </div>
+</div>
+
+<script>
+  // Replaces the consent notice with the Google Maps iframe after the visitor's click.
+  document.querySelectorAll<HTMLElement>('[data-google-map]').forEach((map) => {
+    map.querySelector('[data-load-map]')?.addEventListener('click', () => {
+      const iframe = document.createElement('iframe');
+      iframe.src = map.dataset.src!;
+      iframe.title = map.dataset.title!;
+      iframe.className = 'google-map__frame';
+      iframe.loading = 'lazy';
+      iframe.referrerPolicy = 'no-referrer-when-downgrade';
+      iframe.allowFullscreen = true;
+      map.replaceChildren(iframe);
+      map.classList.add('is-loaded');
+    });
+  });
+</script>

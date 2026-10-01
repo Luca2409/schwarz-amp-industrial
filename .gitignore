@@ -1,6 +1,27 @@
+# build output
+dist/
+dist-e2e/
 .astro/
 
+# dependencies
 node_modules/
 
-dist
+# tests
+test-results/
+playwright-report/
+blob-report/
+playwright/.cache/
+
+# environment
+.env
+.env.*
+!.env.example
+
+# logs
+npm-debug.log*
+
+# OS / editors
 .DS_Store
+.vscode/*
+!.vscode/extensions.json
+.idea/
