@@ -237,7 +237,7 @@ Each page passes its alternates to both `BaseLayout` (hreflang) and `Header` (la
 | `og:type` | `type` prop (`website` or `article` for competencies) |
 | `og:image` (+ width/height/alt) | `image` prop or the hero image, cropped to 1200×630 JPG by `astro:assets` |
 | `og:updated_time`, `article:modified_time` | `lastModified` prop, see [Sitemap](#lastmod) |
-| `<meta name="robots" content="noindex">` | `noindex` prop |
+| `<meta name="robots" content="noindex">` | `noindex` prop, or every page in a [prototype build](./quality-checks.md#prototype-mode) |
 | Favicon, Apple touch icon | `public/favicon.svg`, `public/apple-touch-icon.png` |
 | `<link rel="sitemap">` | Always |
 
@@ -288,7 +288,7 @@ The deploy workflow checks out the full history (`fetch-depth: 0`), otherwise ev
 
 ### robots.txt
 
-`src/pages/robots.txt.ts` allows all crawlers and points to the sitemap. Crawlers only read `robots.txt` at the domain root, so it takes effect once the site runs on its own domain.
+`src/pages/robots.txt.ts` allows all crawlers and points to the sitemap; in a [prototype build](./quality-checks.md#prototype-mode) it disallows all crawlers instead. Crawlers only read `robots.txt` at the domain root, so it takes effect once the site runs on its own domain.
 
 ## Internal linking
 

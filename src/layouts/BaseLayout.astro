@@ -40,6 +40,8 @@ const {
 } = Astro.props;
 const t = useTranslations(lang);
 const description = Astro.props.description ?? t('seo.defaultDescription');
+// Prototype builds (PUBLIC_PROTOTYPE=true) may contain placeholder legal texts: keep them out of search engines.
+const prototype = import.meta.env.PUBLIC_PROTOTYPE === 'true';
 
 const site = Astro.site ?? Astro.url;
 const absolute = (path: string) => new URL(path, site).href;
@@ -62,7 +64,7 @@ const otherLocales = alternates.filter((alternate) => alternate.lang !== lang);
     <meta name="viewport" content="width=device-width" />
     <meta name="description" content={description} />
     <meta name="theme-color" content="#111111" />
-    {noindex && <meta name="robots" content="noindex" />}
+    {(noindex || prototype) && <meta name="robots" content="noindex" />}
     <link rel="icon" href={`${base}/favicon.svg`} type="image/svg+xml" />
     <link rel="apple-touch-icon" href={`${base}/apple-touch-icon.png`} />
     <link rel="canonical" href={canonicalUrl} />

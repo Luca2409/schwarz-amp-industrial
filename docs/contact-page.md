@@ -29,7 +29,7 @@ The build prints a warning until everything is configured:
 [contact] de: not configured yet: address (src/site.ts), contactPerson.name (src/site.ts), contactForm.endpoint (src/site.ts), contact.personRole (src/i18n/ui.ts)
 ```
 
-Remaining `[placeholders]` in `src/site.ts`, `src/i18n/ui.ts` and the legal pages **fail the build in CI**, so they're never deployed. See [Placeholder check](#placeholder-check).
+Remaining `[placeholders]` in `src/site.ts`, `src/i18n/ui.ts` and the legal pages **fail the build in CI**, so they're never deployed by accident. To deploy a draft anyway, use a [prototype build](./quality-checks.md#prototype-mode). See [Placeholder check](#placeholder-check).
 
 1. **Address:** fill in `site.address` in `src/site.ts`. It's used on the page, for the map and, once complete, as `PostalAddress` in the structured data.
 2. **Contact person:** fill in `site.contactPerson` (name, email, phone) and the role in `contact.personRole` for every language in `src/i18n/ui.ts`.
@@ -118,7 +118,7 @@ The language picker stores the chosen language in `localStorage`. This is "stric
 
 ## Placeholder check
 
-Remaining `[placeholders]` in `src/site.ts`, `src/i18n/ui.ts` and the legal pages only warn locally but **fail the build in CI**, so an incomplete contact page or Impressum is never deployed. Details: [quality-checks.md → Placeholders](./quality-checks.md#placeholders).
+Remaining `[placeholders]` in `src/site.ts`, `src/i18n/ui.ts` and the legal pages only warn locally but **fail the build in CI**, so an incomplete contact page or Impressum is never deployed by accident. A [prototype build](./quality-checks.md#prototype-mode) only warns and hides the site from search engines. Details: [quality-checks.md → Placeholders](./quality-checks.md#placeholders).
 
 ## Tests
 

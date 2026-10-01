@@ -36,7 +36,7 @@ The dev server runs at http://localhost:4321/schwarz-amp-industrial/ and redirec
 
 Run `npm run check`, `npm run build` and `npm run test:e2e` before pushing. The build prints `[i18n]` warnings for content that's missing in a language and `[site-checks]` warnings for unfilled `[placeholders]`.
 
-> **Placeholders block deployment:** in CI, the build fails while `[placeholders]` remain in `src/site.ts`, `src/i18n/ui.ts` or the legal pages. All checks: [docs/quality-checks.md](docs/quality-checks.md).
+> **Placeholders block deployment:** in CI, the build fails while `[placeholders]` remain in `src/site.ts`, `src/i18n/ui.ts` or the legal pages, unless it's a [prototype build](#prototype-builds). All checks: [docs/quality-checks.md](docs/quality-checks.md).
 
 > After changing `src/content.config.ts`, restart the dev server. Its content cache doesn't always recover from schema changes.
 
@@ -159,11 +159,20 @@ Astro converts them to WebP in several sizes at build time. Only files that need
 `.github/workflows/deploy.yml` builds and deploys the site to GitHub Pages on every push to `main` (or manually via *Run workflow*):
 
 1. Checkout with full git history (`fetch-depth: 0`, needed for the sitemap's `lastmod` dates)
-2. Node 22, `npm ci`, `npm run build` (fails while `[placeholders]` are left)
+2. Node 22, `npm ci`, `npm run build` (fails while `[placeholders]` are left, unless the repository variable `PROTOTYPE` is `true`)
 3. `npm run test:e2e` against a separate build in `dist-e2e/`; on failure, traces are uploaded as artifact `playwright-traces`
 4. Upload `dist/` and deploy to GitHub Pages
 
 The repository's Pages setting must use **GitHub Actions** as source.
+
+### Prototype builds
+
+While legal texts or contact data still contain `[placeholders]`, the CI build fails. To deploy anyway, e.g. to show a draft, build a **prototype**:
+
+- **GitHub Actions:** set the repository variable `PROTOTYPE` to `true` (Settings → Secrets and variables → Actions → Variables). Delete it or set it to anything else for the real launch.
+- **Locally:** `PUBLIC_PROTOTYPE=true npm run build`
+
+A prototype build only warns about placeholders, adds `<meta name="robots" content="noindex">` to every page and makes `robots.txt` disallow all crawlers, so the draft isn't indexed by search engines. Details: [docs/quality-checks.md → Prototype mode](docs/quality-checks.md#prototype-mode).
 
 `site` and `base` in `deploy.config.mjs` match the GitHub Pages project URL. Both `astro.config.mjs` and `playwright.config.ts` read them from there. When moving to a custom domain, follow [Move to your own domain](docs/i18n-seo.md#move-to-your-own-domain).
 
