@@ -10,7 +10,7 @@ Everything that verifies the site automatically: type checks, content validation
 | [Content schemas](#content-schemas) | every build and dev server | Missing/invalid frontmatter, missing image files | error | error |
 | [Missing translations](#missing-translations) | every build | Content not available in every language | warning | warning |
 | [Contact configuration](#contact-configuration) | every build | Address, contact person, role, form endpoint not set | warning | warning |
-| [Placeholders](#placeholders) | build, dev server start | `[placeholders]` in company data, UI strings, legal pages | warning | **error** |
+| [Placeholders](#placeholders) | build, dev server start | `[placeholders]` in company data, UI strings, legal pages | warning | **error** (warning in a [prototype build](#prototype-mode)) |
 | [Static route files](#static-route-files) | build, dev server start | Contact route files not matching `routes.ts` | error (dev: warning) | error |
 | [End-to-end tests](#end-to-end-tests) | `npm run test:e2e` | Broken form, map consent, language switching, root redirect | error | error |
 
@@ -50,6 +50,14 @@ npm run check && npm run build && npm run test:e2e
 
 The page is still built; it just has no counterpart in the missing language.
 
+### Expired certificates
+
+`warnExpiredCertificates()` (`src/lib/certificates.ts`) warns during the build about certificates whose `validUntil` has passed:
+
+```
+[certificates] "iso-9001" expired on 2024-11-21; replace it in src/lib/certificates.ts
+```
+
 ### Contact configuration
 
 `ContactPage.astro` warns per language while contact settings are missing (`getMissingContactSettings()` in `src/site.ts`, plus the role in `ui.ts`):
@@ -73,13 +81,44 @@ The `siteChecks()` integration (`src/integrations/site-checks.ts`) finds unfille
 | --- | --- |
 | Dev server start, local build | Warning listing every placeholder per file |
 | CI (`CI=true`, set by GitHub Actions) | **Build fails**, so an incomplete Impressum or contact page is never deployed |
+| `PUBLIC_PROTOTYPE=true` | Warning only; prototype build that can be deployed. Every page gets `noindex` and `robots.txt` disallows all crawlers, so placeholder legal texts don't end up in search engines |
 | `ALLOW_PLACEHOLDERS=true` | Warning only; used by the e2e test build, which is never deployed |
 
 Competency content isn't scanned, because method abbreviations like `[RT]` or `[PMI]` look like placeholders.
 
+### Prototype mode
+
+A prototype build lets you deploy a draft while legal texts or contact data still contain `[placeholders]`, without the draft showing up in search engines.
+
+**Switch it on**
+
+| Where | How |
+| --- | --- |
+| GitHub Actions (deploy) | Repository variable `PROTOTYPE` = `true` (Settings → Secrets and variables → Actions → Variables). The workflow passes it to the build as `PUBLIC_PROTOTYPE`. |
+| Locally | `PUBLIC_PROTOTYPE=true npm run build` (or `npm run dev`) |
+
+Switch it off for the real launch by deleting the variable or setting it to anything other than `true`.
+
+**What changes**
+
+| Area | Normal build | Prototype build | Implemented in |
+| --- | --- | --- | --- |
+| Placeholder check in CI | Build fails | Warning only | `src/integrations/site-checks.ts` |
+| Robots meta tag | Only on pages with `noindex` (404, root redirect) | `noindex` on every page | `src/layouts/BaseLayout.astro` |
+| `robots.txt` | `Allow: /` plus sitemap | `Disallow: /` | `src/pages/robots.txt.ts` |
+
+Everything else (content, sitemap, structured data, tests) stays the same.
+
+**Keep in mind**
+
+- The site is still reachable for anyone with the link; `noindex` only keeps it out of search results. Don't share a prototype with placeholder legal texts publicly.
+- Pages that search engines indexed before the prototype was deployed disappear only after the next crawl.
+- `robots.txt` only works at the domain root, so on the GitHub Pages project URL only the `noindex` tag takes effect (see [i18n-seo.md → robots.txt](./i18n-seo.md#robotstxt)).
+- `ALLOW_PLACEHOLDERS=true` only skips the placeholder check without hiding the site. It exists for the e2e test build, which is never deployed; use `PUBLIC_PROTOTYPE` for deployments.
+
 ### Static route files
 
-Routes listed in `staticRoutes` (`src/i18n/routes.ts`) use static page files instead of a dynamic route, currently only `contact`. `siteChecks()` verifies that `src/pages/<lang>/<segment>.astro` exists for every language, so renaming a segment in `routes.ts` without renaming the file can't break links unnoticed:
+Routes listed in `staticRoutes` (`src/i18n/routes.ts`) use static page files instead of a dynamic route, currently `contact` and `certificates`. `siteChecks()` verifies that `src/pages/<lang>/<segment>.astro` exists for every language, so renaming a segment in `routes.ts` without renaming the file can't break links unnoticed:
 
 ```
 Static route files don't match src/i18n/routes.ts. Missing: src/pages/en/contact.astro
@@ -110,6 +149,13 @@ Tests use URLs relative to the site (e.g. `de/kontakt/`), so they work with any 
 - **On failure:** a trace is kept in `test-results/`; in CI it's uploaded as artifact `playwright-traces`.
 
 ### Test cases
+
+`tests/e2e/certificates.spec.ts`:
+
+| Test | Verifies |
+| --- | --- |
+| lists certificates with downloadable PDFs | Both download links return a PDF (HTTP 200, `application/pdf`) |
+| switches between the localized certificates pages | `/de/zertifikate/` → `/en/certificates/`, English PDF linked |
 
 `tests/e2e/contact.spec.ts`:
 
@@ -160,7 +206,7 @@ npx playwright show-trace test-results/…/trace.zip    # inspect a failure step
 | --- | --- |
 | Checkout (full history) | |
 | `npm ci` | Lockfile mismatch |
-| `npm run build` | Schema errors, placeholders, static route mismatch |
+| `npm run build` | Schema errors, placeholders (not in a prototype build), static route mismatch |
 | `npm run test:e2e` | Any failing test (one retry in CI) |
 | Upload traces | Only runs if a previous step failed |
 | Upload `dist/` and deploy | |

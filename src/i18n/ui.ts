@@ -28,6 +28,18 @@ const de = {
 
   'breadcrumb.home': 'Startseite',
 
+  'nav.certificates': 'Zertifikate',
+
+  'certificates.metaTitle': 'Zertifikate – ISO 9001 und DGZfP | AMP',
+  'certificates.metaDescription': 'Zertifikate und Mitgliedschaften von AMP Prüftechnik: Qualitätsmanagement nach ISO 9001 und Mitgliedschaft in der Deutschen Gesellschaft für Zerstörungsfreie Prüfung (DGZfP).',
+  'certificates.eyebrow': 'Zertifikate',
+  'certificates.title': 'Alles nach internationalen Standards.',
+  'certificates.intro': 'AMP erfüllt weltweite Anforderungen an Schweißbefähigungen und Qualitätszertifizierungen nach internationalen Standards.',
+  'certificates.issuer': 'Ausgestellt von',
+  'certificates.download': 'PDF herunterladen',
+  'certificates.germanOnly': 'nur auf Deutsch',
+  'certificates.quality': 'Zertifikate ansehen →',
+
   'notFound.title': 'Seite nicht gefunden',
   'notFound.text': 'Die angeforderte Seite existiert nicht oder wurde verschoben.',
   'notFound.home': 'Zur Startseite →',
@@ -103,6 +115,18 @@ const en = {
   'footer.tagline': 'Precision. Experience. Responsibility.',
 
   'breadcrumb.home': 'Home',
+
+  'nav.certificates': 'Certificates',
+
+  'certificates.metaTitle': 'Certificates – ISO 9001 and DGZfP | AMP',
+  'certificates.metaDescription': 'Certificates and memberships of AMP Prüftechnik: quality management to ISO 9001 and membership of the German Society for Non-Destructive Testing (DGZfP).',
+  'certificates.eyebrow': 'Certificates',
+  'certificates.title': 'Everything to international standards.',
+  'certificates.intro': 'AMP meets worldwide requirements for welding qualifications and quality certifications to international standards.',
+  'certificates.issuer': 'Issued by',
+  'certificates.download': 'Download PDF',
+  'certificates.germanOnly': 'German only',
+  'certificates.quality': 'View certificates →',
 
   'notFound.title': 'Page not found',
   'notFound.text': 'The page you requested does not exist or has been moved.',

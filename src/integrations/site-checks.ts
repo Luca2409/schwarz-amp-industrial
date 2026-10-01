@@ -81,7 +81,9 @@ function listMarkdownFiles(dir: string): string[] {
  *
  * - **Placeholders** (`[PLZ]`, `[Vorname Nachname]`, …) in `src/site.ts`, `src/i18n/ui.ts`
  *   and the legal pages. Fails the build in CI (`CI=true`), so incomplete legal information
- *   is never deployed; only warns locally. Set `ALLOW_PLACEHOLDERS=true` to override.
+ *   is never deployed; only warns locally. A prototype build (`PUBLIC_PROTOTYPE=true`, which
+ *   also hides the site from search engines) or `ALLOW_PLACEHOLDERS=true` (e2e test build)
+ *   only warns.
  * - **Static route files** that don't match `routes` in `src/i18n/routes.ts`. Always fails the build.
  *
  * Both checks also run as warnings when the dev server starts.
@@ -113,8 +115,11 @@ export function siteChecks(): AstroIntegration {
         if (placeholders.length === 0) return;
 
         const message = `Placeholders left:\n  ${placeholders.join('\n  ')}`;
-        if (process.env.CI && process.env.ALLOW_PLACEHOLDERS !== 'true') {
-          throw new Error(`${message}\nFill them in before deploying (or set ALLOW_PLACEHOLDERS=true).`);
+        const allowed = process.env.ALLOW_PLACEHOLDERS === 'true' || process.env.PUBLIC_PROTOTYPE === 'true';
+        if (process.env.CI && !allowed) {
+          throw new Error(
+            `${message}\nFill them in before deploying, or build a prototype with PUBLIC_PROTOTYPE=true.`,
+          );
         }
         logger.warn(message);
       },
