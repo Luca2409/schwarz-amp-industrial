@@ -1,22 +1,32 @@
 ---
+import { Image } from 'astro:assets';
+import type { ImageMetadata } from 'astro';
+
+/** First section of the home page: headline, intro text, two buttons and the main image. */
 interface Props {
+  /** Small label above the headline. */
   eyebrow: string;
+  /** First part of the headline. */
   titlePrefix: string;
+  /** Second part of the headline, visually highlighted. */
   titleHighlight: string;
+  /** Intro paragraph. */
   text: string;
-  image: string;
+  /** Hero image from `src/assets/`; loaded eagerly as it's the largest element on the page. */
+  image: ImageMetadata;
+  /** Alt text of the image. */
   imageLabel: string;
+  /** Label of the primary (yellow) button. */
   primaryLabel: string;
+  /** Target of the primary button, e.g. `#services`. */
   primaryHref: string;
+  /** Label of the secondary button. */
   secondaryLabel: string;
+  /** Target of the secondary button, e.g. `#contact`. */
   secondaryHref: string;
 }
 
 const props = Astro.props;
-const base = import.meta.env.BASE_URL.replace(/\/$/, '');
-const imageSrc = props.image.startsWith('http')
-  ? props.image
-  : `${base}${props.image.startsWith('/') ? props.image : `/${props.image}`}`;
 ---
 
 <section class="hero">
@@ -47,10 +57,12 @@ const imageSrc = props.image.startsWith('http')
   </div>
 
   <div class="hero__visual">
-    <img
+    <Image
       class="hero__image"
-      src={imageSrc}
+      src={props.image}
       alt={props.imageLabel}
+      widths={[640, 960, 1280, 1920, 2560]}
+      sizes="100vw"
       loading="eager"
       fetchpriority="high"
     />

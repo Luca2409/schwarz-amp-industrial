@@ -1,16 +1,19 @@
 ---
+import { site } from '@/site';
+
+/** Contact call-to-action (`#contact`); the link opens an email to the address in `src/site.ts`. */
 interface Props {
   title: string;
+  /** Link label. */
   label: string;
-  href: string;
 }
 
-const { title, label, href } = Astro.props;
+const { title, label } = Astro.props;
 ---
 
 <section class="contact-banner" id="contact">
   <div class="contact-banner__copy">
     <h2>{title}</h2>
   </div>
-  <a href={href}>{label} <span aria-hidden="true">→</span></a>
+  <a href={`mailto:${site.email}`}>{label} <span aria-hidden="true">→</span></a>
 </section>

@@ -1,3 +1,35 @@
 ---
-// DEFAULT INDEX.ASTRO
+import { getAbsoluteLocaleUrl, getRelativeLocaleUrl } from 'astro:i18n';
+import { defaultLang, languages } from '@/i18n/ui';
+import { LANG_STORAGE_KEY } from '@/i18n/storage';
+
+// Redirects "/" to the visitor's language: saved choice from the language picker,
+// then browser languages, then the default locale (also the no-JS fallback).
+const targets = Object.fromEntries(languages.map((lang) => [lang, getRelativeLocaleUrl(lang)]));
+const fallback = targets[defaultLang];
 ---
+
+<!doctype html>
+<html lang={defaultLang}>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="robots" content="noindex" />
+    <link rel="canonical" href={getAbsoluteLocaleUrl(defaultLang)} />
+    <title>AMP</title>
+    <script is:inline define:vars={{ targets, fallback, storageKey: LANG_STORAGE_KEY }}>
+      let saved = null;
+      try {
+        saved = localStorage.getItem(storageKey);
+      } catch {}
+      const preferred = [saved, ...(navigator.languages || [navigator.language])]
+        .filter(Boolean)
+        .map((lang) => lang.toLowerCase().split('-')[0]);
+      const match = preferred.find((lang) => lang in targets);
+      location.replace(match ? targets[match] : fallback);
+    </script>
+    <noscript><meta http-equiv="refresh" content={`0;url=${fallback}`} /></noscript>
+  </head>
+  <body>
+    <a href={fallback}>{fallback}</a>
+  </body>
+</html>

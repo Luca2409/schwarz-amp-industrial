@@ -1,9 +1,11 @@
 ---
+translationKey: "non-destructive-testing"
 number: "01"
 title: "Non-Destructive Testing"
 teaser: "From welds to complex components."
 order: 1
-seoDescription: "Non-destructive testing services by AMP."
+seoTitle: "Non-Destructive Testing (RT, UT, PT/MT, VT) | AMP"
+seoDescription: "Radiographic, ultrasonic, penetrant, magnetic particle and visual testing to DIN, EN, ISO and ASME – in-house or on site. Plus leak, PMI and hardness testing."
 ---
 
 ## Testing Services Tailored to Your Needs

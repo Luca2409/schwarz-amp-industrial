@@ -1,43 +1,49 @@
 ---
-interface LegalLink {
-  label: string;
-  href: string;
-}
+import type { Lang } from '@/i18n/ui';
+import { getHomeAnchor, useTranslations } from '@/i18n/utils';
+import { getEntryPath, getLegalPages } from '@/lib/content';
+import { site } from '@/site';
 
+/** Site footer with navigation, contact data and links to the legal pages of `lang`. */
 interface Props {
-  legalLinks?: LegalLink[];
+  /** Language of the current page. */
+  lang: Lang;
 }
 
-const base = import.meta.env.BASE_URL.replace(/\/$/, '');
-const { legalLinks = [] } = Astro.props;
+const { lang } = Astro.props;
+const t = useTranslations(lang);
+const legalLinks = (await getLegalPages(lang)).map((entry) => ({
+  label: entry.data.title,
+  href: getEntryPath(entry),
+}));
 ---
 
 <footer class="site-footer">
   <div class="site-footer__inner">
     <div class="site-footer__brand">
       <b>AMP</b>
-      <span>Zerstörungsfreie Werkstoffprüfung</span>
+      <span>{t('brand.subtitle')}</span>
     </div>
 
-    <nav class="site-footer__navigation" aria-label="Footer-Navigation">
-      <a href={`${base}/#about`}>Know-how</a>
-      <a href={`${base}/#services`}>Kompetenzen</a>
-      <a href={`${base}/#quality`}>Qualität</a>
+    <nav class="site-footer__navigation" aria-label={t('footer.navLabel')}>
+      <a href={getHomeAnchor(lang, 'about')}>{t('nav.about')}</a>
+      <a href={getHomeAnchor(lang, 'services')}>{t('nav.competencies')}</a>
+      <a href={getHomeAnchor(lang, 'quality')}>{t('nav.quality')}</a>
     </nav>
 
     <div class="site-footer__contact">
-      <a href="mailto:info@amp-zfp.de">info@amp-zfp.de</a>
-      <a href="tel:+497443966519">+49 7443 9665-19</a>
+      <a href={`mailto:${site.email}`}>{site.email}</a>
+      <a href={site.phone.href}>{site.phone.display}</a>
     </div>
   </div>
   <div class="site-footer__bottom">
-    <span>AMP Prüftechnik</span>
+    <span>{site.company}</span>
     {legalLinks.length > 0 ? (
-      <nav class="site-footer__legal" aria-label="Rechtliche Hinweise">
+      <nav class="site-footer__legal" aria-label={t('footer.legalLabel')}>
         {legalLinks.map((link) => <a href={link.href}>{link.label}</a>)}
       </nav>
     ) : (
-      <span>Präzision. Erfahrung. Verantwortung.</span>
+      <span>{t('footer.tagline')}</span>
     )}
   </div>
 </footer>

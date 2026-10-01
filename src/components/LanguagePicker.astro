@@ -1,47 +1,54 @@
 ---
-import { languages } from "@/i18n/ui";
+import { languages, localeMeta, type Lang } from '@/i18n/ui';
+import { getLocalizedPath, useTranslations, type Alternate } from '@/i18n/utils';
 
-const base = import.meta.env.BASE_URL.replace(/\/$/, '');
-const pathname = Astro.url.pathname;
-const pathWithoutBase = base && pathname.startsWith(`${base}/`)
-  ? pathname.slice(base.length)
-  : pathname;
-const pathSegments = pathWithoutBase.split('/').filter(Boolean);
-const currentLocale = pathSegments[0] in languages ? pathSegments[0] : 'de';
-const languageNames: Record<string, string> = {
-  de: 'Deutsch',
-  en: 'English',
-};
+/**
+ * Links to the current page in every language. Languages without a translation link to
+ * their home page. A click saves the choice in localStorage for the redirect on "/".
+ */
+interface Props {
+  /** Language of the current page, marked as active. */
+  lang: Lang;
+  /** Translations of the current page. */
+  alternates: Alternate[];
+}
 
-function getLocalizedPath(locale: string) {
-  const localizedSegments = [...pathSegments];
+const { lang, alternates } = Astro.props;
+const t = useTranslations(lang);
 
-  if (localizedSegments[0] in languages) {
-    localizedSegments[0] = locale;
-  } else {
-    localizedSegments.unshift(locale);
-  }
-
-  let localizedPath = `/${localizedSegments.join('/')}`;
-  if (pathname.endsWith('/') && !localizedPath.endsWith('/')) localizedPath += '/';
-
-  return `${base}${localizedPath}${Astro.url.search}`;
+/** Returns the URL of this page in `locale`, or that language's home page. */
+function getHref(locale: Lang) {
+  return alternates.find((alternate) => alternate.lang === locale)?.path ?? getLocalizedPath(locale);
 }
 ---
 
-<div class="language-picker" role="group" aria-label="Sprache auswählen">
+<div class="language-picker" role="group" aria-label={t('language.select')}>
   {
-    Object.entries(languages).map(([locale, label]) => (
+    languages.map((locale) => (
       <a
-        class:list={['language-picker__option', { 'is-active': locale === currentLocale }]}
-        href={getLocalizedPath(locale)}
+        class:list={['language-picker__option', { 'is-active': locale === lang }]}
+        href={getHref(locale)}
         lang={locale}
         hreflang={locale}
-        aria-label={`${languageNames[locale] ?? label} auswählen`}
-        aria-current={locale === currentLocale ? 'page' : undefined}
+        aria-label={localeMeta[locale].name}
+        aria-current={locale === lang ? 'page' : undefined}
+        data-lang={locale}
       >
-        {label}
+        {localeMeta[locale].short}
       </a>
     ))
   }
 </div>
+
+<script>
+  import { LANG_STORAGE_KEY } from '@/i18n/storage';
+
+  // Remember the chosen language so "/" redirects there next time.
+  document.querySelectorAll<HTMLAnchorElement>('.language-picker [data-lang]').forEach((link) => {
+    link.addEventListener('click', () => {
+      try {
+        localStorage.setItem(LANG_STORAGE_KEY, link.dataset.lang!);
+      } catch {}
+    });
+  });
+</script>

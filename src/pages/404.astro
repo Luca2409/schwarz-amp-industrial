@@ -1,0 +1,32 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import Header from '@/components/Header.astro';
+import Footer from '@/components/Footer.astro';
+import { defaultLang, languages } from '@/i18n/ui';
+import { getAlternates, getLocalizedPath, useTranslations } from '@/i18n/utils';
+
+// GitHub Pages serves one 404 page for every URL, so it shows all languages.
+const t = useTranslations(defaultLang);
+const alternates = getAlternates();
+---
+<BaseLayout lang={defaultLang} title={`${t('notFound.title')} | AMP`} noindex>
+  <Header lang={defaultLang} alternates={alternates} />
+
+  <main>
+    {languages.map((lang) => {
+      const tl = useTranslations(lang);
+      return (
+        <section class="detail-hero" lang={lang}>
+          <div class="detail-hero__inner">
+            <div class="eyebrow eyebrow--dark">404</div>
+            <h1>{tl('notFound.title')}</h1>
+            <p>{tl('notFound.text')}</p>
+            <a class="button button--accent" href={getLocalizedPath(lang)}>{tl('notFound.home')}</a>
+          </div>
+        </section>
+      );
+    })}
+  </main>
+
+  <Footer lang={defaultLang} />
+</BaseLayout>

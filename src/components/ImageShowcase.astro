@@ -1,8 +1,16 @@
 ---
+import { Image } from 'astro:assets';
+import type { ImageMetadata } from 'astro';
+
+/** Full-width image below the hero with an optional caption. The image is cropped with `object-fit: cover`. */
 interface Props {
-  src: string;
+  /** Image from `src/assets/`. */
+  src: ImageMetadata;
+  /** Alt text of the image. */
   alt: string;
+  /** Small label in the caption. */
   eyebrow?: string;
+  /** Caption text; the caption is hidden if neither `eyebrow` nor `caption` is set. */
   caption?: string;
 }
 
@@ -12,21 +20,17 @@ const {
   eyebrow,
   caption,
 } = Astro.props;
-
-const base = import.meta.env.BASE_URL.replace(/\/$/, '');
-const imageSrc = src.startsWith('http')
-  ? src
-  : `${base}${src.startsWith('/') ? src : `/${src}`}`;
 ---
 
 <section class="image-showcase">
   <div class="image-showcase__inner">
     <figure class="image-showcase__figure">
-      <img
+      <Image
         class="image-showcase__image"
-        src={imageSrc}
+        src={src}
         alt={alt}
-        loading="lazy"
+        widths={[640, 960, 1440]}
+        sizes="(min-width: 1440px) 1440px, 100vw"
       />
 
       {(eyebrow || caption) && (

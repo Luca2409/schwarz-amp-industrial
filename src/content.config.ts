@@ -7,7 +7,7 @@ const pages = defineCollection({
     base: './src/content/pages',
     pattern: '**/*.md',
   }),
-  schema: z.object({
+  schema: ({ image }) => z.object({
     title: z.string(),
     description: z.string(),
 
@@ -15,10 +15,10 @@ const pages = defineCollection({
     heroTitlePrefix: z.string(),
     heroTitleHighlight: z.string(),
     heroText: z.string(),
-    heroImage: z.string(),
+    heroImage: image(),
     heroImageLabel: z.string(),
 
-    showcaseImage: z.string(),
+    showcaseImage: image(),
     showcaseImageAlt: z.string(),
     showcaseEyebrow: z.string().optional(),
     showcaseCaption: z.string().optional(),
@@ -41,7 +41,6 @@ const pages = defineCollection({
 
     contactTitle: z.string(),
     contactLabel: z.string(),
-    contactHref: z.string(),
   }),
 });
 
@@ -50,16 +49,34 @@ const competencies = defineCollection({
     base: './src/content/competencies',
     pattern: '**/*.md',
   }),
-  schema: z.object({
+  schema: ({ image }) => z.object({
+    translationKey: z.string(),
     number: z.string(),
     title: z.string(),
     teaser: z.string(),
     order: z.number(),
+    seoTitle: z.string(),
     seoDescription: z.string(),
+    ogImage: image().optional(),
+  }),
+});
+
+// Impressum, privacy policy etc., linked in the footer.
+const legal = defineCollection({
+  loader: glob({
+    base: './src/content/legal',
+    pattern: '**/*.md',
+  }),
+  schema: z.object({
+    translationKey: z.string(),
+    title: z.string(),
+    description: z.string(),
+    order: z.number(),
   }),
 });
 
 export const collections = {
   pages,
   competencies,
+  legal,
 };

@@ -1,9 +1,11 @@
 ---
+translationKey: "inspections-acceptance"
 number: "03"
 title: "Inspektionen & Abnahmen"
 teaser: "Fachliche Begleitung und zuverlässige Dokumentation."
 order: 3
-seoDescription: "Inspektionen und technische Abnahmen bei AMP."
+seoTitle: "Inspektionen, Abnahmen & Lieferantenüberwachung | AMP"
+seoDescription: "Qualitäts-, Termin- und Fertigungsüberwachung, Schweißaufsicht und Abnahmen: AMP überwacht Ihre Lieferkette von der Planung bis zur Abnahme."
 ---
 
 ## AMP – Ihr Partner für Qualität und Terminüberwachung

@@ -1,9 +1,11 @@
 ---
+translationKey: "dimensional-metrology"
 number: "02"
 title: "Dimensional Metrology"
 teaser: "Laser-based precision measurement for industrial applications."
 order: 2
-seoDescription: "Industrial dimensional measurement services by AMP."
+seoTitle: "Contract Measurement with FARO Laser Tracker & FaroArm | AMP"
+seoDescription: "Precise 3D measurement of components, machinery and industrial systems with FARO Laser Tracker and FaroArm – accuracy up to 0.03 mm, at our facility or on site."
 ---
 
 ## Precision for Your Product – Contract Measurement Services

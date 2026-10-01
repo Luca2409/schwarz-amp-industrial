@@ -1,9 +1,11 @@
 ---
+translationKey: "inspections-acceptance"
 number: "03"
 title: "Inspections & Acceptance Tests"
 teaser: "Expert support and reliable documentation."
 order: 3
-seoDescription: "Industrial inspections and technical acceptance testing by AMP."
+seoTitle: "Inspections, Acceptance Tests & Supplier Monitoring | AMP"
+seoDescription: "Quality, schedule and production monitoring, welding supervision and acceptance tests: AMP oversees your supply chain from planning to acceptance."
 ---
 
 ## AMP – Your Partner for Quality and Schedule Monitoring

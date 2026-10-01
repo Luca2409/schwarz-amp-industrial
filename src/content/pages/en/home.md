@@ -6,10 +6,10 @@ heroEyebrow: "AMP · Quality Assurance"
 heroTitlePrefix: "Your partner for"
 heroTitleHighlight: "non-destructive testing."
 heroText: "Advanced testing technology, extensive expertise, and dedicated support for demanding industrial inspection tasks."
-heroImage: "/images/hero-image.jpg"
+heroImage: "../../../assets/images/hero-image.jpg"
 heroImageLabel: "Material testing in practice"
 
-showcaseImage: "/images/know-how_01.jpg"
+showcaseImage: "../../../assets/images/know-how_01.jpg"
 showcaseImageAlt: "Exterior of the AMP testing center"
 showcaseEyebrow: "AMP Testing Technology"
 showcaseCaption: "Technical expertise for demanding industrial inspection tasks."
@@ -32,7 +32,6 @@ qualityCardText: "From individual inspections to continuous quality monitoring, 
 
 contactTitle: "Your inspection task. Our expertise."
 contactLabel: "Get in touch"
-contactHref: "mailto:info@amp-zfp.de"
 ---
 
 As a medium-sized company, we adapt to the specific requirements of every customer. You benefit from advanced testing technology, extensive expertise, and fast, direct decision-making.

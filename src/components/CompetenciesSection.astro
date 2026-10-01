@@ -1,20 +1,25 @@
 ---
 import type { CollectionEntry } from 'astro:content';
 import CompetencyRow from './CompetencyRow.astro';
+import { getEntryPath } from '@/lib/content';
 
+/** List of competencies linking to their detail pages (home page and "related" section). */
 interface Props {
   eyebrow: string;
   title: string;
+  /** Competencies of one language. */
   entries: CollectionEntry<'competencies'>[];
+  /** Section id used as anchor; `services` on the home page. */
+  id?: string;
 }
 
-const { eyebrow, title } = Astro.props;
+const { eyebrow, title, id = 'services' } = Astro.props;
 const entries = [...Astro.props.entries].sort(
   (a, b) => a.data.order - b.data.order
 );
 ---
 
-<section class="competencies-section" id="services">
+<section class="competencies-section" id={id}>
   <div class="section-heading-block">
     <div class="eyebrow eyebrow--dark">{eyebrow}</div>
     <h2 class="section-heading">{title}</h2>
@@ -23,7 +28,7 @@ const entries = [...Astro.props.entries].sort(
   <div class="competency-list">
     {entries.map((entry) => (
       <CompetencyRow
-        id={entry.id}
+        href={getEntryPath(entry)}
         number={entry.data.number}
         title={entry.data.title}
         teaser={entry.data.teaser}
