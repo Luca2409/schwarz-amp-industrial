@@ -43,7 +43,7 @@ Code is documented with JSDoc comments on functions, exported values and compone
 | --- | --- | --- | --- |
 | Contact page | Contact person, address, form, Google Maps with consent | [contact-page.md](./contact-page.md) | `src/components/ContactPage.astro` |
 | Legal pages | Impressum and privacy policy per language, linked in the footer (templates) | [i18n-seo.md → Legal pages](./i18n-seo.md#legal-pages) | `src/content/legal/` |
-| 404 page | Bilingual, `noindex` | [i18n-seo.md → 404 page](./i18n-seo.md#404-page) | `src/pages/404.astro` |
+| 404 page | Shows the language of the requested URL (else saved choice or browser language), `noindex` | [i18n-seo.md → 404 page](./i18n-seo.md#404-page) | `src/pages/404.astro` |
 | Site config | Company data, address, contact person, form service in one place | [i18n-seo.md → Site config](./i18n-seo.md#site-config), [contact-page.md → Setup](./contact-page.md#setup-checklist) | `src/site.ts` |
 | Image optimization | WebP in several sizes via `astro:assets` | [i18n-seo.md → Images](./i18n-seo.md#images) | `src/assets/images/` |
 | Favicon | SVG plus Apple touch icon | [i18n-seo.md → SEO tags](./i18n-seo.md#seo-tags) | `public/favicon.svg` |
@@ -54,6 +54,6 @@ Code is documented with JSDoc comments on functions, exported values and compone
 | --- | --- | --- | --- |
 | Build checks | Missing translations, contact config, placeholders (block CI), static route files | [quality-checks.md → Build checks](./quality-checks.md#build-checks) | `src/integrations/site-checks.ts` |
 | Prototype mode | `PUBLIC_PROTOTYPE=true`: deploy a draft with placeholders; every page `noindex`, `robots.txt` disallows all | [quality-checks.md → Prototype mode](./quality-checks.md#prototype-mode) | `src/integrations/site-checks.ts`, `src/layouts/BaseLayout.astro`, `src/pages/robots.txt.ts`, `.github/workflows/deploy.yml` |
-| E2E tests | 18 Playwright tests on desktop and mobile, against a local build or a deployed site (`E2E_BASE_URL`) | [quality-checks.md → End-to-end tests](./quality-checks.md#end-to-end-tests) | `tests/e2e/`, `playwright.config.ts` |
+| E2E tests | 21 Playwright tests on desktop and mobile, against a local build or a deployed site (`E2E_BASE_URL`) | [quality-checks.md → End-to-end tests](./quality-checks.md#end-to-end-tests) | `tests/e2e/`, `playwright.config.ts` |
 | Deploy config | Domain and base path in one place, shared by Astro and the tests | [i18n-seo.md → Move to your own domain](./i18n-seo.md#move-to-your-own-domain) | `deploy.config.mjs` |
 | CI pipeline | Build, test, deploy to GitHub Pages | [quality-checks.md → CI pipeline](./quality-checks.md#ci-pipeline) | `.github/workflows/deploy.yml` |

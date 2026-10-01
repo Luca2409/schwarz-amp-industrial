@@ -308,7 +308,14 @@ Collection `legal` (`src/content/legal/<lang>/*.md`) with `translationKey`, `tit
 
 ## 404 page
 
-`src/pages/404.astro` becomes `404.html`, which GitHub Pages serves for every unknown URL. Since one file serves all languages, it shows the message in every language, each linking to its home page. It's `noindex`.
+`src/pages/404.astro` becomes `404.html`, which GitHub Pages serves for every unknown URL, in every language. The page therefore renders a complete variant (header, message, footer) per language; only the default language is visible initially. A small inline script then shows the matching variant and sets `<html lang>` and the title:
+
+1. the language segment of the requested URL (`/en/…` → English),
+2. otherwise the language saved by the language picker (`amp-lang` in localStorage),
+3. otherwise the first supported browser language,
+4. otherwise German. Without JavaScript, German is shown.
+
+The page is `noindex` and returns HTTP 404. Footer ids carry the language (`footer-related-heading-de`), so the duplicated header and footer stay valid HTML.
 
 ## Site config
 
