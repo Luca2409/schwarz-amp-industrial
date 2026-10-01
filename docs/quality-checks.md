@@ -50,6 +50,14 @@ npm run check && npm run build && npm run test:e2e
 
 The page is still built; it just has no counterpart in the missing language.
 
+### Expired certificates
+
+`warnExpiredCertificates()` (`src/lib/certificates.ts`) warns during the build about certificates whose `validUntil` has passed:
+
+```
+[certificates] "iso-9001" expired on 2024-11-21; replace it in src/lib/certificates.ts
+```
+
 ### Contact configuration
 
 `ContactPage.astro` warns per language while contact settings are missing (`getMissingContactSettings()` in `src/site.ts`, plus the role in `ui.ts`):
@@ -79,7 +87,7 @@ Competency content isn't scanned, because method abbreviations like `[RT]` or `[
 
 ### Static route files
 
-Routes listed in `staticRoutes` (`src/i18n/routes.ts`) use static page files instead of a dynamic route, currently only `contact`. `siteChecks()` verifies that `src/pages/<lang>/<segment>.astro` exists for every language, so renaming a segment in `routes.ts` without renaming the file can't break links unnoticed:
+Routes listed in `staticRoutes` (`src/i18n/routes.ts`) use static page files instead of a dynamic route, currently `contact` and `certificates`. `siteChecks()` verifies that `src/pages/<lang>/<segment>.astro` exists for every language, so renaming a segment in `routes.ts` without renaming the file can't break links unnoticed:
 
 ```
 Static route files don't match src/i18n/routes.ts. Missing: src/pages/en/contact.astro
@@ -110,6 +118,13 @@ Tests use URLs relative to the site (e.g. `de/kontakt/`), so they work with any 
 - **On failure:** a trace is kept in `test-results/`; in CI it's uploaded as artifact `playwright-traces`.
 
 ### Test cases
+
+`tests/e2e/certificates.spec.ts`:
+
+| Test | Verifies |
+| --- | --- |
+| lists certificates with downloadable PDFs | Both download links return a PDF (HTTP 200, `application/pdf`) |
+| switches between the localized certificates pages | `/de/zertifikate/` → `/en/certificates/`, English PDF linked |
 
 `tests/e2e/contact.spec.ts`:
 

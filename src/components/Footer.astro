@@ -29,6 +29,7 @@ const legalLinks = (await getLegalPages(lang)).map((entry) => ({
       <a href={getHomeAnchor(lang, 'about')}>{t('nav.about')}</a>
       <a href={getHomeAnchor(lang, 'services')}>{t('nav.competencies')}</a>
       <a href={getHomeAnchor(lang, 'quality')}>{t('nav.quality')}</a>
+      <a href={getLocalizedPath(lang, 'certificates')}>{t('nav.certificates')}</a>
       <a href={getLocalizedPath(lang, 'contact')}>{t('nav.contact')}</a>
     </nav>
 

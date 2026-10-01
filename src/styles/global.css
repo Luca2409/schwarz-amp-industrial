@@ -581,6 +581,16 @@ summary:focus-visible {
     letter-spacing: -0.025em;
 }
 
+/* Switch to the menu button before the five navigation items get too tight. */
+@media (max-width: 1040px) {
+    .main-navigation {
+        display: none;
+    }
+    .mobile-navigation {
+        display: block;
+    }
+}
+
 @media (max-width: 900px) {
     .image-showcase {
         padding-top: 40px;
@@ -771,6 +781,19 @@ summary:focus-visible {
     margin: 17px 0 0;
     color: #c7c7c2;
     line-height: 1.72;
+}
+
+.quality-card__link {
+    margin-top: 22px;
+    display: inline-flex;
+    color: var(--yellow);
+    font-size: 14px;
+    font-weight: 800;
+    text-decoration: none;
+}
+
+.quality-card__link:hover {
+    color: var(--white);
 }
 
 
@@ -1307,6 +1330,114 @@ summary:focus-visible {
 
 
 /* =========================================================
+   CERTIFICATES PAGE
+   ========================================================= */
+
+/* Break only between words ("internationalen" must not be split). */
+.detail-hero h1.detail-hero__title--no-hyphens {
+    hyphens: manual;
+    overflow-wrap: break-word;
+}
+
+.certificate-list {
+    margin: 0;
+    padding: 0;
+    display: grid;
+    gap: 20px;
+    list-style: none;
+}
+
+.certificate-card {
+    padding: 32px 34px;
+    display: grid;
+    gap: 14px;
+    border: 1px solid var(--line);
+    border-top: 3px solid var(--yellow);
+    border-radius: var(--radius);
+    background: var(--white);
+}
+
+.certificate-card__title {
+    margin: 0;
+    color: var(--text);
+    font-size: clamp(24px, 2.2vw, 30px);
+    line-height: 1.15;
+    letter-spacing: -.02em;
+}
+
+.certificate-card__text {
+    margin: 0;
+    max-width: 640px;
+    color: var(--muted);
+    line-height: 1.65;
+}
+
+.certificate-card__meta {
+    margin: 4px 0 0;
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 6px 18px;
+    font-size: 14px;
+}
+
+.certificate-card__meta dt {
+    color: var(--muted);
+}
+
+.certificate-card__meta dd {
+    margin: 0;
+    color: var(--text);
+    font-weight: 600;
+}
+
+.certificate-card__download {
+    margin-top: 8px;
+    justify-self: start;
+    display: inline-flex;
+    align-items: center;
+    gap: 14px;
+    padding: 12px 18px 12px 12px;
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    color: var(--text);
+    font-size: 15px;
+    font-weight: 700;
+    text-decoration: none;
+    transition: border-color .16s ease, background .16s ease;
+}
+
+.certificate-card__download:hover {
+    border-color: var(--black);
+    background: var(--off);
+}
+
+.certificate-card__download small {
+    display: block;
+    color: var(--muted);
+    font-size: 12px;
+    font-weight: 400;
+}
+
+.certificate-card__icon {
+    width: 40px;
+    height: 40px;
+    display: grid;
+    place-items: center;
+    background: var(--black);
+    color: var(--yellow);
+    font-size: 11px;
+    font-weight: 900;
+    letter-spacing: .08em;
+}
+
+@media (max-width: 560px) {
+    .certificate-card {
+        padding: 24px 22px;
+    }
+}
+
+
+/* =========================================================
    INDUSTRIAL DETAILING
    ========================================================= */
 
@@ -1370,12 +1501,7 @@ summary:focus-visible {
     .brand__subtitle {
         font-size: 7px;
     }
-    .main-navigation {
-        display: none;
-    }
-    .mobile-navigation {
-        display: block;
-    }
+
     .hero {
         grid-template-rows: auto auto;
         min-height: 0;

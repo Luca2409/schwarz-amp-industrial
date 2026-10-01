@@ -11,7 +11,7 @@ import QualitySection from '@/components/QualitySection.astro';
 import ContactBanner from '@/components/ContactBanner.astro';
 import Footer from '@/components/Footer.astro';
 import JsonLd from '@/components/JsonLd.astro';
-import { getAlternates } from '@/i18n/utils';
+import { getAlternates, getLocalizedPath, useTranslations } from '@/i18n/utils';
 import type { Lang } from '@/i18n/ui';
 import { getCompetencies } from '@/lib/content';
 import { getLastModified } from '@/lib/last-modified';
@@ -35,6 +35,7 @@ const { home, lang } = Astro.props;
 const { Content } = await render(home);
 const competencies = await getCompetencies(lang);
 const alternates = getAlternates();
+const t = useTranslations(lang);
 const lastModified = getLastModified(home.filePath, ...competencies.map((entry) => entry.filePath));
 ---
 
@@ -93,6 +94,7 @@ const lastModified = getLastModified(home.filePath, ...competencies.map((entry) 
       title={home.data.qualityTitle}
       cardTitle={home.data.qualityCardTitle}
       cardText={home.data.qualityCardText}
+      link={{ label: t('certificates.quality'), href: getLocalizedPath(lang, 'certificates') }}
     />
 
     <ContactBanner

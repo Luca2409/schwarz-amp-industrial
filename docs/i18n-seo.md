@@ -66,6 +66,7 @@ Every page carries a language prefix (`prefixDefaultLocale: true`). All URLs end
 | Competency | `/de/kompetenzen/vermessung/` | `/en/competencies/dimensional-metrology/` | `src/pages/[lang]/[competencies]/[slug].astro` |
 | Legal page | `/de/impressum/` | `/en/legal-notice/` | `src/pages/[lang]/[slug].astro` |
 | Contact | `/de/kontakt/` | `/en/contact/` | `src/pages/de/kontakt.astro`, `src/pages/en/contact.astro`, see [contact-page.md](./contact-page.md) |
+| Certificates | `/de/zertifikate/` | `/en/certificates/` | `src/pages/de/zertifikate.astro`, `src/pages/en/certificates.astro` |
 | 404 | `/404.html` | | `src/pages/404.astro` |
 
 Never build URLs by hand. Use `getLocalizedPath`, `getHomeAnchor` or `getEntryPath`; they handle `base`, the language prefix, translated segments and trailing slashes.
@@ -190,14 +191,15 @@ Route segments that differ per language are defined in `src/i18n/routes.ts`:
 export const routes = {
   competencies: { de: 'kompetenzen', en: 'competencies' },
   contact: { de: 'kontakt', en: 'contact' },
+  certificates: { de: 'zertifikate', en: 'certificates' },
 };
 
-export const staticRoutes = ['contact'];
+export const staticRoutes = ['contact', 'certificates'];
 ```
 
 The dynamic folder `src/pages/[lang]/[competencies]/` receives the translated segment as a param from `getStaticPaths`. Every route key must have an entry for each language (type-checked).
 
-`contact` is the exception: the contact page uses static route files (`src/pages/de/kontakt.astro`, `src/pages/en/contact.astro`), because a dynamic `[lang]/[contact]/` route would clash with the legal pages route `[lang]/[slug].astro`. Such routes are listed in `staticRoutes` in `src/i18n/routes.ts`; the build fails if their files don't match the segments in `routes` (`src/integrations/site-checks.ts`). `routes.contact` is still used to build links with `getLocalizedPath(lang, 'contact')`.
+`contact` and `certificates` are the exception: their pages use static route files (`src/pages/de/kontakt.astro`, `src/pages/en/contact.astro`), because a dynamic `[lang]/[contact]/` route would clash with the legal pages route `[lang]/[slug].astro`. Such routes are listed in `staticRoutes` in `src/i18n/routes.ts`; the build fails if their files don't match the segments in `routes` (`src/integrations/site-checks.ts`). `routes.contact` is still used to build links with `getLocalizedPath(lang, 'contact')`.
 
 ## Language selection
 
@@ -258,6 +260,7 @@ JSON-LD built with `src/lib/structured-data.ts` and rendered with `<JsonLd slot=
 | Competency | `Service`, `BreadcrumbList` |
 | Legal page | `BreadcrumbList` |
 | Contact | `Organization`, `ContactPage`, `BreadcrumbList` |
+| Certificates | `BreadcrumbList` |
 
 The `Organization` includes a `ContactPoint` and, once `site.address` is filled in, a `PostalAddress`.
 
@@ -279,6 +282,7 @@ All nodes reference the organization by a stable id (`…/de/#organization`). Co
 | Home | its `home.md` and all competencies of that language |
 | Competency / legal page | its Markdown file |
 | Contact | `src/components/ContactPage.astro`, `src/site.ts` and `src/i18n/ui.ts` |
+| Certificates | `src/components/CertificatesPage.astro` and `src/lib/certificates.ts` |
 
 The deploy workflow checks out the full history (`fetch-depth: 0`), otherwise every page would get the date of the latest commit.
 

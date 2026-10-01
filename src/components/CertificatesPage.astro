@@ -1,0 +1,108 @@
+---
+import { getAbsoluteLocaleUrl } from 'astro:i18n';
+
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import Header from '@/components/Header.astro';
+import Footer from '@/components/Footer.astro';
+import JsonLd from '@/components/JsonLd.astro';
+import type { Lang } from '@/i18n/ui';
+import { getAlternates, getLocalizedPath, useTranslations } from '@/i18n/utils';
+import { certificates, getCertificateFile, warnExpiredCertificates } from '@/lib/certificates';
+import { getLastModified } from '@/lib/last-modified';
+import { breadcrumbs } from '@/lib/structured-data';
+import { site } from '@/site';
+
+/**
+ * Certificates page: certificates and memberships with issuer and PDF downloads. The
+ * validity date isn't shown, but the build warns about expired certificates.
+ * Rendered by the static routes `src/pages/de/zertifikate.astro` and
+ * `src/pages/en/certificates.astro`; the data lives in `src/lib/certificates.ts`.
+ */
+interface Props {
+  lang: Lang;
+}
+
+const { lang } = Astro.props;
+const t = useTranslations(lang);
+if (lang === 'de') warnExpiredCertificates();
+
+const alternates = getAlternates('certificates');
+const url = new URL(getLocalizedPath(lang, 'certificates'), Astro.site ?? Astro.url).href;
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+const sizeFormat = new Intl.NumberFormat(lang === 'de' ? 'de-DE' : 'en-GB', { maximumFractionDigits: 0 });
+
+const items = certificates.map((certificate) => {
+  const file = getCertificateFile(certificate, lang);
+  return {
+    ...certificate,
+    href: `${base}${file.file}`,
+    sizeLabel: `${sizeFormat.format(file.size / 1024)} KB`,
+    otherLanguage: file.lang !== lang,
+  };
+});
+---
+
+<BaseLayout
+  lang={lang}
+  title={t('certificates.metaTitle')}
+  description={t('certificates.metaDescription')}
+  alternates={alternates}
+  lastModified={getLastModified('src/components/CertificatesPage.astro', 'src/lib/certificates.ts')}
+>
+  <JsonLd
+    slot="head"
+    data={breadcrumbs([
+      { name: t('breadcrumb.home'), url: getAbsoluteLocaleUrl(lang) },
+      { name: t('certificates.eyebrow'), url },
+    ])}
+  />
+  <Header lang={lang} alternates={alternates} />
+
+  <main>
+    <section class="detail-hero">
+      <div class="detail-hero__inner">
+        <div class="eyebrow eyebrow--dark">{t('certificates.eyebrow')}</div>
+        <h1 class="detail-hero__title--no-hyphens">{t('certificates.title')}</h1>
+        <p>{t('certificates.intro')}</p>
+      </div>
+    </section>
+
+    <section class="detail-content">
+      <ul class="certificate-list">
+        {items.map((item) => (
+          <li class="certificate-card" id={item.id}>
+            <h2 class="certificate-card__title">{item.title[lang]}</h2>
+            <p class="certificate-card__text">{item.description[lang]}</p>
+
+            <dl class="certificate-card__meta">
+              <dt>{t('certificates.issuer')}</dt>
+              <dd>{item.issuer}</dd>
+            </dl>
+
+            <a class="certificate-card__download" href={item.href} download>
+              <span class="certificate-card__icon" aria-hidden="true">PDF</span>
+              <span>
+                {t('certificates.download')}
+                <small>
+                  {item.sizeLabel}{item.otherLanguage && ` · ${t('certificates.germanOnly')}`}
+                </small>
+              </span>
+            </a>
+          </li>
+        ))}
+      </ul>
+
+      <aside class="detail-sidebar">
+        <div class="eyebrow eyebrow--dark">{t('competency.contactEyebrow')}</div>
+        <h2>{t('competency.contactTitle')}</h2>
+        <p>{t('competency.contactText')}</p>
+        <p><a href={site.phone.href}>{site.phone.display}</a><br /><a href={`mailto:${site.email}`}>{site.email}</a></p>
+        <a class="button button--accent" href={getLocalizedPath(lang, 'contact')}>
+          {t('competency.contactCta')}
+        </a>
+      </aside>
+    </section>
+  </main>
+
+  <Footer lang={lang} />
+</BaseLayout>

@@ -8,9 +8,11 @@ interface Props {
   cardTitle: string;
   /** Text of the card. */
   cardText: string;
+  /** Optional link below the card text, e.g. to the certificates page. */
+  link?: { label: string; href: string };
 }
 
-const { eyebrow, title, cardTitle, cardText } = Astro.props;
+const { eyebrow, title, cardTitle, cardText, link } = Astro.props;
 ---
 
 <section class="quality-section" id="quality">
@@ -22,5 +24,6 @@ const { eyebrow, title, cardTitle, cardText } = Astro.props;
   <div class="quality-card">
     <h3>{cardTitle}</h3>
     <p>{cardText}</p>
+    {link && <a class="quality-card__link" href={link.href}>{link.label}</a>}
   </div>
 </section>
