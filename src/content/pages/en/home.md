@@ -17,7 +17,6 @@ showcaseCaption: "Technical expertise for demanding industrial inspection tasks.
 primaryCtaLabel: "Explore our capabilities"
 primaryCtaHref: "#services"
 secondaryCtaLabel: "Discuss a project"
-secondaryCtaHref: "#contact"
 
 aboutEyebrow: "Expertise, testing, optimization"
 aboutTitle: "Expertise is our passion."

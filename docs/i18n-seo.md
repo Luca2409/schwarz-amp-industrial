@@ -167,7 +167,8 @@ Helpers in `src/lib/content.ts`:
 
 - `heroImage` and `showcaseImage` are paths to `src/assets/images/`, relative to the Markdown file (e.g. `../../../assets/images/hero-image.jpg`). See [Images](#images).
 - The contact banner links to the contact page; there is no link field in the frontmatter.
-- `primaryCtaHref` / `secondaryCtaHref` are anchors on the same page (`#services`, `#contact`).
+- `primaryCtaHref` is an anchor on the same page (`#services`). The secondary button always links to the contact page, so it has only a label (`secondaryCtaLabel`).
+- `heroTitleHighlight` may contain soft hyphens (`\u00AD` in the YAML string) to mark where long words may break, e.g. `"zerstörungs\u00ADfreie Werkstoff\u00ADprüfung."`. The hero title has no automatic hyphenation.
 
 ### Competency frontmatter
 

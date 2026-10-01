@@ -26,7 +26,6 @@ const pages = defineCollection({
     primaryCtaLabel: z.string(),
     primaryCtaHref: z.string(),
     secondaryCtaLabel: z.string(),
-    secondaryCtaHref: z.string(),
 
     aboutEyebrow: z.string(),
     aboutTitle: z.string(),

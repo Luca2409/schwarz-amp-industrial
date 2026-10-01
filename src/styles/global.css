@@ -416,7 +416,8 @@ summary:focus-visible {
     min-height: calc(100vh - 88px);
     min-height: calc(100svh - 88px);
     display: grid;
-    grid-template-rows: minmax(300px, 42fr) minmax(320px, 58fr);
+    /* Split: text column left, image right at full height of the first screen. */
+    grid-template-columns: minmax(0, 46fr) minmax(0, 54fr);
     gap: 0;
     align-items: stretch;
     background: var(--white);
@@ -424,14 +425,13 @@ summary:focus-visible {
 }
 
 .hero__copy {
-    width: min(100%, var(--content-max));
-    margin: 0 auto;
     min-width: 0;
-    padding: clamp(42px, 5vw, 72px) var(--page-padding);
+    /* Left padding aligns the text with the content column of the other sections. */
+    padding: clamp(48px, 6vw, 96px) clamp(32px, 4vw, 64px) clamp(48px, 6vw, 96px) max(var(--page-padding), calc((100vw - var(--content-max)) / 2 + var(--page-padding)));
     display: grid;
-    grid-template-columns: minmax(0, 1.15fr) minmax(320px, .85fr);
-    gap: clamp(52px, 7vw, 108px);
-    align-items: center;
+    grid-template-columns: minmax(0, 1fr);
+    align-content: center;
+    gap: 28px;
 }
 
 .hero__heading,
@@ -441,7 +441,7 @@ summary:focus-visible {
 
 .hero__title {
     max-width: 780px;
-    margin: 18px 0 0;
+    margin: 16px 0 0;
     font-size: clamp(42px, 4vw, 60px);
     line-height: 1.04;
     letter-spacing: -0.025em;
@@ -454,7 +454,7 @@ summary:focus-visible {
 .hero__title::after {
     width: 68px;
     height: 4px;
-    margin-top: 20px;
+    margin-top: 18px;
     display: block;
     background: var(--yellow);
     content: "";
@@ -1323,6 +1323,9 @@ summary:focus-visible {
 
 .hero__title {
     text-transform: none;
+    /* Long German compounds break only at soft hyphens (\u00AD) set in home.md. */
+    hyphens: manual;
+    overflow-wrap: break-word;
 }
 
 .competency-row__number {
@@ -1339,10 +1342,6 @@ summary:focus-visible {
    ========================================================= */
 
 @media (max-width: 1050px) {
-    .hero__copy {
-        grid-template-columns: minmax(0, 1fr) minmax(300px, .8fr);
-        gap: 44px;
-    }
     .main-navigation {
         gap: 16px;
     }
@@ -1377,7 +1376,7 @@ summary:focus-visible {
         display: block;
     }
     .hero {
-        grid-template-rows: auto auto;
+        grid-template-columns: 1fr;
         min-height: 0;
     }
     .hero__copy {
@@ -1453,7 +1452,18 @@ summary:focus-visible {
         padding: 0 var(--page-padding);
     }
     .hero__visual {
-        height: 360px;
+        height: 300px;
+    }
+    .hero__copy {
+        padding-top: 40px;
+        padding-bottom: 44px;
+    }
+    .hero__title {
+        font-size: clamp(32px, 9vw, 40px);
+    }
+    .hero__text {
+        font-size: 16px;
+        line-height: 1.65;
     }
     .image-showcase__image {
         aspect-ratio: auto;

@@ -4,7 +4,7 @@ description: "Moderne Prüftechnik, umfassendes Know-how und persönliche Betreu
 
 heroEyebrow: "AMP · Qualitätssicherung"
 heroTitlePrefix: "Ihr Partner für"
-heroTitleHighlight: "zerstörungsfreie Werkstoffprüfung."
+heroTitleHighlight: "zerstörungs\u00ADfreie Werkstoff\u00ADprüfung."
 heroText: "Moderne Prüftechnik, umfassendes Know-how und persönliche Betreuung für anspruchsvolle industrielle Prüfaufgaben."
 heroImage: "../../../assets/images/hero-image.jpg"
 heroImageLabel: "Werkstoffprüfung im Einsatz"
@@ -17,7 +17,6 @@ showcaseCaption: "Technische Kompetenz für anspruchsvolle industrielle Prüfauf
 primaryCtaLabel: "Kompetenzen ansehen"
 primaryCtaHref: "#services"
 secondaryCtaLabel: "Projekt anfragen"
-secondaryCtaHref: "#contact"
 
 aboutEyebrow: "Wissen, prüfen, optimieren"
 aboutTitle: "Know-how ist unsere Leidenschaft."

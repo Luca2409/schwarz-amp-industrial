@@ -11,7 +11,7 @@ import QualitySection from '@/components/QualitySection.astro';
 import ContactBanner from '@/components/ContactBanner.astro';
 import Footer from '@/components/Footer.astro';
 import JsonLd from '@/components/JsonLd.astro';
-import { getAlternates } from '@/i18n/utils';
+import { getAlternates, getLocalizedPath } from '@/i18n/utils';
 import type { Lang } from '@/i18n/ui';
 import { getCompetencies } from '@/lib/content';
 import { getLastModified } from '@/lib/last-modified';
@@ -65,7 +65,7 @@ const lastModified = getLastModified(home.filePath, ...competencies.map((entry) 
       primaryLabel={home.data.primaryCtaLabel}
       primaryHref={home.data.primaryCtaHref}
       secondaryLabel={home.data.secondaryCtaLabel}
-      secondaryHref={home.data.secondaryCtaHref}
+      secondaryHref={getLocalizedPath(lang, 'contact')}
     />
 
     <AboutSection
