@@ -2,12 +2,23 @@
 title: "AMP – Zerstörungsfreie Werkstoffprüfung"
 description: "Moderne Prüftechnik, umfassendes Know-how und persönliche Betreuung für anspruchsvolle industrielle Prüfaufgaben."
 
-heroEyebrow: "AMP · Qualitätssicherung"
+heroEyebrow: "Prüftechnik aus dem Schwarzwald"
 heroTitlePrefix: "Ihr Partner für"
 heroTitleHighlight: "zerstörungs\u00ADfreie Werkstoff\u00ADprüfung."
 heroText: "Moderne Prüftechnik, umfassendes Know-how und persönliche Betreuung für anspruchsvolle industrielle Prüfaufgaben."
 heroImage: "../../../assets/images/hero-image.jpg"
 heroImageLabel: "Werkstoffprüfung im Einsatz"
+
+# Key facts under the hero. Only use statements that are backed by the content of the site.
+facts:
+  - value: "DIN · EN · ISO · ASME"
+    label: "Prüfungen nach geltenden Regelwerken"
+  - value: "0,03 mm"
+    label: "3D-Punktgenauigkeit in der Vermessung"
+  - value: "Prüfzentrum & vor Ort"
+    label: "Prüfungen bei uns oder direkt bei Ihnen"
+  - value: "Zertifiziert"
+    label: "Erfahrene, zertifizierte Servicetechniker"
 
 showcaseImage: "../../../assets/images/know-how_01.jpg"
 showcaseImageAlt: "Fassade des AMP-Prüfzentrums"

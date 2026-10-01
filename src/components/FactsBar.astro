@@ -1,0 +1,24 @@
+---
+/** Row of key facts below the hero, e.g. standards, accuracy, certifications. Renders nothing without facts. */
+interface Props {
+  /** Fact pairs from the `facts` frontmatter of home.md; may be missing in cached content. */
+  facts?: { value: string; label: string }[];
+  /** Accessible name of the list, e.g. the competencies eyebrow. */
+  label: string;
+}
+
+const { facts = [], label } = Astro.props;
+---
+
+{facts.length > 0 && (
+  <section class="facts-bar" aria-label={label}>
+    <ul class="facts-bar__list">
+      {facts.map((fact) => (
+        <li class="facts-bar__item">
+          <strong class="facts-bar__value">{fact.value}</strong>
+          <span class="facts-bar__label">{fact.label}</span>
+        </li>
+      ))}
+    </ul>
+  </section>
+)}

@@ -15,7 +15,7 @@
     --off: #f3f3ef;
     --white: #ffffff;
     --text: #171717;
-    --muted: #656565;
+    --muted: #575757;
     --line: #ddddda;
     --radius: 2px;
     --shadow: 0 18px 48px rgba(0, 0, 0, 0.14);
@@ -50,6 +50,7 @@ a {
 }
 
 a:focus-visible,
+button:focus-visible,
 summary:focus-visible {
     outline: 2px solid var(--black);
     outline-offset: 3px;
@@ -66,10 +67,10 @@ summary:focus-visible {
     width: max-content;
     align-items: center;
     gap: 12px;
-    color: #707070;
-    font-size: 10px;
+    color: #5f5f5f;
+    font-size: 11px;
     font-weight: 800;
-    letter-spacing: 0.22em;
+    letter-spacing: 0.2em;
     text-transform: uppercase;
 }
 
@@ -413,8 +414,10 @@ summary:focus-visible {
 
 .hero {
     width: 100%;
-    min-height: calc(100vh - 88px);
-    min-height: calc(100svh - 88px);
+    /* Window height minus header (88px) and the part of the facts card below the hero (80px),
+       so the whole card is visible on the first screen of common laptops and monitors. */
+    min-height: calc(100vh - 168px);
+    min-height: calc(100svh - 168px);
     display: grid;
     /* Split: text column left, image right at full height of the first screen. */
     grid-template-columns: minmax(0, 46fr) minmax(0, 54fr);
@@ -427,7 +430,8 @@ summary:focus-visible {
 .hero__copy {
     min-width: 0;
     /* Left padding aligns the text with the content column of the other sections. */
-    padding: clamp(48px, 6vw, 96px) clamp(32px, 4vw, 64px) clamp(48px, 6vw, 96px) max(var(--page-padding), calc((100vw - var(--content-max)) / 2 + var(--page-padding)));
+    /* Bottom padding leaves room for the facts card overlapping the hero by 64px. */
+    padding: clamp(40px, 4.5vw, 72px) clamp(32px, 4vw, 64px) clamp(88px, 7vw, 120px) max(var(--page-padding), calc((100vw - var(--content-max)) / 2 + var(--page-padding)));
     display: grid;
     grid-template-columns: minmax(0, 1fr);
     align-content: center;
@@ -513,28 +517,15 @@ summary:focus-visible {
 
 
 /* =========================================================
-   IMAGE SHOWCASE
+   IMAGE SHOWCASE (figure inside the about section)
    ========================================================= */
 
 .image-showcase {
-    width: min(100%, var(--content-max));
-    margin: 0 auto;
-    padding: 52px var(--page-padding) 84px;
-}
-
-.image-showcase__inner {
-    position: relative;
-}
-
-.image-showcase__figure {
     position: relative;
     margin: 0;
-    min-height: 300px;
     overflow: hidden;
     border-radius: var(--radius);
-    border: 1px solid #d5d5d1;
     background: var(--black);
-    box-shadow: none;
 }
 
 .image-showcase__image {
@@ -543,13 +534,12 @@ summary:focus-visible {
     display: block;
     object-fit: cover;
     object-position: center;
-    filter: grayscale(.28) contrast(1.04);
 }
 
-.image-showcase__figure::after {
+.image-showcase::after {
     position: absolute;
     inset: 0;
-    background: linear-gradient(90deg, rgba(0, 0, 0, .64) 0%, rgba(0, 0, 0, .22) 48%, rgba(0, 0, 0, .04) 76%);
+    background: linear-gradient(90deg, rgba(0, 0, 0, .6) 0%, rgba(0, 0, 0, .2) 48%, rgba(0, 0, 0, 0) 76%);
     pointer-events: none;
     content: "";
 }
@@ -582,23 +572,13 @@ summary:focus-visible {
 }
 
 @media (max-width: 900px) {
-    .image-showcase {
-        padding-top: 40px;
-        padding-bottom: 56px;
-    }
-    .image-showcase__figure {
-        min-height: 300px;
-    }
     .image-showcase__image {
+        aspect-ratio: auto;
         height: 360px;
     }
 }
 
 @media (max-width: 560px) {
-    .image-showcase {
-        padding-top: 32px;
-        padding-bottom: 48px;
-    }
     .image-showcase__caption {
         right: 24px;
         bottom: 24px;
@@ -606,6 +586,88 @@ summary:focus-visible {
     }
     .image-showcase__image {
         height: 300px;
+    }
+}
+
+
+/* =========================================================
+   FACTS BAR
+   ========================================================= */
+
+/* Card that overlaps the bottom edge of the hero, bridging hero and the next section. */
+.facts-bar {
+    position: relative;
+    z-index: 2;
+    margin-top: -64px;
+    padding: 0 var(--page-padding);
+}
+
+.facts-bar__list {
+    width: min(100%, calc(var(--content-max) - 2 * var(--page-padding)));
+    margin: 0 auto;
+    padding: 0 8px;
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    border-top: 3px solid var(--yellow);
+    background: var(--white);
+    box-shadow: 0 18px 48px rgba(0, 0, 0, .1);
+    list-style: none;
+}
+
+.facts-bar__item {
+    padding: 28px 24px;
+    display: grid;
+    gap: 6px;
+    align-content: start;
+}
+
+.facts-bar__item + .facts-bar__item {
+    border-left: 1px solid var(--line);
+}
+
+.facts-bar__value {
+    color: var(--text);
+    font-size: 20px;
+    font-weight: 800;
+    line-height: 1.2;
+    letter-spacing: -0.01em;
+}
+
+.facts-bar__label {
+    color: var(--muted);
+    font-size: 14px;
+    line-height: 1.5;
+}
+
+@media (max-width: 1100px) {
+    .facts-bar__list {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+    .facts-bar__item:nth-child(odd) {
+        border-left: 0;
+    }
+    .facts-bar__item:nth-child(n + 3) {
+        border-top: 1px solid var(--line);
+    }
+}
+
+@media (max-width: 900px) {
+    .facts-bar {
+        margin-top: -40px;
+    }
+}
+
+@media (max-width: 560px) {
+    .facts-bar__list {
+        padding: 0 20px;
+        grid-template-columns: 1fr;
+    }
+    .facts-bar__item {
+        padding: 18px 0;
+    }
+    .facts-bar__item + .facts-bar__item {
+        border-top: 1px solid var(--line);
+        border-left: 0;
     }
 }
 
@@ -626,14 +688,56 @@ summary:focus-visible {
 }
 
 .about-section {
+    position: relative;
+    isolation: isolate;
+    overflow: hidden;
     margin-top: 0;
-    background: #181818;
-    color: var(--white);
+    background: var(--white);
+    color: var(--text);
+}
+
+/* Contour lines as a quiet nod to the Black Forest; faint behind the text, stronger toward
+   the image at the bottom so they never compete with reading. */
+.about-section__topo {
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    width: 100%;
+    height: 100%;
+    color: #d6d3cc;
+    -webkit-mask-image: linear-gradient(to bottom, rgba(0, 0, 0, .18) 0%, rgba(0, 0, 0, .3) 45%, #000 85%);
+    mask-image: linear-gradient(to bottom, rgba(0, 0, 0, .18) 0%, rgba(0, 0, 0, .3) 45%, #000 85%);
 }
 
 .about-section__content {
     max-width: 640px;
-    color: #c7c7c2;
+    color: var(--muted);
+}
+
+/* First paragraph as lead text. */
+.about-section__content p:first-child {
+    margin-bottom: 24px;
+    color: var(--text);
+    font-size: clamp(19px, 1.6vw, 22px);
+    line-height: 1.55;
+}
+
+.about-section__media {
+    position: relative;
+    grid-column: 1 / -1;
+    margin-top: clamp(8px, 2vw, 24px);
+}
+
+/* Yellow block peeking out behind the image: a confident brand accent. */
+.about-section__media::before {
+    position: absolute;
+    left: -14px;
+    bottom: -14px;
+    z-index: -1;
+    width: clamp(96px, 12vw, 180px);
+    height: clamp(96px, 12vw, 180px);
+    background: var(--yellow);
+    content: "";
 }
 
 .about-section .section-heading {
@@ -699,8 +803,8 @@ summary:focus-visible {
 
 .competency-row__text {
     margin: 0;
-    color: #aaa;
-    font-size: 15px;
+    color: #b5b5b5;
+    font-size: 16px;
     line-height: 1.55;
 }
 
@@ -864,8 +968,8 @@ summary:focus-visible {
 
 .site-footer__brand span {
     margin-top: 10px;
-    color: #b8b8b8;
-    font-size: 10px;
+    color: #c4c4c4;
+    font-size: 12px;
     font-weight: 700;
 }
 
@@ -879,16 +983,16 @@ summary:focus-visible {
 }
 
 .site-footer__heading {
-    color: #666;
-    font-size: 9px;
+    color: #8a8a8a;
+    font-size: 11px;
     font-weight: 750;
     letter-spacing: .14em;
     text-transform: uppercase;
 }
 
 .site-footer a {
-    color: #b8b8b8;
-    font-size: 12px;
+    color: #c4c4c4;
+    font-size: 14px;
     text-decoration: none;
 }
 
@@ -908,10 +1012,10 @@ summary:focus-visible {
     justify-content: space-between;
     gap: 24px;
     border-top: 1px solid rgba(255, 255, 255, .12);
-    color: #666;
-    font-size: 9px;
+    color: #8a8a8a;
+    font-size: 11px;
     font-weight: 750;
-    letter-spacing: .14em;
+    letter-spacing: .12em;
     text-transform: uppercase;
 }
 
@@ -922,7 +1026,7 @@ summary:focus-visible {
 }
 
 .site-footer__legal a {
-    color: #8d8d8d;
+    color: #a3a3a3;
     font-size: inherit;
 }
 
@@ -1310,22 +1414,21 @@ summary:focus-visible {
    INDUSTRIAL DETAILING
    ========================================================= */
 
+/* Headings wrap between words only; a word breaks only if it can't fit at all.
+   Use soft hyphens (\u00AD) in content for long compounds. */
 .hero__title,
 .section-heading,
 .detail-hero h1,
 .competency-row__title,
 .quality-card h3,
 .contact-banner h2 {
-    overflow-wrap: anywhere;
-    hyphens: auto;
+    overflow-wrap: break-word;
+    hyphens: manual;
     text-wrap: balance;
 }
 
 .hero__title {
     text-transform: none;
-    /* Long German compounds break only at soft hyphens (\u00AD) set in home.md. */
-    hyphens: manual;
-    overflow-wrap: break-word;
 }
 
 .competency-row__number {
@@ -1459,6 +1562,12 @@ summary:focus-visible {
         padding-bottom: 44px;
     }
     .hero__title {
+        font-size: clamp(32px, 9vw, 40px);
+    }
+    .section-heading {
+        font-size: clamp(28px, 8vw, 34px);
+    }
+    .detail-hero h1 {
         font-size: clamp(32px, 9vw, 40px);
     }
     .hero__text {

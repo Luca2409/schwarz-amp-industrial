@@ -2,12 +2,23 @@
 title: "AMP – Non-Destructive Testing"
 description: "Advanced testing technology, extensive expertise, and dedicated support for demanding industrial inspection tasks."
 
-heroEyebrow: "AMP · Quality Assurance"
+heroEyebrow: "Testing expertise from the Black Forest"
 heroTitlePrefix: "Your partner for"
 heroTitleHighlight: "non-destructive testing."
 heroText: "Advanced testing technology, extensive expertise, and dedicated support for demanding industrial inspection tasks."
 heroImage: "../../../assets/images/hero-image.jpg"
 heroImageLabel: "Material testing in practice"
+
+# Key facts under the hero. Only use statements that are backed by the content of the site.
+facts:
+  - value: "DIN · EN · ISO · ASME"
+    label: "Testing to applicable codes and standards"
+  - value: "0.03 mm"
+    label: "3D point accuracy in dimensional metrology"
+  - value: "In-house & on site"
+    label: "Testing at our facility or at yours"
+  - value: "Certified"
+    label: "Experienced, certified service technicians"
 
 showcaseImage: "../../../assets/images/know-how_01.jpg"
 showcaseImageAlt: "Exterior of the AMP testing center"

@@ -28,6 +28,8 @@ const de = {
 
   'breadcrumb.home': 'Startseite',
 
+  'home.factsLabel': 'Auf einen Blick',
+
   'notFound.title': 'Seite nicht gefunden',
   'notFound.text': 'Die angeforderte Seite existiert nicht oder wurde verschoben.',
   'notFound.home': 'Zur Startseite →',
@@ -103,6 +105,8 @@ const en = {
   'footer.tagline': 'Precision. Experience. Responsibility.',
 
   'breadcrumb.home': 'Home',
+
+  'home.factsLabel': 'At a glance',
 
   'notFound.title': 'Page not found',
   'notFound.text': 'The page you requested does not exist or has been moved.',

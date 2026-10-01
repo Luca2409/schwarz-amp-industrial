@@ -18,6 +18,9 @@ const pages = defineCollection({
     heroImage: image(),
     heroImageLabel: z.string(),
 
+    /** Key facts shown below the hero (value + short explanation). */
+    facts: z.array(z.object({ value: z.string(), label: z.string() })).default([]),
+
     showcaseImage: image(),
     showcaseImageAlt: z.string(),
     showcaseEyebrow: z.string().optional(),

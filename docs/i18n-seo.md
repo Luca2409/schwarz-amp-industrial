@@ -114,7 +114,7 @@ const t = useTranslations(lang);
 ```
 
 - German is the reference. A key missing in another language is a **type error** (`npm run check`).
-- Keys are grouped by prefix: `brand.*`, `nav.*`, `language.*`, `footer.*`, `breadcrumb.*`, `notFound.*`, `competency.*`, `contact.*` (incl. `contact.form.*`, `contact.map.*`), `seo.*`.
+- Keys are grouped by prefix: `brand.*`, `nav.*`, `language.*`, `footer.*`, `breadcrumb.*`, `notFound.*`, `competency.*`, `contact.*` (incl. `contact.form.*`, `contact.map.*`), `home.*`, `seo.*`.
 - `t()` falls back to German at runtime if a key is missing.
 
 Components get the language as a `lang` prop from the page; they don't detect it from the URL.
@@ -168,7 +168,8 @@ Helpers in `src/lib/content.ts`:
 - `heroImage` and `showcaseImage` are paths to `src/assets/images/`, relative to the Markdown file (e.g. `../../../assets/images/hero-image.jpg`). See [Images](#images).
 - The contact banner links to the contact page; there is no link field in the frontmatter.
 - `primaryCtaHref` is an anchor on the same page (`#services`). The secondary button always links to the contact page, so it has only a label (`secondaryCtaLabel`).
-- `heroTitleHighlight` may contain soft hyphens (`\u00AD` in the YAML string) to mark where long words may break, e.g. `"zerstörungs\u00ADfreie Werkstoff\u00ADprüfung."`. The hero title has no automatic hyphenation.
+- `facts` is a list of `value` / `label` pairs shown as a row below the hero (`FactsBar.astro`). Only use statements that are backed by the site's content; without facts the row isn't rendered.
+- Headings (hero, section and page titles) have no automatic hyphenation, so they only wrap between words. For long compounds, soft hyphens (`\u00AD` in the YAML string) mark where a word may break, e.g. `heroTitleHighlight: "zerstörungs\u00ADfreie Werkstoff\u00ADprüfung."`.
 
 ### Competency frontmatter
 

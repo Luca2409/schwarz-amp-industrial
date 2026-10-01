@@ -22,28 +22,24 @@ const {
 } = Astro.props;
 ---
 
-<section class="image-showcase">
-  <div class="image-showcase__inner">
-    <figure class="image-showcase__figure">
-      <Image
-        class="image-showcase__image"
-        src={src}
-        alt={alt}
-        widths={[640, 960, 1440]}
-        sizes="(min-width: 1440px) 1440px, 100vw"
-      />
+<figure class="image-showcase">
+  <Image
+    class="image-showcase__image"
+    src={src}
+    alt={alt}
+    widths={[640, 960, 1440]}
+    sizes="(min-width: 1440px) 1300px, 100vw"
+  />
 
-      {(eyebrow || caption) && (
-        <figcaption class="image-showcase__caption">
-          {eyebrow && (
-            <span class="image-showcase__eyebrow">{eyebrow}</span>
-          )}
-
-          {caption && (
-            <span class="image-showcase__text">{caption}</span>
-          )}
-        </figcaption>
+  {(eyebrow || caption) && (
+    <figcaption class="image-showcase__caption">
+      {eyebrow && (
+        <span class="image-showcase__eyebrow">{eyebrow}</span>
       )}
-    </figure>
-  </div>
-</section>
+
+      {caption && (
+        <span class="image-showcase__text">{caption}</span>
+      )}
+    </figcaption>
+  )}
+</figure>
