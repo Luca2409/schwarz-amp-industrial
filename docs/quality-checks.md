@@ -157,6 +157,15 @@ Tests use URLs relative to the site (e.g. `de/kontakt/`), so they work with any 
 | lists certificates with downloadable PDFs | Both download links return a PDF (HTTP 200, `application/pdf`) |
 | switches between the localized certificates pages | `/de/zertifikate/` → `/en/certificates/`, English PDF linked |
 
+`tests/e2e/llms.spec.ts`:
+
+| Test | Verifies |
+| --- | --- |
+| llms.txt follows the llmstxt.org format and links existing pages | H1 + blockquote, `## Optional` section, every linked page returns 200 |
+| llms-full.txt contains the content of every language | German and English sections, competency content, no soft hyphens |
+| robots.txt welcomes AI crawlers and points to llms.txt | AI crawler entries and llms.txt reference (skipped on prototype deployments) |
+| home page describes the company and its services as structured data | `Organization` with description and three offered services |
+
 `tests/e2e/contact.spec.ts`:
 
 | Test | Verifies |

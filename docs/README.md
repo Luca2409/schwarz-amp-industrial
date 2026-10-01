@@ -6,6 +6,7 @@
 | [i18n-seo.md](./i18n-seo.md) | Languages, localized URLs, translations, SEO tags, structured data, sitemap |
 | [contact-page.md](./contact-page.md) | Contact page, form service, Google Maps, legal implications |
 | [quality-checks.md](./quality-checks.md) | Type check, content validation, build checks, e2e tests, CI pipeline |
+| [llm-discoverability.md](./llm-discoverability.md) | llms.txt, llms-full.txt, AI crawlers, structured data for language models |
 
 Code is documented with JSDoc comments on functions, exported values and component props.
 
@@ -28,12 +29,13 @@ Code is documented with JSDoc comments on functions, exported values and compone
 | --- | --- | --- | --- |
 | Head tags | Title, description, canonical, Open Graph, Twitter, favicon, `noindex` | [i18n-seo.md → SEO tags](./i18n-seo.md#seo-tags) | `src/layouts/BaseLayout.astro` |
 | hreflang | Alternates incl. `x-default` on every translated page | [i18n-seo.md → SEO tags](./i18n-seo.md#seo-tags) | `src/layouts/BaseLayout.astro` |
-| Structured data | `Organization`, `WebSite`, `Service`, `ContactPage`, `BreadcrumbList` | [i18n-seo.md → Structured data](./i18n-seo.md#structured-data) | `src/lib/structured-data.ts`, `src/components/JsonLd.astro` |
+| Structured data | `Organization` (with services), `WebSite`, `Service`, `ContactPage`, `BreadcrumbList` | [i18n-seo.md → Structured data](./i18n-seo.md#structured-data) | `src/lib/structured-data.ts`, `src/components/JsonLd.astro` |
 | Sitemap | With hreflang alternates and `lastmod` from git | [i18n-seo.md → Sitemap](./i18n-seo.md#sitemap-and-robotstxt) | `src/i18n/sitemap.ts`, `src/lib/last-modified.ts` |
-| robots.txt | Allows all, points to the sitemap; disallows all in a prototype build | [i18n-seo.md → robots.txt](./i18n-seo.md#robotstxt) | `src/pages/robots.txt.ts` |
+| robots.txt | Allows all, names AI crawlers explicitly, points to the sitemap and llms.txt; disallows all in a prototype build | [i18n-seo.md → robots.txt](./i18n-seo.md#robotstxt) | `src/pages/robots.txt.ts` |
 | Social preview image | 1200×630, generated; optional per competency | [i18n-seo.md → SEO tags](./i18n-seo.md#seo-tags) | `src/layouts/BaseLayout.astro` |
 | Meta texts | SEO title and description per competency | [i18n-seo.md → Competency frontmatter](./i18n-seo.md#competency-frontmatter) | `src/content/competencies/` |
 | Internal linking | Related competencies on every competency page | [i18n-seo.md → Internal linking](./i18n-seo.md#internal-linking) | `src/pages/[lang]/[competencies]/[slug].astro` |
+| llms.txt | Summary and key links for language models, plus full text in `llms-full.txt`; generated from the content | [llm-discoverability.md](./llm-discoverability.md) | `src/lib/llms.ts` |
 
 ### Pages and content
 
@@ -52,6 +54,6 @@ Code is documented with JSDoc comments on functions, exported values and compone
 | --- | --- | --- | --- |
 | Build checks | Missing translations, contact config, placeholders (block CI), static route files | [quality-checks.md → Build checks](./quality-checks.md#build-checks) | `src/integrations/site-checks.ts` |
 | Prototype mode | `PUBLIC_PROTOTYPE=true`: deploy a draft with placeholders; every page `noindex`, `robots.txt` disallows all | [quality-checks.md → Prototype mode](./quality-checks.md#prototype-mode) | `src/integrations/site-checks.ts`, `src/layouts/BaseLayout.astro`, `src/pages/robots.txt.ts`, `.github/workflows/deploy.yml` |
-| E2E tests | 12 Playwright tests on desktop and mobile, against a local build or a deployed site (`E2E_BASE_URL`) | [quality-checks.md → End-to-end tests](./quality-checks.md#end-to-end-tests) | `tests/e2e/`, `playwright.config.ts` |
+| E2E tests | 18 Playwright tests on desktop and mobile, against a local build or a deployed site (`E2E_BASE_URL`) | [quality-checks.md → End-to-end tests](./quality-checks.md#end-to-end-tests) | `tests/e2e/`, `playwright.config.ts` |
 | Deploy config | Domain and base path in one place, shared by Astro and the tests | [i18n-seo.md → Move to your own domain](./i18n-seo.md#move-to-your-own-domain) | `deploy.config.mjs` |
 | CI pipeline | Build, test, deploy to GitHub Pages | [quality-checks.md → CI pipeline](./quality-checks.md#ci-pipeline) | `.github/workflows/deploy.yml` |

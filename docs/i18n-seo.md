@@ -262,7 +262,7 @@ JSON-LD built with `src/lib/structured-data.ts` and rendered with `<JsonLd slot=
 | Contact | `Organization`, `ContactPage`, `BreadcrumbList` |
 | Certificates | `BreadcrumbList` |
 
-The `Organization` includes a `ContactPoint` and, once `site.address` is filled in, a `PostalAddress`.
+The `Organization` includes a `ContactPoint` and, once `site.address` is filled in, a `PostalAddress`. On the home page it also carries `description`, `knowsAbout` and `makesOffer` (one `Service` per competency), see [llm-discoverability.md](./llm-discoverability.md#structured-data).
 
 All nodes reference the organization by a stable id (`…/de/#organization`). Company data comes from `src/site.ts`. Validate with Google's [Rich Results Test](https://search.google.com/test/rich-results) or the [Schema Markup Validator](https://validator.schema.org/).
 
@@ -288,7 +288,7 @@ The deploy workflow checks out the full history (`fetch-depth: 0`), otherwise ev
 
 ### robots.txt
 
-`src/pages/robots.txt.ts` allows all crawlers and points to the sitemap; in a [prototype build](./quality-checks.md#prototype-mode) it disallows all crawlers instead. Crawlers only read `robots.txt` at the domain root, so it takes effect once the site runs on its own domain.
+`src/pages/robots.txt.ts` allows all crawlers, names AI crawlers explicitly ([llm-discoverability.md](./llm-discoverability.md#robotstxt)) and points to the sitemap and `llms.txt`; in a [prototype build](./quality-checks.md#prototype-mode) it disallows all crawlers instead. Crawlers only read `robots.txt` at the domain root, so it takes effect once the site runs on its own domain.
 
 ## Internal linking
 

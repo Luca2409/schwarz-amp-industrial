@@ -7,14 +7,29 @@ import { hasAddress, site } from '@/site';
 /** Stable id of the organization node, so other nodes can reference it across pages. */
 const organizationId = () => `${getAbsoluteLocaleUrl(defaultLang)}#organization`;
 
+/** A service the organization offers, for `makesOffer` in {@link organization}. */
+export interface OfferedService {
+  name: string;
+  description: string;
+  /** Absolute URL of the service page. */
+  url: string;
+}
+
 /**
- * Describes the company as a schema.org `Organization`. Rendered on the home pages.
+ * Describes the company as a schema.org `Organization`. Rendered on the home and contact
+ * pages. With `details`, it also states what the company does (description, subject areas,
+ * services), which helps search engines and language models connect AMP to its services.
  *
  * @param lang Language of the current page; sets the organization's `url`.
  * @param siteUrl Absolute site URL (`Astro.site`), used to make the logo URL absolute.
+ * @param details Optional description and offered services (e.g. the competencies).
  * @returns JSON-LD object built from `src/site.ts`.
  */
-export function organization(lang: Lang, siteUrl: URL) {
+export function organization(
+  lang: Lang,
+  siteUrl: URL,
+  details?: { description: string; services: OfferedService[] },
+) {
   return {
     '@context': 'https://schema.org',
     '@type': 'Organization',
@@ -26,6 +41,20 @@ export function organization(lang: Lang, siteUrl: URL) {
     email: site.email,
     telephone: site.phone.display,
     ...(hasAddress && { address: postalAddress() }),
+    ...(details && {
+      description: details.description,
+      knowsAbout: details.services.map((service) => service.name),
+      makesOffer: details.services.map((service) => ({
+        '@type': 'Offer',
+        itemOffered: {
+          '@type': 'Service',
+          name: service.name,
+          description: service.description,
+          url: service.url,
+          provider: { '@id': organizationId() },
+        },
+      })),
+    }),
     contactPoint: {
       '@type': 'ContactPoint',
       contactType: 'customer service',

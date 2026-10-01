@@ -13,7 +13,7 @@ import Footer from '@/components/Footer.astro';
 import JsonLd from '@/components/JsonLd.astro';
 import { getAlternates, getLocalizedPath, useTranslations } from '@/i18n/utils';
 import type { Lang } from '@/i18n/ui';
-import { getCompetencies } from '@/lib/content';
+import { getCompetencies, getEntryPath } from '@/lib/content';
 import { getLastModified } from '@/lib/last-modified';
 import { organization, website } from '@/lib/structured-data';
 
@@ -49,7 +49,14 @@ const lastModified = getLastModified(home.filePath, ...competencies.map((entry) 
   <JsonLd
     slot="head"
     data={[
-      organization(lang, Astro.site ?? Astro.url),
+      organization(lang, Astro.site ?? Astro.url, {
+        description: home.data.description,
+        services: competencies.map((entry) => ({
+          name: entry.data.title,
+          description: entry.data.seoDescription,
+          url: new URL(getEntryPath(entry), Astro.site ?? Astro.url).href,
+        })),
+      }),
       website(lang, home.data.title, home.data.description),
     ]}
   />
