@@ -166,6 +166,14 @@ Tests use URLs relative to the site (e.g. `de/kontakt/`), so they work with any 
 | robots.txt welcomes AI crawlers and points to llms.txt | AI crawler entries and llms.txt reference (skipped on prototype deployments) |
 | home page describes the company and its services as structured data | `Organization` with description and three offered services |
 
+`tests/e2e/not-found.spec.ts`:
+
+| Test | Verifies |
+| --- | --- |
+| shows the German 404 for German URLs | HTTP 404, German message, `<html lang="de">` |
+| shows the English 404 for English URLs | English message, `<html lang="en">`, English title |
+| without a language in the URL: uses the browser language | English browser → English message |
+
 `tests/e2e/contact.spec.ts`:
 
 | Test | Verifies |

@@ -3,30 +3,57 @@ import BaseLayout from '@/layouts/BaseLayout.astro';
 import Header from '@/components/Header.astro';
 import Footer from '@/components/Footer.astro';
 import { defaultLang, languages } from '@/i18n/ui';
+import { LANG_STORAGE_KEY } from '@/i18n/storage';
 import { getAlternates, getLocalizedPath, useTranslations } from '@/i18n/utils';
 
-// GitHub Pages serves one 404 page for every URL, so it shows all languages.
-const t = useTranslations(defaultLang);
+/**
+ * GitHub Pages serves this one page for every unknown URL, in every language. It renders a
+ * full variant (header, message, footer) per language; a small script shows the one matching
+ * the URL (`/en/…`), else the language saved by the language picker, else the browser
+ * language. Without JavaScript the default language is shown.
+ */
 const alternates = getAlternates();
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+const titles = Object.fromEntries(
+  languages.map((lang) => [lang, `${useTranslations(lang)('notFound.title')} | AMP`]),
+);
 ---
-<BaseLayout lang={defaultLang} title={`${t('notFound.title')} | AMP`} noindex>
-  <Header lang={defaultLang} alternates={alternates} />
+<BaseLayout lang={defaultLang} title={titles[defaultLang]} noindex>
+  {languages.map((lang) => {
+    const t = useTranslations(lang);
+    return (
+      <div class="not-found-variant" data-lang-variant={lang} lang={lang} hidden={lang !== defaultLang}>
+        <Header lang={lang} alternates={alternates} />
+        <main>
+          <section class="detail-hero">
+            <div class="detail-hero__inner">
+              <div class="eyebrow eyebrow--dark">404</div>
+              <h1>{t('notFound.title')}</h1>
+              <p>{t('notFound.text')}</p>
+              <a class="button button--accent" href={getLocalizedPath(lang)}>{t('notFound.home')}</a>
+            </div>
+          </section>
+        </main>
+        <Footer lang={lang} />
+      </div>
+    );
+  })}
 
-  <main>
-    {languages.map((lang) => {
-      const tl = useTranslations(lang);
-      return (
-        <section class="detail-hero" lang={lang}>
-          <div class="detail-hero__inner">
-            <div class="eyebrow eyebrow--dark">404</div>
-            <h1>{tl('notFound.title')}</h1>
-            <p>{tl('notFound.text')}</p>
-            <a class="button button--accent" href={getLocalizedPath(lang)}>{tl('notFound.home')}</a>
-          </div>
-        </section>
-      );
-    })}
-  </main>
-
-  <Footer lang={defaultLang} />
+  <script is:inline define:vars={{ languages, defaultLang, base, titles, storageKey: LANG_STORAGE_KEY }}>
+    (() => {
+      const fromPath = location.pathname.slice(base.length).split('/').filter(Boolean)[0];
+      let saved = null;
+      try {
+        saved = localStorage.getItem(storageKey);
+      } catch {}
+      const browser = (navigator.languages || [navigator.language]).map((l) => l.toLowerCase().split('-')[0]);
+      const lang = [fromPath, saved, ...browser].find((l) => languages.includes(l)) || defaultLang;
+      if (lang === defaultLang) return;
+      document.querySelectorAll('[data-lang-variant]').forEach((el) => {
+        el.hidden = el.dataset.langVariant !== lang;
+      });
+      document.documentElement.lang = lang;
+      document.title = titles[lang];
+    })();
+  </script>
 </BaseLayout>

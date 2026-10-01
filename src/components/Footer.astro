@@ -33,8 +33,8 @@ const legalLinks = (await getLegalPages(lang)).map((entry) => ({
       <a href={getLocalizedPath(lang, 'contact')}>{t('nav.contact')}</a>
     </nav>
 
-    <nav class="site-footer__related" aria-labelledby="footer-related-heading">
-      <span class="site-footer__heading" id="footer-related-heading">{t('footer.relatedLabel')}</span>
+    <nav class="site-footer__related" aria-labelledby={`footer-related-heading-${lang}`}>
+      <span class="site-footer__heading" id={`footer-related-heading-${lang}`}>{t('footer.relatedLabel')}</span>
       {site.relatedCompanies.map((company) => (
         <a href={company.url}>{company.name}</a>
       ))}
