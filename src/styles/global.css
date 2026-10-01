@@ -419,8 +419,17 @@ summary:focus-visible {
     min-height: calc(100vh - 168px);
     min-height: calc(100svh - 168px);
     display: grid;
-    /* Split: text column left, image right at full height of the first screen. */
-    grid-template-columns: minmax(0, 46fr) minmax(0, 54fr);
+    /* Outer margin of the content column; text and image align to it. */
+    --hero-edge: max(var(--page-padding), calc((100vw - var(--content-max)) / 2 + var(--page-padding)));
+    /* Split: text left, image right. The image column is half of the content width plus the
+       right margin, so the text column doesn't get squeezed by wide outer margins. */
+    grid-template-columns: minmax(0, 1fr) calc((100% - 2 * var(--hero-edge)) * .5 + var(--hero-edge));
+    /* Rows: space above, the text block, space below, and a fixed row for the facts card
+       overlapping the hero by 64px. The space above gets 60% of the space below, so the
+       text sits slightly above center, closer to the header. The image starts on the same
+       line as the text and ends where the card begins, floating between header and card. */
+    --hero-space: clamp(32px, 3.5vw, 56px);
+    grid-template-rows: minmax(clamp(24px, 2.5vw, 40px), .6fr) auto minmax(var(--hero-space), 1fr) 64px;
     gap: 0;
     align-items: stretch;
     background: var(--white);
@@ -428,13 +437,13 @@ summary:focus-visible {
 }
 
 .hero__copy {
+    grid-column: 1;
+    grid-row: 2;
     min-width: 0;
     /* Left padding aligns the text with the content column of the other sections. */
-    /* Bottom padding leaves room for the facts card overlapping the hero by 64px. */
-    padding: clamp(40px, 4.5vw, 72px) clamp(32px, 4vw, 64px) clamp(88px, 7vw, 120px) max(var(--page-padding), calc((100vw - var(--content-max)) / 2 + var(--page-padding)));
+    padding: 0 clamp(32px, 4vw, 64px) 0 var(--hero-edge);
     display: grid;
     grid-template-columns: minmax(0, 1fr);
-    align-content: center;
     gap: 28px;
 }
 
@@ -481,11 +490,28 @@ summary:focus-visible {
 }
 
 .hero__visual {
+    /* From the text's first line down to the card row, so the image's bottom edge and the
+       card's yellow top edge form one line. */
+    grid-column: 2;
+    grid-row: 2 / 4;
     position: relative;
     min-width: 0;
     min-height: 320px;
-    overflow: hidden;
-    background: var(--black);
+    /* Right edge aligned with the content column (header button, facts card). */
+    margin-right: var(--hero-edge);
+    isolation: isolate;
+    --hero-shape: polygon(14% 0, 100% 0, 100% 100%, 0 100%);
+}
+
+/* Yellow stripe along the slanted left edge, meeting the card's yellow top edge. */
+.hero__visual::before {
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    background: var(--yellow);
+    clip-path: var(--hero-shape);
+    transform: translateX(-10px);
+    content: "";
 }
 
 .hero__image {
@@ -497,6 +523,8 @@ summary:focus-visible {
     object-fit: cover;
     object-position: center 46%;
     filter: saturate(.76) contrast(1.04);
+    /* Slanted left edge, echoing the italic AMP logo. */
+    clip-path: var(--hero-shape);
 }
 
 .hero .button--primary {
@@ -1480,9 +1508,12 @@ summary:focus-visible {
     }
     .hero {
         grid-template-columns: 1fr;
+        grid-template-rows: none;
         min-height: 0;
     }
     .hero__copy {
+        grid-column: auto;
+        grid-row: auto;
         grid-template-columns: 1fr;
         gap: 28px;
         padding: 58px var(--page-padding) 64px;
@@ -1496,6 +1527,16 @@ summary:focus-visible {
     .hero__visual {
         height: clamp(360px, 68vw, 460px);
         min-height: 0;
+        /* Stacked layout: full-bleed with a slanted top edge; straight bottom edge so the image
+           meets the card's yellow top edge. Card overlap is 40px here. */
+        grid-column: auto;
+        grid-row: auto;
+        margin-bottom: 40px;
+        margin-right: 0;
+        --hero-shape: polygon(0 10%, 100% 0, 100% 100%, 0 100%);
+    }
+    .hero__visual::before {
+        transform: translateY(-8px);
     }
     .about-section__inner,
     .quality-section,
