@@ -1,0 +1,73 @@
+---
+import { getCollection, render } from 'astro:content';
+import { getAbsoluteLocaleUrl } from 'astro:i18n';
+
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import Header from '@/components/Header.astro';
+import Footer from '@/components/Footer.astro';
+import JsonLd from '@/components/JsonLd.astro';
+import { useTranslations } from '@/i18n/utils';
+import {
+  getEntryAlternates,
+  getEntryLang,
+  getEntryPath,
+  getEntrySlug,
+  warnMissingTranslations,
+} from '@/lib/content';
+import { getLastModified } from '@/lib/last-modified';
+import { breadcrumbs } from '@/lib/structured-data';
+
+/**
+ * Builds one page per legal entry, e.g. `/de/impressum/` and `/en/legal-notice/`.
+ * Warns about legal pages that are missing in a language.
+ *
+ * @returns Paths with the entry and its translations (`alternates`) as props.
+ */
+export async function getStaticPaths() {
+  const entries = await getCollection('legal');
+  warnMissingTranslations(entries);
+
+  return entries.map((entry) => ({
+    params: { lang: getEntryLang(entry), slug: getEntrySlug(entry) },
+    props: { entry, alternates: getEntryAlternates(entry, entries) },
+  }));
+}
+
+const { entry, alternates } = Astro.props;
+const lang = getEntryLang(entry);
+const t = useTranslations(lang);
+const { Content } = await render(entry);
+const url = new URL(getEntryPath(entry), Astro.site ?? Astro.url).href;
+---
+<BaseLayout
+  lang={lang}
+  title={`${entry.data.title} | AMP`}
+  description={entry.data.description}
+  alternates={alternates}
+  lastModified={getLastModified(entry.filePath)}
+>
+  <JsonLd
+    slot="head"
+    data={breadcrumbs([
+      { name: t('breadcrumb.home'), url: getAbsoluteLocaleUrl(lang) },
+      { name: entry.data.title, url },
+    ])}
+  />
+  <Header lang={lang} alternates={alternates} />
+
+  <main>
+    <section class="detail-hero">
+      <div class="detail-hero__inner">
+        <h1>{entry.data.title}</h1>
+      </div>
+    </section>
+
+    <section class="detail-content">
+      <article class="markdown-content">
+        <Content />
+      </article>
+    </section>
+  </main>
+
+  <Footer lang={lang} />
+</BaseLayout>

@@ -1,16 +1,19 @@
 ---
+/** One linked row in the competencies list. */
 interface Props {
-  id: string;
+  /** Localized URL of the competency page, see `getEntryPath`. */
+  href: string;
+  /** Display number, e.g. `"01"`. */
   number: string;
   title: string;
+  /** Short description next to the title. */
   teaser: string;
 }
 
-const { id, number, title, teaser } = Astro.props;
-const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+const { href, number, title, teaser } = Astro.props;
 ---
 
-<a class="competency-row" href={`${base}/kompetenzen/${id}/`}>
+<a class="competency-row" href={href}>
   <div class="competency-row__number">{number}</div>
   <h3 class="competency-row__title">{title}</h3>
   <p class="competency-row__text">{teaser}</p>

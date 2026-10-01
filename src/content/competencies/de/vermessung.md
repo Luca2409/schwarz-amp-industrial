@@ -1,9 +1,11 @@
 ---
+translationKey: "dimensional-metrology"
 number: "02"
 title: "Vermessung"
 teaser: "Laserbasierte Präzisionsmessung für industrielle Anwendungen."
 order: 2
-seoDescription: "Industrielle Vermessung bei AMP."
+seoTitle: "Lohnvermessung mit FARO Laser Tracker & FaroArm | AMP"
+seoDescription: "Präzise 3D-Vermessung von Bauteilen, Maschinen und Anlagen mit FARO Laser Tracker und FaroArm – Genauigkeit bis 0,03 mm, bei uns oder direkt bei Ihnen vor Ort."
 ---
 
 ## Präzision für Ihr Produkt – Lohnvermessung

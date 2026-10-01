@@ -1,9 +1,11 @@
 ---
+translationKey: "non-destructive-testing"
 number: "01"
 title: "Zerstörungsfreie Werkstoffprüfung"
 teaser: "Von Schweißnähten bis zu komplexen Bauteilen."
 order: 1
-seoDescription: "Zerstörungsfreie Werkstoffprüfung bei AMP."
+seoTitle: "Zerstörungsfreie Werkstoffprüfung (RT, UT, PT/MT, VT) | AMP"
+seoDescription: "Röntgen-, Ultraschall-, Riss- und Sichtprüfung nach DIN, EN, ISO und ASME – im Prüfzentrum oder vor Ort. Dazu Dichtheitsprüfung, PMI und Härtemessung."
 ---
 
 ## Dienstleistungen nach Maß

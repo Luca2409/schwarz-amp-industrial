@@ -1,0 +1,110 @@
+---
+import { getCollection, render } from 'astro:content';
+import { getAbsoluteLocaleUrl } from 'astro:i18n';
+
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import Header from '@/components/Header.astro';
+import Footer from '@/components/Footer.astro';
+import JsonLd from '@/components/JsonLd.astro';
+import CompetenciesSection from '@/components/CompetenciesSection.astro';
+import { routes } from '@/i18n/routes';
+import { getHomeAnchor, useTranslations } from '@/i18n/utils';
+import {
+  getCompetencies,
+  getEntryAlternates,
+  getEntryLang,
+  getEntryPath,
+  getEntrySlug,
+  warnMissingTranslations,
+} from '@/lib/content';
+import { getLastModified } from '@/lib/last-modified';
+import { breadcrumbs, service } from '@/lib/structured-data';
+import { site } from '@/site';
+
+/**
+ * Builds one page per competency, e.g. `/de/kompetenzen/vermessung/`. The route segment
+ * is translated via `src/i18n/routes.ts`, the slug is the file name. Warns about
+ * competencies that are missing in a language.
+ *
+ * @returns Paths with the entry and its translations (`alternates`) as props.
+ */
+export async function getStaticPaths() {
+  const entries = await getCollection('competencies');
+  warnMissingTranslations(entries);
+
+  return entries.map((entry) => {
+    const lang = getEntryLang(entry);
+    return {
+      params: { lang, competencies: routes.competencies[lang], slug: getEntrySlug(entry) },
+      props: { entry, alternates: getEntryAlternates(entry, entries) },
+    };
+  });
+}
+
+const { entry, alternates } = Astro.props;
+const lang = getEntryLang(entry);
+const t = useTranslations(lang);
+const { Content } = await render(entry);
+const url = new URL(getEntryPath(entry), Astro.site ?? Astro.url).href;
+const related = (await getCompetencies(lang)).filter((other) => other.id !== entry.id);
+---
+<BaseLayout
+  lang={lang}
+  title={entry.data.seoTitle}
+  description={entry.data.seoDescription}
+  alternates={alternates}
+  lastModified={getLastModified(entry.filePath)}
+  type="article"
+  image={entry.data.ogImage}
+>
+  <JsonLd
+    slot="head"
+    data={[
+      service(lang, entry.data.title, entry.data.seoDescription, url),
+      breadcrumbs([
+        { name: t('breadcrumb.home'), url: getAbsoluteLocaleUrl(lang) },
+        { name: entry.data.title, url },
+      ]),
+    ]}
+  />
+  <Header lang={lang} alternates={alternates} />
+
+  <main>
+    <section class="detail-hero">
+      <div class="detail-hero__inner">
+        <div class="detail-back-row">
+          <a class="detail-back" href={getHomeAnchor(lang, 'services')}>{t('competency.back')}</a>
+        </div>
+        <div class="eyebrow eyebrow--dark">{t('competency.eyebrow')}</div>
+        <h1>{entry.data.title}</h1>
+        <p>{entry.data.teaser}</p>
+      </div>
+    </section>
+
+    <section class="detail-content">
+      <article class="markdown-content">
+        <Content />
+      </article>
+
+      <aside class="detail-sidebar">
+        <div class="eyebrow eyebrow--dark">{t('competency.contactEyebrow')}</div>
+        <h2>{t('competency.contactTitle')}</h2>
+        <p>{t('competency.contactText')}</p>
+        <a class="button button--accent" href={`mailto:${site.email}`}>
+          {t('competency.contactCta')}
+        </a>
+      </aside>
+    </section>
+
+    {related.length > 0 && (
+      <CompetenciesSection
+        id="related"
+        eyebrow={t('competency.relatedEyebrow')}
+        title={t('competency.relatedTitle')}
+        entries={related}
+      />
+    )}
+  </main>
+
+  <Footer lang={lang} />
+</BaseLayout>

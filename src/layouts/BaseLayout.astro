@@ -2,45 +2,102 @@
 import '@fontsource-variable/inter';
 import '@fontsource-variable/inter/wght-italic.css';
 import '@/styles/global.css';
+import { getImage } from 'astro:assets';
+import type { ImageMetadata } from 'astro';
+import defaultSocialImage from '@/assets/images/hero-image.jpg';
+import { defaultLang, localeMeta, type Lang } from '@/i18n/ui';
+import { useTranslations, type Alternate } from '@/i18n/utils';
+import { site as siteConfig } from '@/site';
 
+/** Page shell with all SEO tags: canonical, hreflang, Open Graph, Twitter, favicon. */
 interface Props {
+  /** Language of the page; sets `<html lang>` and `og:locale`. */
+  lang: Lang;
+  /** Full `<title>`, also used for `og:title`. */
   title: string;
+  /** Meta description; defaults to the `seo.defaultDescription` translation. */
   description?: string;
+  /** Translations of this page (including the current one), for hreflang. */
+  alternates?: Alternate[];
+  /** `og:type`; competency pages use `article`. */
+  type?: 'website' | 'article';
+  /** Social preview image; cropped to 1200×630. */
+  image?: ImageMetadata;
+  /** Adds `<meta name="robots" content="noindex">`, e.g. for the 404 page. */
+  noindex?: boolean;
+  /** Used for og:updated_time and the sitemap's lastmod. */
+  lastModified?: Date;
 }
 
 const {
+  lang,
   title,
-  description = 'AMP – Zerstörungsfreie Werkstoffprüfung',
+  alternates = [],
+  type = 'website',
+  image = defaultSocialImage,
+  noindex = false,
+  lastModified,
 } = Astro.props;
+const t = useTranslations(lang);
+const description = Astro.props.description ?? t('seo.defaultDescription');
 
 const site = Astro.site ?? Astro.url;
-const canonicalUrl = new URL(Astro.url.pathname, site);
+const absolute = (path: string) => new URL(path, site).href;
 const base = import.meta.env.BASE_URL.replace(/\/$/, '');
-const socialImageUrl = new URL(`${base}/images/hero-image.jpg`, site);
+
+const currentPath = alternates.find((alternate) => alternate.lang === lang)?.path ?? Astro.url.pathname;
+const canonicalUrl = absolute(currentPath);
+const socialImage = await getImage({ src: image, width: 1200, height: 630, fit: 'cover', format: 'jpg' });
+const socialImageUrl = absolute(socialImage.src);
+
+// x-default points visitors without a matching language to the default-language version.
+const xDefault = alternates.find((alternate) => alternate.lang === defaultLang);
+const otherLocales = alternates.filter((alternate) => alternate.lang !== lang);
 ---
 
 <!doctype html>
-<html lang="de">
+<html lang={lang}>
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width" />
     <meta name="description" content={description} />
     <meta name="theme-color" content="#111111" />
+    {noindex && <meta name="robots" content="noindex" />}
+    <link rel="icon" href={`${base}/favicon.svg`} type="image/svg+xml" />
+    <link rel="apple-touch-icon" href={`${base}/apple-touch-icon.png`} />
     <link rel="canonical" href={canonicalUrl} />
+    {alternates.length > 1 && alternates.map((alternate) => (
+      <link rel="alternate" hreflang={alternate.lang} href={absolute(alternate.path)} />
+    ))}
+    {alternates.length > 1 && xDefault && (
+      <link rel="alternate" hreflang="x-default" href={absolute(xDefault.path)} />
+    )}
+    <link rel="sitemap" href={`${base}/sitemap-index.xml`} />
 
-    <meta property="og:type" content="website" />
-    <meta property="og:locale" content="de_DE" />
+    <meta property="og:type" content={type} />
+    <meta property="og:site_name" content={siteConfig.name} />
+    <meta property="og:locale" content={localeMeta[lang].ogLocale} />
+    {otherLocales.map((alternate) => (
+      <meta property="og:locale:alternate" content={localeMeta[alternate.lang].ogLocale} />
+    ))}
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
     <meta property="og:url" content={canonicalUrl} />
     <meta property="og:image" content={socialImageUrl} />
-    <meta property="og:image:alt" content="AMP Prüftechnik im industriellen Einsatz" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content={t('seo.imageAlt')} />
+    {lastModified && <meta property="og:updated_time" content={lastModified.toISOString()} />}
+    {lastModified && type === 'article' && (
+      <meta property="article:modified_time" content={lastModified.toISOString()} />
+    )}
 
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content={title} />
     <meta name="twitter:description" content={description} />
     <meta name="twitter:image" content={socialImageUrl} />
     <title>{title}</title>
+    <slot name="head" />
   </head>
   <body>
     <slot />

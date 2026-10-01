@@ -1,76 +1,35 @@
 ---
-import { getCollection, getEntry, render } from 'astro:content';
+import { getAbsoluteLocaleUrl, getRelativeLocaleUrl } from 'astro:i18n';
+import { defaultLang, languages } from '@/i18n/ui';
+import { LANG_STORAGE_KEY } from '@/i18n/storage';
 
-import BaseLayout from '@/layouts/BaseLayout.astro';
-import Header from '@/components/Header.astro';
-import Hero from '@/components/Hero.astro';
-import ImageShowcase from '@/components/ImageShowcase.astro';
-import AboutSection from '@/components/AboutSection.astro';
-import CompetenciesSection from '@/components/CompetenciesSection.astro';
-import QualitySection from '@/components/QualitySection.astro';
-import ContactBanner from '@/components/ContactBanner.astro';
-import Footer from '@/components/Footer.astro';
-
-const home = await getEntry('pages', 'home');
-
-if (!home) {
-  throw new Error('Home content not found.');
-}
-
-const competencies = await getCollection('competencies');
-const { Content } = await render(home);
+// Redirects "/" to the visitor's language: saved choice from the language picker,
+// then browser languages, then the default locale (also the no-JS fallback).
+const targets = Object.fromEntries(languages.map((lang) => [lang, getRelativeLocaleUrl(lang)]));
+const fallback = targets[defaultLang];
 ---
 
-<BaseLayout title={home.data.title} description={home.data.description}>
-  <Header />
-
-  <main>
-    <Hero
-      eyebrow={home.data.heroEyebrow}
-      titlePrefix={home.data.heroTitlePrefix}
-      titleHighlight={home.data.heroTitleHighlight}
-      text={home.data.heroText}
-      image={home.data.heroImage}
-      imageLabel={home.data.heroImageLabel}
-      primaryLabel={home.data.primaryCtaLabel}
-      primaryHref={home.data.primaryCtaHref}
-      secondaryLabel={home.data.secondaryCtaLabel}
-      secondaryHref={home.data.secondaryCtaHref}
-    />
-
-    <AboutSection
-      eyebrow={home.data.aboutEyebrow}
-      title={home.data.aboutTitle}
-    >
-      <Content />
-    </AboutSection>
-
-    <ImageShowcase
-      src={home.data.showcaseImage}
-      alt={home.data.showcaseImageAlt}
-      eyebrow={home.data.showcaseEyebrow}
-      caption={home.data.showcaseCaption}
-    />
-
-    <CompetenciesSection
-      eyebrow={home.data.competenciesEyebrow}
-      title={home.data.competenciesTitle}
-      entries={competencies}
-    />
-
-    <QualitySection
-      eyebrow={home.data.qualityEyebrow}
-      title={home.data.qualityTitle}
-      cardTitle={home.data.qualityCardTitle}
-      cardText={home.data.qualityCardText}
-    />
-
-    <ContactBanner
-      title={home.data.contactTitle}
-      label={home.data.contactLabel}
-      href={home.data.contactHref}
-    />
-  </main>
-
-  <Footer />
-</BaseLayout>
+<!doctype html>
+<html lang={defaultLang}>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="robots" content="noindex" />
+    <link rel="canonical" href={getAbsoluteLocaleUrl(defaultLang)} />
+    <title>AMP</title>
+    <script is:inline define:vars={{ targets, fallback, storageKey: LANG_STORAGE_KEY }}>
+      let saved = null;
+      try {
+        saved = localStorage.getItem(storageKey);
+      } catch {}
+      const preferred = [saved, ...(navigator.languages || [navigator.language])]
+        .filter(Boolean)
+        .map((lang) => lang.toLowerCase().split('-')[0]);
+      const match = preferred.find((lang) => lang in targets);
+      location.replace(match ? targets[match] : fallback);
+    </script>
+    <noscript><meta http-equiv="refresh" content={`0;url=${fallback}`} /></noscript>
+  </head>
+  <body>
+    <a href={fallback}>{fallback}</a>
+  </body>
+</html>

@@ -6,10 +6,10 @@ heroEyebrow: "AMP · Qualitätssicherung"
 heroTitlePrefix: "Ihr Partner für"
 heroTitleHighlight: "zerstörungsfreie Werkstoffprüfung."
 heroText: "Moderne Prüftechnik, umfassendes Know-how und persönliche Betreuung für anspruchsvolle industrielle Prüfaufgaben."
-heroImage: "/images/hero-image.jpg"
+heroImage: "../../../assets/images/hero-image.jpg"
 heroImageLabel: "Werkstoffprüfung im Einsatz"
 
-showcaseImage: "/images/know-how_01.jpg"
+showcaseImage: "../../../assets/images/know-how_01.jpg"
 showcaseImageAlt: "Fassade des AMP-Prüfzentrums"
 showcaseEyebrow: "AMP Prüftechnik"
 showcaseCaption: "Technische Kompetenz für anspruchsvolle industrielle Prüfaufgaben."
@@ -32,7 +32,6 @@ qualityCardText: "Von der einzelnen Prüfung bis zur laufenden Qualitätsüberwa
 
 contactTitle: "Ihre Prüfaufgabe. Unser Know-how."
 contactLabel: "Jetzt Kontakt aufnehmen"
-contactHref: "mailto:info@amp-zfp.de"
 ---
 
 Als mittelständisches Unternehmen stellen wir uns auf die besonderen Anforderungen unserer Kunden ein. Sie profitieren von modernster Prüftechnik und umfassender Expertise – und können sich auf kurze Ent­scheidungs­wege verlassen. 

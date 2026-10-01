@@ -1,0 +1,105 @@
+---
+import { getCollection, render } from 'astro:content';
+
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import Header from '@/components/Header.astro';
+import Hero from '@/components/Hero.astro';
+import ImageShowcase from '@/components/ImageShowcase.astro';
+import AboutSection from '@/components/AboutSection.astro';
+import CompetenciesSection from '@/components/CompetenciesSection.astro';
+import QualitySection from '@/components/QualitySection.astro';
+import ContactBanner from '@/components/ContactBanner.astro';
+import Footer from '@/components/Footer.astro';
+import JsonLd from '@/components/JsonLd.astro';
+import { getAlternates } from '@/i18n/utils';
+import type { Lang } from '@/i18n/ui';
+import { getCompetencies } from '@/lib/content';
+import { getLastModified } from '@/lib/last-modified';
+import { organization, website } from '@/lib/structured-data';
+
+/**
+ * Builds one home page per language from `src/content/pages/<lang>/home.md`.
+ *
+ * @returns Paths `/<lang>/` with the home entry and its language as props.
+ */
+export async function getStaticPaths() {
+  const entries = await getCollection('pages', (entry) => entry.id.endsWith('/home'));
+
+  return entries.map((entry) => {
+    const lang = entry.id.split('/')[0] as Lang;
+    return { params: { lang }, props: { home: entry, lang } };
+  });
+}
+
+const { home, lang } = Astro.props;
+const { Content } = await render(home);
+const competencies = await getCompetencies(lang);
+const alternates = getAlternates();
+const lastModified = getLastModified(home.filePath, ...competencies.map((entry) => entry.filePath));
+---
+
+<BaseLayout
+  lang={lang}
+  title={home.data.title}
+  description={home.data.description}
+  alternates={alternates}
+  lastModified={lastModified}
+>
+  <JsonLd
+    slot="head"
+    data={[
+      organization(lang, Astro.site ?? Astro.url),
+      website(lang, home.data.title, home.data.description),
+    ]}
+  />
+  <Header lang={lang} alternates={alternates} />
+
+  <main>
+    <Hero
+      eyebrow={home.data.heroEyebrow}
+      titlePrefix={home.data.heroTitlePrefix}
+      titleHighlight={home.data.heroTitleHighlight}
+      text={home.data.heroText}
+      image={home.data.heroImage}
+      imageLabel={home.data.heroImageLabel}
+      primaryLabel={home.data.primaryCtaLabel}
+      primaryHref={home.data.primaryCtaHref}
+      secondaryLabel={home.data.secondaryCtaLabel}
+      secondaryHref={home.data.secondaryCtaHref}
+    />
+
+    <AboutSection
+      eyebrow={home.data.aboutEyebrow}
+      title={home.data.aboutTitle}
+    >
+      <Content />
+    </AboutSection>
+
+    <ImageShowcase
+      src={home.data.showcaseImage}
+      alt={home.data.showcaseImageAlt}
+      eyebrow={home.data.showcaseEyebrow}
+      caption={home.data.showcaseCaption}
+    />
+
+    <CompetenciesSection
+      eyebrow={home.data.competenciesEyebrow}
+      title={home.data.competenciesTitle}
+      entries={competencies}
+    />
+
+    <QualitySection
+      eyebrow={home.data.qualityEyebrow}
+      title={home.data.qualityTitle}
+      cardTitle={home.data.qualityCardTitle}
+      cardText={home.data.qualityCardText}
+    />
+
+    <ContactBanner
+      title={home.data.contactTitle}
+      label={home.data.contactLabel}
+    />
+  </main>
+
+  <Footer lang={lang} />
+</BaseLayout>

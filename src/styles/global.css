@@ -234,8 +234,58 @@ summary:focus-visible {
     right: 0;
 }
 
+.language-picker {
+    display: inline-flex;
+    align-items: center;
+    gap: 0;
+}
+
+.language-picker__option {
+    position: relative;
+    min-width: 32px;
+    height: 32px;
+    padding: 0 8px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    color: rgba(255, 255, 255, .58);
+    font-size: 10px;
+    font-weight: 800;
+    letter-spacing: .1em;
+    line-height: 1;
+    text-decoration: none;
+    text-transform: uppercase;
+    transition: color .18s ease;
+}
+
+.language-picker__option + .language-picker__option {
+    border-left: 1px solid rgba(255, 255, 255, .12);
+}
+
+.language-picker__option:hover {
+    color: var(--yellow);
+}
+
+.language-picker__option.is-active {
+    color: var(--white);
+}
+
+.language-picker__option.is-active::after {
+    position: absolute;
+    right: 8px;
+    bottom: 0;
+    left: 8px;
+    height: 2px;
+    background: var(--yellow);
+    content: "";
+}
+
+.language-picker__option:focus-visible {
+    outline-color: var(--white);
+    box-shadow: 0 0 0 3px var(--yellow);
+}
+
 .main-navigation__cta {
-    margin-left: 8px;
     padding: 11px 15px;
     border-radius: 2px;
     background: var(--white);
@@ -312,7 +362,7 @@ summary:focus-visible {
     box-shadow: var(--shadow);
 }
 
-.mobile-navigation nav a {
+.mobile-navigation__link {
     padding: 15px 0;
     display: flex;
     justify-content: space-between;
@@ -325,12 +375,34 @@ summary:focus-visible {
     text-transform: uppercase;
 }
 
-.mobile-navigation nav a:last-child {
+.mobile-navigation__link:last-of-type {
     border-bottom: 0;
 }
 
-.mobile-navigation nav a span {
+.mobile-navigation__link span {
     color: var(--yellow);
+}
+
+.mobile-navigation__languages {
+    padding: 16px 0 8px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+    border-top: 1px solid rgba(255, 255, 255, .12);
+}
+
+.mobile-navigation__languages > span {
+    color: rgba(255, 255, 255, .58);
+    font-size: 10px;
+    font-weight: 800;
+    letter-spacing: .14em;
+    text-transform: uppercase;
+}
+
+.mobile-navigation__languages .language-picker__option {
+    min-width: 38px;
+    height: 32px;
 }
 
 

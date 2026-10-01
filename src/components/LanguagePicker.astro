@@ -1,0 +1,54 @@
+---
+import { languages, localeMeta, type Lang } from '@/i18n/ui';
+import { getLocalizedPath, useTranslations, type Alternate } from '@/i18n/utils';
+
+/**
+ * Links to the current page in every language. Languages without a translation link to
+ * their home page. A click saves the choice in localStorage for the redirect on "/".
+ */
+interface Props {
+  /** Language of the current page, marked as active. */
+  lang: Lang;
+  /** Translations of the current page. */
+  alternates: Alternate[];
+}
+
+const { lang, alternates } = Astro.props;
+const t = useTranslations(lang);
+
+/** Returns the URL of this page in `locale`, or that language's home page. */
+function getHref(locale: Lang) {
+  return alternates.find((alternate) => alternate.lang === locale)?.path ?? getLocalizedPath(locale);
+}
+---
+
+<div class="language-picker" role="group" aria-label={t('language.select')}>
+  {
+    languages.map((locale) => (
+      <a
+        class:list={['language-picker__option', { 'is-active': locale === lang }]}
+        href={getHref(locale)}
+        lang={locale}
+        hreflang={locale}
+        aria-label={localeMeta[locale].name}
+        aria-current={locale === lang ? 'page' : undefined}
+        data-lang={locale}
+      >
+        {localeMeta[locale].short}
+      </a>
+    ))
+  }
+</div>
+
+<script>
+  import { LANG_STORAGE_KEY } from '@/i18n/storage';
+
+  // Remember the chosen language so "/" redirects there next time.
+  document.querySelectorAll<HTMLAnchorElement>('.language-picker [data-lang]').forEach((link) => {
+    link.addEventListener('click', () => {
+      try {
+        localStorage.setItem(LANG_STORAGE_KEY, link.dataset.lang!);
+      } catch {}
+    });
+  });
+</script>
