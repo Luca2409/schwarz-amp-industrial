@@ -9,9 +9,14 @@ interface Props {
   lang: Lang;
   /** Translations of the current page, passed on to the language picker. */
   alternates: Alternate[];
+  /**
+   * Transparent header on top of a full-bleed hero image; turns solid once the page is
+   * scrolled or the mobile menu is open.
+   */
+  overlay?: boolean;
 }
 
-const { lang, alternates } = Astro.props;
+const { lang, alternates, overlay = false } = Astro.props;
 const t = useTranslations(lang);
 
 const navigation = [
@@ -22,7 +27,7 @@ const navigation = [
 ];
 ---
 
-<header class="site-header">
+<header class:list={['site-header', { 'site-header--overlay': overlay }]} data-site-header>
   <div class="site-header__inner">
     <a class="brand" href={getLocalizedPath(lang)} aria-label={t('brand.homeLabel')}>
       <span class="brand__name">AMP</span>
@@ -57,6 +62,13 @@ const navigation = [
 </header>
 
 <script>
+  // Overlay header: solid background as soon as the page is scrolled.
+  document.querySelectorAll<HTMLElement>('.site-header--overlay').forEach((header) => {
+    const update = () => header.classList.toggle('is-scrolled', window.scrollY > 8);
+    update();
+    window.addEventListener('scroll', update, { passive: true });
+  });
+
   // Mobile menu (<details>): closes after a link is clicked and on Escape, returning focus to the toggle.
   document.querySelectorAll<HTMLDetailsElement>('.mobile-navigation').forEach((menu) => {
     menu.querySelectorAll('a').forEach((link) => {

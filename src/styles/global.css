@@ -164,6 +164,24 @@ summary:focus-visible {
     backdrop-filter: blur(10px);
 }
 
+/* Transparent header over the full-bleed hero image (home page). Fixed, so the image runs
+   up to the top of the screen; solid once scrolled or while the mobile menu is open. */
+.site-header--overlay {
+    position: fixed;
+    left: 0;
+    right: 0;
+    background: transparent;
+    border-bottom-color: transparent;
+    backdrop-filter: none;
+    transition: background .25s ease, border-color .25s ease;
+}
+
+.site-header--overlay.is-scrolled,
+.site-header--overlay:has(.mobile-navigation[open]) {
+    background: var(--black);
+    border-bottom-color: rgba(255, 255, 255, 0.12);
+}
+
 .site-header__inner {
     width: min(100%, var(--content-max));
     height: 100%;
@@ -413,41 +431,81 @@ summary:focus-visible {
    ========================================================= */
 
 .hero {
+    /* How far the key facts islands reach below the image. */
+    --facts-overlap: 64px;
+    position: relative;
+    /* Above the next section, so the overlapping islands aren't covered by it. */
+    z-index: 1;
+    isolation: isolate;
     width: 100%;
-    /* Fills the first screen below the header (88px), including the facts card at the bottom. */
-    min-height: calc(100vh - 88px);
-    min-height: calc(100svh - 88px);
+    /* Somewhat shorter than the screen: room for the overlapping island and a bit of the next
+       section on the first screen. */
+    min-height: max(520px, calc(100vh - 88px - 140px));
+    min-height: max(520px, calc(100svh - 88px - 140px));
     display: grid;
-    /* Outer margin of the content column; text and image align to it. */
-    --hero-edge: max(var(--page-padding), calc((100vw - var(--content-max)) / 2 + var(--page-padding)));
-    /* Split: text left, image right. The image column is half of the content width plus the
-       right margin, so the text column doesn't get squeezed by wide outer margins. */
-    grid-template-columns: minmax(0, 1fr) calc((100% - 2 * var(--hero-edge)) * .5 + var(--hero-edge));
-    /* Rows: space above, the text block, space below, and the facts card. The space above
-       gets 60% of the space below, so the text sits slightly above center, closer to the
-       header. The image runs from the header to the facts bar. */
-    --hero-space: clamp(32px, 3.5vw, 56px);
-    grid-template-rows: minmax(clamp(24px, 2.5vw, 40px), .6fr) auto minmax(var(--hero-space), 1fr) auto;
-    gap: 0;
-    align-items: stretch;
-    background: var(--white);
-    color: var(--black);
+    /* Text block vertically centered in the free space, key facts at the bottom. */
+    grid-template-rows: 1fr auto;
+    background: var(--black);
+    color: var(--white);
+}
+
+/* With the overlay header the hero starts at the top of the screen, below the header. */
+.site-header--overlay ~ main .hero {
+    min-height: max(608px, calc(100vh - 140px));
+    min-height: max(608px, calc(100svh - 140px));
+}
+
+.site-header--overlay ~ main .hero__copy {
+    padding-top: calc(88px + clamp(48px, 6vh, 88px));
+}
+
+/* Full-bleed background image. */
+.hero__visual {
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+}
+
+.hero__image {
+    width: 100%;
+    height: 100%;
+    display: block;
+    object-fit: cover;
+    object-position: center 40%;
+    /* Slightly calmer, so the photo reads as a backdrop for the text. */
+    filter: saturate(.8) brightness(.9);
+}
+
+/* Dark gradients: at the top for the overlay header, a wide soft one from the left for the
+   text, and from the bottom for the facts island. */
+.hero__visual::after {
+    position: absolute;
+    inset: 0;
+    background:
+        linear-gradient(180deg, rgba(12, 12, 12, .7) 0px, rgba(12, 12, 12, 0) 180px),
+        linear-gradient(90deg, rgba(12, 12, 12, .9) 0%, rgba(12, 12, 12, .78) 30%, rgba(12, 12, 12, .45) 55%, rgba(12, 12, 12, .12) 80%, rgba(12, 12, 12, 0) 100%),
+        linear-gradient(0deg, rgba(12, 12, 12, .5) 0%, rgba(12, 12, 12, 0) 35%);
+    content: "";
 }
 
 .hero__copy {
-    grid-column: 1;
-    grid-row: 2;
+    width: min(100%, var(--content-max));
+    margin: 0 auto;
     min-width: 0;
-    /* Left padding aligns the text with the content column of the other sections. */
-    padding: 0 clamp(32px, 4vw, 64px) 0 var(--hero-edge);
+    padding: clamp(48px, 6vh, 88px) var(--page-padding) clamp(48px, 6vh, 80px);
     display: grid;
-    grid-template-columns: minmax(0, 1fr);
+    grid-template-columns: minmax(0, 640px);
+    align-content: center;
     gap: 28px;
 }
 
 .hero__heading,
 .hero__support {
     min-width: 0;
+}
+
+.hero .eyebrow {
+    color: #d2d2d2;
 }
 
 .hero__title {
@@ -465,7 +523,7 @@ summary:focus-visible {
 .hero__text {
     max-width: 540px;
     margin: 0;
-    color: var(--muted);
+    color: #d6d6d6;
     font-size: 18px;
     line-height: 1.75;
 }
@@ -478,31 +536,6 @@ summary:focus-visible {
     gap: 12px;
 }
 
-.hero__visual {
-    /* Full-bleed: from the header down to the facts bar and out to the right window edge;
-       the image's bottom edge meets the bar's yellow top edge. */
-    grid-column: 2;
-    grid-row: 1 / 4;
-    position: relative;
-    min-width: 0;
-    min-height: 320px;
-    isolation: isolate;
-    --hero-shape: polygon(14% 0, 100% 0, 100% 100%, 0 100%);
-}
-
-.hero__image {
-    position: absolute;
-    inset: 0;
-    width: 100%;
-    height: 100%;
-    display: block;
-    object-fit: cover;
-    object-position: center 46%;
-    filter: saturate(.76) contrast(1.04);
-    /* Slanted left edge, echoing the italic AMP logo. */
-    clip-path: var(--hero-shape);
-}
-
 .hero .button--primary {
     background: var(--yellow);
     border-color: var(--yellow);
@@ -510,13 +543,13 @@ summary:focus-visible {
 }
 
 .hero .button--primary:hover {
-    background: var(--black);
-    border-color: var(--black);
-    color: var(--white);
+    background: var(--white);
+    border-color: var(--white);
+    color: var(--black);
 }
 
 .hero .button--secondary {
-    color: var(--black);
+    color: var(--white);
 }
 
 
@@ -595,50 +628,44 @@ summary:focus-visible {
 
 
 /* =========================================================
-   FACTS BAR
+   FACTS ISLAND (one card overlapping the bottom edge of the hero image)
    ========================================================= */
 
-/* Bottom row of the hero, full width: a dark bar whose yellow top edge runs across the whole
-   window, echoing the black and yellow of header and logo. The facts sit in the content column. */
 .hero__facts {
-    grid-column: 1 / -1;
-    grid-row: 4;
-}
-
-.facts-bar {
     position: relative;
     z-index: 2;
-    border-top: 3px solid var(--yellow);
-    background: var(--black);
+    /* Pull the island down so it straddles the image's bottom edge. */
+    margin-bottom: calc(-1 * var(--facts-overlap));
+    padding: 0 var(--page-padding);
 }
 
+/* The island: one white card holding all facts, separated by thin dividers. */
 .facts-bar__list {
-    width: min(100%, var(--content-max));
+    width: min(100%, calc(var(--content-max) - 2 * var(--page-padding)));
     margin: 0 auto;
-    padding: 0 var(--page-padding);
+    padding: 6px;
     display: grid;
     grid-template-columns: repeat(4, minmax(0, 1fr));
+    border-radius: var(--radius);
+    background: var(--white);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, .06), 0 24px 56px rgba(0, 0, 0, .18);
+    color: var(--text);
     list-style: none;
 }
 
 .facts-bar__item {
-    padding: 28px 24px;
+    padding: 22px 24px;
     display: grid;
     gap: 6px;
     align-content: start;
 }
 
-/* First fact lines up with the hero text. */
-.facts-bar__item:first-child {
-    padding-left: 0;
-}
-
 .facts-bar__item + .facts-bar__item {
-    border-left: 1px solid rgba(255, 255, 255, .16);
+    border-left: 1px solid var(--line);
 }
 
 .facts-bar__value {
-    color: var(--white);
+    color: var(--text);
     font-size: 20px;
     font-weight: 800;
     line-height: 1.2;
@@ -646,9 +673,14 @@ summary:focus-visible {
 }
 
 .facts-bar__label {
-    color: #c4c4c4;
+    color: var(--muted);
     font-size: 14px;
     line-height: 1.5;
+}
+
+/* More room above the next section, which the island overlaps. */
+.hero + .about-section .about-section__inner {
+    padding-top: 168px;
 }
 
 @media (max-width: 1100px) {
@@ -656,24 +688,36 @@ summary:focus-visible {
         grid-template-columns: repeat(2, minmax(0, 1fr));
     }
     .facts-bar__item:nth-child(odd) {
-        padding-left: 0;
         border-left: 0;
     }
     .facts-bar__item:nth-child(n + 3) {
-        border-top: 1px solid rgba(255, 255, 255, .16);
+        border-top: 1px solid var(--line);
+    }
+}
+
+@media (max-width: 900px) {
+    .hero + .about-section .about-section__inner {
+        padding-top: 132px;
     }
 }
 
 @media (max-width: 560px) {
+    .hero {
+        --facts-overlap: 40px;
+    }
     .facts-bar__list {
+        padding: 2px 20px;
         grid-template-columns: 1fr;
     }
     .facts-bar__item {
-        padding: 18px 0;
+        padding: 16px 0;
     }
     .facts-bar__item + .facts-bar__item {
-        border-top: 1px solid rgba(255, 255, 255, .16);
+        border-top: 1px solid var(--line);
         border-left: 0;
+    }
+    .hero + .about-section .about-section__inner {
+        padding-top: 112px;
     }
 }
 
@@ -1469,6 +1513,9 @@ summary:focus-visible {
     .site-header {
         height: 76px;
     }
+    .site-header--overlay ~ main .hero__copy {
+        padding-top: calc(76px + 48px);
+    }
     .brand__name {
         font-size: 34px;
     }
@@ -1484,37 +1531,26 @@ summary:focus-visible {
     .mobile-navigation {
         display: block;
     }
-    .hero {
-        grid-template-columns: 1fr;
-        grid-template-rows: none;
-        min-height: 0;
-    }
     .hero__copy {
-        grid-column: auto;
-        grid-row: auto;
         grid-template-columns: 1fr;
         gap: 28px;
-        padding: 58px var(--page-padding) 64px;
+        padding: 58px var(--page-padding) 40px;
+    }
+    /* Image stays as background; a stronger, even overlay keeps the text readable when it
+       spans the whole width. */
+    .hero__visual::after {
+        background:
+            linear-gradient(180deg, rgba(12, 12, 12, .75) 0px, rgba(12, 12, 12, .62) 160px),
+            linear-gradient(0deg, rgba(12, 12, 12, .8) 0%, rgba(12, 12, 12, .62) 100%);
+    }
+    .hero__image {
+        object-position: 30% center;
     }
     .hero__title {
         max-width: 720px;
     }
     .hero__support {
         max-width: 620px;
-    }
-    .hero__visual {
-        height: clamp(360px, 68vw, 460px);
-        min-height: 0;
-        /* Stacked layout: full-bleed with a slanted top edge; straight bottom edge so the image
-           meets the card's yellow top edge. */
-        grid-column: auto;
-        grid-row: auto;
-        margin-right: 0;
-        --hero-shape: polygon(0 10%, 100% 0, 100% 100%, 0 100%);
-    }
-    .hero__facts {
-        grid-column: auto;
-        grid-row: auto;
     }
     .about-section__inner,
     .quality-section,
@@ -1573,12 +1609,12 @@ summary:focus-visible {
     .site-header__inner {
         padding: 0 var(--page-padding);
     }
-    .hero__visual {
-        height: 300px;
-    }
     .hero__copy {
         padding-top: 40px;
-        padding-bottom: 44px;
+        padding-bottom: 32px;
+    }
+    .site-header--overlay ~ main .hero__copy {
+        padding-top: calc(76px + 40px);
     }
     .hero__title {
         font-size: clamp(32px, 9vw, 40px);

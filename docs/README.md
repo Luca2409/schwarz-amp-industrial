@@ -51,6 +51,6 @@ Code is documented with JSDoc comments on functions, exported values and compone
 | Feature | Summary | Docs | Key files |
 | --- | --- | --- | --- |
 | Build checks | Missing translations, contact config, placeholders (block CI), static route files | [quality-checks.md → Build checks](./quality-checks.md#build-checks) | `src/integrations/site-checks.ts` |
-| E2E tests | 12 Playwright tests on desktop and mobile, against a local build or a deployed site (`E2E_BASE_URL`) | [quality-checks.md → End-to-end tests](./quality-checks.md#end-to-end-tests) | `tests/e2e/`, `playwright.config.ts` |
+| E2E tests | 15 Playwright tests on desktop and mobile, against a local build or a deployed site (`E2E_BASE_URL`) | [quality-checks.md → End-to-end tests](./quality-checks.md#end-to-end-tests) | `tests/e2e/`, `playwright.config.ts` |
 | Deploy config | Domain and base path in one place, shared by Astro and the tests | [i18n-seo.md → Move to your own domain](./i18n-seo.md#move-to-your-own-domain) | `deploy.config.mjs` |
 | CI pipeline | Build, test, deploy to GitHub Pages | [quality-checks.md → CI pipeline](./quality-checks.md#ci-pipeline) | `.github/workflows/deploy.yml` |

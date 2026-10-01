@@ -6,8 +6,8 @@ heroEyebrow: "Prüftechnik aus dem Schwarzwald"
 heroTitlePrefix: "Ihr Partner für"
 heroTitleHighlight: "zerstörungs\u00ADfreie Werkstoff\u00ADprüfung."
 heroText: "Moderne Prüftechnik, umfassendes Know-how und persönliche Betreuung für anspruchsvolle industrielle Prüfaufgaben."
-heroImage: "../../../assets/images/hero-image.jpg"
-heroImageLabel: "Werkstoffprüfung im Einsatz"
+heroImage: "../../../assets/images/SCHWARZ-Reverse-Engineering-Standbild-19-scaled.jpg"
+heroImageLabel: "3D-Messtechnik im Einsatz: optisches Trackingsystem und Handscanner"
 
 # Key facts under the hero. Only use statements that are backed by the content of the site.
 facts:

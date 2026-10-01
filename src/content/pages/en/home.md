@@ -6,8 +6,8 @@ heroEyebrow: "Testing expertise from the Black Forest"
 heroTitlePrefix: "Your partner for"
 heroTitleHighlight: "non-destructive testing."
 heroText: "Advanced testing technology, extensive expertise, and dedicated support for demanding industrial inspection tasks."
-heroImage: "../../../assets/images/hero-image.jpg"
-heroImageLabel: "Material testing in practice"
+heroImage: "../../../assets/images/SCHWARZ-Reverse-Engineering-Standbild-19-scaled.jpg"
+heroImageLabel: "3D metrology in use: optical tracking system and handheld scanner"
 
 # Key facts under the hero. Only use statements that are backed by the content of the site.
 facts:

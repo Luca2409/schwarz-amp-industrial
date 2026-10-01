@@ -12,7 +12,7 @@ Everything that verifies the site automatically: type checks, content validation
 | [Contact configuration](#contact-configuration) | every build | Address, contact person, role, form endpoint not set | warning | warning |
 | [Placeholders](#placeholders) | build, dev server start | `[placeholders]` in company data, UI strings, legal pages | warning | **error** |
 | [Static route files](#static-route-files) | build, dev server start | Contact route files not matching `routes.ts` | error (dev: warning) | error |
-| [End-to-end tests](#end-to-end-tests) | `npm run test:e2e` | Broken form, map consent, language switching, root redirect | error | error |
+| [End-to-end tests](#end-to-end-tests) | `npm run test:e2e` | Broken form, map consent, language switching, root redirect, home header and key facts | error | error |
 
 Before pushing, run:
 
@@ -132,6 +132,14 @@ Tests use URLs relative to the site (e.g. `de/kontakt/`), so they work with any 
 | root redirect: English browser | `/` → `/en/` |
 | root redirect: French browser | `/` → `/de/` (fallback) |
 | root redirect: saved choice | Saved `de` wins over an English browser |
+
+`tests/e2e/home.spec.ts`:
+
+| Test | Verifies |
+| --- | --- |
+| home header is transparent over the hero and turns solid on scroll | Transparent at the top, solid after scrolling, transparent again at the top |
+| subpages keep the solid header | Contact page header is solid |
+| shows the whole key facts island on the first screen | At 1440 × 790 the island ends within the screen |
 
 ### Running and debugging
 
