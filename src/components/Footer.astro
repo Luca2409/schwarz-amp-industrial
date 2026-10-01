@@ -4,7 +4,7 @@ import { getHomeAnchor, getLocalizedPath, useTranslations } from '@/i18n/utils';
 import { getEntryPath, getLegalPages } from '@/lib/content';
 import { site } from '@/site';
 
-/** Site footer with navigation, contact data and links to the legal pages of `lang`. */
+/** Site footer with navigation, related companies, contact data and links to the legal pages of `lang`. */
 interface Props {
   /** Language of the current page. */
   lang: Lang;
@@ -30,6 +30,13 @@ const legalLinks = (await getLegalPages(lang)).map((entry) => ({
       <a href={getHomeAnchor(lang, 'services')}>{t('nav.competencies')}</a>
       <a href={getHomeAnchor(lang, 'quality')}>{t('nav.quality')}</a>
       <a href={getLocalizedPath(lang, 'contact')}>{t('nav.contact')}</a>
+    </nav>
+
+    <nav class="site-footer__related" aria-labelledby="footer-related-heading">
+      <span class="site-footer__heading" id="footer-related-heading">{t('footer.relatedLabel')}</span>
+      {site.relatedCompanies.map((company) => (
+        <a href={company.url}>{company.name}</a>
+      ))}
     </nav>
 
     <div class="site-footer__contact">

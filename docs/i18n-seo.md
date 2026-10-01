@@ -37,7 +37,7 @@ How the site handles languages, localized URLs, translations, SEO tags, structur
 | `src/lib/content.ts` | Helpers for translated content entries (paths, alternates, missing-translation check) |
 | `src/lib/structured-data.ts` | schema.org JSON-LD builders |
 | `src/lib/last-modified.ts` | Last change date of source files (git) |
-| `src/site.ts` | Company data, address, contact person, form service, map URL |
+| `src/site.ts` | Company data, related companies, address, contact person, form service, map URL |
 | `src/layouts/BaseLayout.astro` | All `<head>` SEO tags |
 | `src/components/LanguagePicker.astro` | Language switch |
 | `src/components/JsonLd.astro` | Renders structured data |
@@ -317,6 +317,7 @@ export const site = {
   email: 'info@amp-zfp.de',
   phone: { display: '+49 7443 9665-19', href: 'tel:+497443966519' },
   logo: '/images/logo-amp.png',
+  relatedCompanies: [{ name: 'Schwarz Holding', url: 'https://www.schwarz-online.de/' }, …],
   address: { street: '…', postalCode: '…', city: '…', country: 'DE' },
   contactPerson: { name: '…', email: '…', phone: { … } },
   contactForm: { endpoint: '…', hiddenFields: {}, honeypot: 'botcheck', subjectField: 'subject' },
@@ -324,7 +325,7 @@ export const site = {
 };
 ```
 
-Address, contact person, form service and map are explained in [contact-page.md](./contact-page.md#setup-checklist).
+`relatedCompanies` are listed in the footer under "Weitere Unternehmen" / "Related companies" (`footer.relatedLabel`); their names aren't translated. Address, contact person, form service and map are explained in [contact-page.md](./contact-page.md#setup-checklist).
 
 Markdown can't import it, so the legal pages repeat email and phone.
 

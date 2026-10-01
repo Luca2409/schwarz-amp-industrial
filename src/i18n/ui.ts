@@ -23,6 +23,7 @@ const de = {
 
   'footer.navLabel': 'Footer-Navigation',
   'footer.legalLabel': 'Rechtliche Hinweise',
+  'footer.relatedLabel': 'Weitere Unternehmen',
   'footer.tagline': 'Präzision. Erfahrung. Verantwortung.',
 
   'breadcrumb.home': 'Startseite',
@@ -98,6 +99,7 @@ const en = {
 
   'footer.navLabel': 'Footer navigation',
   'footer.legalLabel': 'Legal information',
+  'footer.relatedLabel': 'Related companies',
   'footer.tagline': 'Precision. Experience. Responsibility.',
 
   'breadcrumb.home': 'Home',

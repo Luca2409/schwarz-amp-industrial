@@ -62,7 +62,7 @@ src/
   layouts/BaseLayout.astro     HTML shell with all SEO tags
   lib/                         Content helpers, structured data, last-modified dates
   pages/                       Routes (see URL overview below)
-  site.ts                      Company data, address, contact person, form service, map URL
+  site.ts                      Company data, related companies, address, contact person, form service, map URL
   styles/global.css            All styles
 tests/e2e/                     Playwright tests (contact form, map, language switching, root redirect)
 ```
@@ -133,7 +133,7 @@ Navigation, buttons, footer and other fixed texts are translation keys in `src/i
 
 ### Company data
 
-Email, phone, company name, logo, address, contact person, form service and map URL are defined once in `src/site.ts` and used by the footer, contact page and structured data. The legal Markdown files repeat email and phone and must be updated by hand.
+Email, phone, company name, logo, related companies (footer links), address, contact person, form service and map URL are defined once in `src/site.ts` and used by the footer, contact page and structured data. The legal Markdown files repeat email and phone and must be updated by hand.
 
 ### Contact page
 

@@ -14,6 +14,13 @@ export const site = {
   /** Logo path inside `public/`, without `base`. */
   logo: '/images/logo-amp.png',
 
+  /** Related companies linked in the footer; names aren't translated. */
+  relatedCompanies: [
+    { name: 'Schwarz Holding', url: 'https://www.schwarz-online.de/' },
+    { name: 'Schwarz Forst & Agrar', url: 'https://www.schwarz-forst-agrar.de/' },
+    { name: 'Blackworker', url: 'https://www.blackworker.de/' },
+  ],
+
   // TODO: Replace the [placeholders] below; the build warns while any are left.
 
   /** Postal address, shown on the contact page, used for the map and structured data. */
